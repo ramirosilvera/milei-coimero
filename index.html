@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Milei Compra Senadores</title>
-  <!-- Se incluye Google Fonts para mejorar la tipografía -->
+  <!-- Se incluye Google Fonts para una tipografía moderna -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -12,20 +12,20 @@
   <!-- Pantalla de Inicio -->
   <div id="startScreen" class="screen">
     <h1>Milei Compra Senadores</h1>
-    <p class="slogan">¡La revolución de los senadores ya comienza!</p>
+    <p class="slogan">¡La revolución en el Senado ya comienza!</p>
     <div id="instructions">
       <h2>¿Cómo jugar?</h2>
       <p>
-        Tu objetivo es impedir que se llene el Congreso comprando <strong>5 senadores</strong> (radicales o peronistas) antes de que se alcance el quórum de 129 senadores.
+        Tu objetivo es impedir que se llene el Senado comprando <strong>5 senadores</strong> (solo los de tipo <em>radical</em> o <em>peronista</em>) antes de que se alcance el quórum de <strong>72</strong> senadores.
       </p>
       <p>
-        Comienzas con 10 favores. Usa tus favores para comprar senadores; cada compra aumenta el precio del siguiente. Si te quedas sin favores, activa el <em>Voucher Libertario</em> o vende un cargo público para conseguir más.
+        Comienzas con 10 favores. Úsalos para comprar senadores; cada compra encarece al siguiente. Si te quedas sin favores, activa el <em>Voucher Libertario</em>, vende un cargo público o haz una intervención para conseguir más.
       </p>
       <p>
-        Durante la partida aparecerán eventos aleatorios que pueden ayudarte o dificultarte la misión. ¡Estate atento a las pistas que se mostrarán para que sepas qué hacer!
+        Durante la partida aparecerán eventos y pistas que te orientarán si no sabes qué hacer. ¡Mantente atento y actúa rápido!
       </p>
     </div>
-    <button id="startButton">¡A romper el Congreso!</button>
+    <button id="startButton">¡A romper el Senado!</button>
   </div>
 
   <!-- Pantalla del Juego -->
@@ -33,12 +33,13 @@
     <header>
       <div id="stats">
         <span>Favores: <span id="favores">10</span></span>
-        <span>Congreso: <span id="congreso">0</span>/129</span>
+        <span>Senado: <span id="congreso">0</span>/72</span>
         <span>Senadores Comprados: <span id="comprados">0</span>/5</span>
       </div>
       <div id="actions">
         <button id="voucherBtn">Usar Voucher Libertario (Una vez)</button>
         <button id="venderBtn">Vender Cargo Público (Máx 3 veces)</button>
+        <button id="interveneBtn">¡Intervenir!</button>
       </div>
     </header>
     <main>
