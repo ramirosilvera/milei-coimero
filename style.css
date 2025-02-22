@@ -1,4 +1,4 @@
-/* Se utiliza la fuente Roboto para un look más moderno */
+/* Fuente moderna y fondo degradado */
 body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
@@ -7,7 +7,7 @@ body {
   color: #333;
 }
 
-/* Estilo general para las pantallas (inicio, juego y fin) */
+/* Estilo general para todas las pantallas */
 .screen {
   display: flex;
   flex-direction: column;
@@ -18,7 +18,7 @@ body {
   padding: 20px;
 }
 
-/* Pantalla de inicio */
+/* Pantalla de Inicio */
 #startScreen {
   background: rgba(255, 255, 255, 0.9);
   border-radius: 10px;
