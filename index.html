@@ -4,18 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Milei Compra Senadores</title>
+  <!-- Se incluye Google Fonts para mejorar la tipografía -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- Pantalla de Inicio -->
-  <div id="startScreen">
+  <div id="startScreen" class="screen">
     <h1>Milei Compra Senadores</h1>
-    <p>¡Bienvenido a la revolución de los senadores! ¿Listo para romper el Congreso?</p>
+    <p class="slogan">¡La revolución de los senadores ya comienza!</p>
+    <div id="instructions">
+      <h2>¿Cómo jugar?</h2>
+      <p>
+        Tu objetivo es impedir que se llene el Congreso comprando <strong>5 senadores</strong> (radicales o peronistas) antes de que se alcance el quórum de 129 senadores.
+      </p>
+      <p>
+        Comienzas con 10 favores. Usa tus favores para comprar senadores; cada compra aumenta el precio del siguiente. Si te quedas sin favores, activa el <em>Voucher Libertario</em> o vende un cargo público para conseguir más.
+      </p>
+      <p>
+        Durante la partida aparecerán eventos aleatorios que pueden ayudarte o dificultarte la misión. ¡Estate atento a las pistas que se mostrarán para que sepas qué hacer!
+      </p>
+    </div>
     <button id="startButton">¡A romper el Congreso!</button>
   </div>
 
   <!-- Pantalla del Juego -->
-  <div id="gameScreen" style="display:none;">
+  <div id="gameScreen" class="screen" style="display:none;">
     <header>
       <div id="stats">
         <span>Favores: <span id="favores">10</span></span>
@@ -36,7 +50,7 @@
   </div>
 
   <!-- Pantalla de Fin -->
-  <div id="endScreen" style="display:none;">
+  <div id="endScreen" class="screen" style="display:none;">
     <h2 id="endTitle"></h2>
     <p id="endMessage"></p>
     <button id="restartButton">Reiniciar la revolución</button>
