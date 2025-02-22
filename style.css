@@ -1,48 +1,88 @@
-/* Estilos generales */
+/* Se utiliza la fuente Roboto para un look más moderno */
 body {
-  font-family: Arial, sans-serif;
-  background: #e0f7fa;
+  font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
+  background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+  color: #333;
 }
 
-/* Pantallas de Inicio y Fin */
-#startScreen, #endScreen {
+/* Estilo general para las pantallas (inicio, juego y fin) */
+.screen {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
   text-align: center;
-  background: #e0f7fa;
+  padding: 20px;
 }
 
-#startScreen h1, #endScreen h2 {
-  font-size: 2.5em;
+/* Pantalla de inicio */
+#startScreen {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  margin: 20px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
+}
+
+#startScreen h1 {
+  font-size: 3em;
+  margin-bottom: 10px;
+}
+
+.slogan {
+  font-size: 1.5em;
   margin-bottom: 20px;
+  color: #0288d1;
 }
 
-#startScreen p, #endScreen p {
-  font-size: 1.2em;
-  margin-bottom: 20px;
+#instructions {
+  text-align: left;
+  max-width: 600px;
+  margin: 0 auto 20px;
 }
 
-#startScreen button, #endScreen button {
+#instructions h2 {
+  font-size: 1.8em;
+  margin-bottom: 10px;
+  color: #e65100;
+}
+
+#instructions p {
+  font-size: 1.1em;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+/* Botones generales */
+button {
   padding: 15px 25px;
   font-size: 1.2em;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
+  background: #0288d1;
+  color: #fff;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #0277bd;
 }
 
 /* Pantalla del Juego */
 header {
   background: #0288d1;
   color: #fff;
-  padding: 20px;
+  width: 100%;
+  padding: 20px 10px;
+  box-sizing: border-box;
   text-align: center;
 }
 
 #stats {
-  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 #stats span {
@@ -56,9 +96,8 @@ header {
 
 #actions button {
   margin: 5px;
-  padding: 10px 15px;
   font-size: 1em;
-  cursor: pointer;
+  padding: 10px 15px;
 }
 
 main {
@@ -72,34 +111,43 @@ main {
   background: #fff;
   border: 2px solid #0288d1;
   border-radius: 10px;
-  width: 200px;
+  width: 220px;
   margin: 10px;
   padding: 15px;
   text-align: center;
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 12px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease;
+}
+
+.candidate:hover {
+  transform: translateY(-5px);
 }
 
 .candidate h3 {
   margin: 10px 0;
+  font-size: 1.5em;
+  color: #e65100;
 }
 
 .candidate p {
   margin: 5px 0;
+  font-size: 1.1em;
 }
 
 .candidate button {
-  padding: 8px 12px;
-  font-size: 0.9em;
-  cursor: pointer;
   margin-top: 10px;
+  font-size: 1em;
+  padding: 8px 12px;
 }
 
+/* Footer */
 footer {
   text-align: center;
   padding: 15px;
   background: #0288d1;
   color: #fff;
-  position: fixed;
   width: 100%;
+  position: fixed;
   bottom: 0;
+  left: 0;
 }
