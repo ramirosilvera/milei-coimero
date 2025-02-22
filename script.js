@@ -8,12 +8,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const maxVender = 3;
   let voucherUsed = false;
   let purchaseEnabled = true;
-  let congressInterval, donationInterval;
+  let congressInterval, donationInterval, hintInterval;
   let gameActive = false;
   let finalTitle = "";
   let finalMessage = "";
 
-  // Definición de candidatos (ahora senadores)
+  // Definición de candidatos (senadores)
   let candidates = [
     { id: 1, type: "radical", name: "Senador Radical 1", basePrice: 10, currentPrice: 10 },
     { id: 2, type: "peronista", name: "Senador Peronista 1", basePrice: 15, currentPrice: 15 },
@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
     renderCandidates();
     updateStats();
     showMessage("¡Que comience la revolución!");
+    // Inicia intervalos para eventos y para sugerencias
     congressInterval = setInterval(function () {
       congreso += 5;
       updateStats();
@@ -74,6 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
       showMessage("Donación anónima: +5 favores.");
       updateStats();
     }, 20000);
+    hintInterval = setInterval(showHint, 30000); // Cada 30 segundos se muestra una pista si el juego sigue activo
     scheduleRandomEvent();
   }
 
@@ -81,6 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function resetGame() {
     clearInterval(congressInterval);
     clearInterval(donationInterval);
+    clearInterval(hintInterval);
     purchaseEnabled = true;
     gameActive = false;
   }
@@ -116,6 +119,19 @@ document.addEventListener("DOMContentLoaded", function () {
   // Muestra mensajes en el área designada
   function showMessage(text) {
     messageArea.textContent = text;
+  }
+
+  // Función para mostrar sugerencias si el jugador parece estancado
+  function showHint() {
+    if (!gameActive) return;
+    // Pistas basadas en el estado actual
+    if (favores < 5) {
+      showMessage("Pista: ¡Vende un cargo público para conseguir más favores!");
+    } else if (comprados < maxComprados && favores >= 5) {
+      showMessage("Pista: Recuerda que debes comprar senadores radicales o peronistas para ganar.");
+    } else if (congreso > 80 && comprados < maxComprados) {
+      showMessage("Pista: El Congreso se llena rápido, ¡actúa ya!");
+    }
   }
 
   // Función para comprar un senador
@@ -234,6 +250,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function endGame(isVictory) {
     clearInterval(congressInterval);
     clearInterval(donationInterval);
+    clearInterval(hintInterval);
     purchaseEnabled = false;
     candidates.forEach((candidate) => {
       let btn = document.getElementById("buy-" + candidate.id);
