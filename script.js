@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
   // Variables globales del juego
   let favores = 10;
-  let congreso = 0;
-  let comprados = 0;
+  let congreso = 0; // Contador del Senado (acumula senadores presentes)
+  let comprados = 0; // Senadores radicales o peronistas comprados
   const maxComprados = 5;
   let venderCount = 0;
   const maxVender = 3;
@@ -12,12 +12,15 @@ document.addEventListener("DOMContentLoaded", function () {
   let gameActive = false;
   let finalTitle = "";
   let finalMessage = "";
+  let interveneCooldown = false;
+  let congressIncrement = 5; // Incremento normal en el Senado cada intervalo
 
-  // Definición de candidatos (senadores)
+  // Definición de candidatos (ahora senadores)
+  // Se reemplaza el candidato "libertario" por "del PRO"
   let candidates = [
     { id: 1, type: "radical", name: "Senador Radical 1", basePrice: 10, currentPrice: 10 },
     { id: 2, type: "peronista", name: "Senador Peronista 1", basePrice: 15, currentPrice: 15 },
-    { id: 3, type: "libertario", name: "Senador Libertario 1", basePrice: 5, currentPrice: 5 },
+    { id: 3, type: "pro", name: "Senador del PRO 1", basePrice: 5, currentPrice: 5 },
   ];
 
   // Elementos del DOM para las pantallas
@@ -33,6 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const startButton = document.getElementById("startButton");
   const restartButton = document.getElementById("restartButton");
+  const interveneBtn = document.getElementById("interveneBtn");
 
   // Iniciar el juego
   startButton.addEventListener("click", function () {
@@ -49,6 +53,9 @@ document.addEventListener("DOMContentLoaded", function () {
     initializeGame();
   });
 
+  // Evento para la acción de intervención
+  interveneBtn.addEventListener("click", interveneAction);
+
   // Inicialización del juego
   function initializeGame() {
     favores = 10;
@@ -58,24 +65,28 @@ document.addEventListener("DOMContentLoaded", function () {
     voucherUsed = false;
     purchaseEnabled = true;
     gameActive = true;
+    congressIncrement = 5;
+    // Reinicia los precios base
     candidates.forEach(candidate => {
       candidate.currentPrice = candidate.basePrice;
     });
     renderCandidates();
     updateStats();
     showMessage("¡Que comience la revolución!");
-    // Inicia intervalos para eventos y para sugerencias
+    // Intervalo para el avance del Senado (quorum a 72)
     congressInterval = setInterval(function () {
-      congreso += 5;
+      congreso += congressIncrement;
       updateStats();
       checkDefeat();
     }, 5000);
+    // Intervalo para donaciones
     donationInterval = setInterval(function () {
       favores += 5;
       showMessage("Donación anónima: +5 favores.");
       updateStats();
     }, 20000);
-    hintInterval = setInterval(showHint, 30000); // Cada 30 segundos se muestra una pista si el juego sigue activo
+    // Intervalo para mostrar pistas cada 30 segundos
+    hintInterval = setInterval(showHint, 30000);
     scheduleRandomEvent();
   }
 
@@ -121,16 +132,15 @@ document.addEventListener("DOMContentLoaded", function () {
     messageArea.textContent = text;
   }
 
-  // Función para mostrar sugerencias si el jugador parece estancado
+  // Función para mostrar pistas si el jugador parece estancado
   function showHint() {
     if (!gameActive) return;
-    // Pistas basadas en el estado actual
     if (favores < 5) {
       showMessage("Pista: ¡Vende un cargo público para conseguir más favores!");
     } else if (comprados < maxComprados && favores >= 5) {
-      showMessage("Pista: Recuerda que debes comprar senadores radicales o peronistas para ganar.");
-    } else if (congreso > 80 && comprados < maxComprados) {
-      showMessage("Pista: El Congreso se llena rápido, ¡actúa ya!");
+      showMessage("Pista: Recuerda, solo senadores radicales o peronistas cuentan para ganar.");
+    } else if (congreso > 50 && comprados < maxComprados) {
+      showMessage("Pista: El Senado se llena rápido, ¡actúa ya!");
     }
   }
 
@@ -145,15 +155,15 @@ document.addEventListener("DOMContentLoaded", function () {
     candidate.currentPrice *= 1.15;
     document.getElementById("price-" + candidate.id).textContent = Math.round(candidate.currentPrice);
 
-    if (candidate.type === "radical" || candidate.type === "peronista") {
+    // Solo los senadores radicales y peronistas cuentan para la victoria
+    if (candidate.type === "radical") {
       comprados++;
-      if (candidate.type === "radical") {
-        showMessage("Te liberaste del yugo de la casta.");
-      } else if (candidate.type === "peronista") {
-        showMessage("Ahora sí, ¡viva la libertad, carajo!");
-      }
-    } else {
-      showMessage("¡Bienvenido a las fuerzas del cielo!");
+      showMessage("Te liberaste del yugo de la casta.");
+    } else if (candidate.type === "peronista") {
+      comprados++;
+      showMessage("Ahora sí, ¡viva la libertad, carajo!");
+    } else if (candidate.type === "pro") {
+      showMessage("¡El PRO se hace presente en el Senado!");
     }
     updateStats();
     checkVictory();
@@ -192,7 +202,54 @@ document.addEventListener("DOMContentLoaded", function () {
     updateStats();
   });
 
-  // Eventos aleatorios
+  // Acción de intervención para activar bonos y evitar tiempos muertos
+  function interveneAction() {
+    if (interveneCooldown) {
+      showMessage("Espera, ¡la intervención está en enfriamiento!");
+      return;
+    }
+    interveneCooldown = true;
+    interveneBtn.disabled = true;
+    let bonus = Math.floor(Math.random() * 3); // 0, 1 o 2
+    switch(bonus) {
+      case 0:
+        favores += 5;
+        showMessage("Intervención exitosa: ¡Recibes 5 favores extra!");
+        break;
+      case 1:
+        candidates.forEach(candidate => {
+          candidate.currentPrice *= 0.9;
+          document.getElementById("price-" + candidate.id).textContent = Math.round(candidate.currentPrice);
+        });
+        showMessage("Intervención especial: ¡Los precios bajan un 10% por 10 segundos!");
+        setTimeout(() => {
+          candidates.forEach(candidate => {
+            candidate.currentPrice /= 0.9;
+            document.getElementById("price-" + candidate.id).textContent = Math.round(candidate.currentPrice);
+          });
+          showMessage("El efecto de la intervención en precios ha terminado.");
+        }, 10000);
+        break;
+      case 2:
+        let originalIncrement = congressIncrement;
+        congressIncrement = 2;
+        showMessage("Intervención en el Senado: ¡El avance se ralentiza por 10 segundos!");
+        setTimeout(() => {
+          congressIncrement = originalIncrement;
+          showMessage("El ritmo del Senado vuelve a la normalidad.");
+        }, 10000);
+        break;
+    }
+    updateStats();
+    // Enfriamiento de 60 segundos para la intervención
+    setTimeout(() => {
+      interveneCooldown = false;
+      interveneBtn.disabled = false;
+      showMessage("¡La intervención está disponible de nuevo!");
+    }, 60000);
+  }
+
+  // Eventos aleatorios que afectan la partida
   function triggerRandomEvent() {
     const events = ["sublevacion", "oferta", "denuncia"];
     const event = events[Math.floor(Math.random() * events.length)];
@@ -228,20 +285,20 @@ document.addEventListener("DOMContentLoaded", function () {
     setTimeout(triggerRandomEvent, randomTime);
   }
 
-  // Condición de victoria
+  // Condición de victoria: compra 5 senadores (radical o peronista) antes de que el Senado llegue a 72
   function checkVictory() {
     if (comprados >= maxComprados) {
       finalTitle = "¡Misión cumplida!";
-      finalMessage = "No habrá comisión investigadora. ¡La casta tiene miedo!";
+      finalMessage = "No habrá comisión investigadora. ¡La casta tiembla ante la revolución!";
       endGame(true);
     }
   }
 
-  // Condición de derrota
+  // Condición de derrota: el Senado alcanza o supera 72 senadores
   function checkDefeat() {
-    if (congreso >= 129) {
+    if (congreso >= 72) {
       finalTitle = "¡Fracaso total!";
-      finalMessage = "La casta logró el quórum. Pero no nos rendiremos, ¡volveremos más fuertes!";
+      finalMessage = "La casta llenó el Senado. ¡La revolución se detuvo!";
       endGame(false);
     }
   }
@@ -260,6 +317,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     document.getElementById("voucherBtn").disabled = true;
     document.getElementById("venderBtn").disabled = true;
+    interveneBtn.disabled = true;
     gameScreen.style.display = "none";
     document.getElementById("endTitle").textContent = finalTitle;
     document.getElementById("endMessage").textContent = finalMessage;
