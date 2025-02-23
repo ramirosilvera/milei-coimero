@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <!-- Escala para responsividad -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cartas del Congreso: La Batalla por el Poder</title>
   <!-- Google Fonts para tipografía moderna -->
@@ -10,9 +9,6 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Advertencia de orientación -->
-  <div id="orientation-warning">Por favor, gira tu dispositivo a horizontal para jugar.</div>
-  
   <!-- Pantalla de Inicio -->
   <div id="startScreen" class="screen">
     <div class="start-container">
@@ -29,7 +25,7 @@
           - Cada carta cuesta favores y otorga un efecto (ganancia de influencia, bloqueo de la oposición, etc.).<br>
           - Juega una carta por turno para acumular influencia.<br>
           - Tienes 10 turnos para alcanzar 500 puntos de influencia.<br>
-          - Si se agota el tiempo (60 segundos), la Oposición gana automáticamente.
+          - Si se agota el tiempo (60 segundos), la oposición gana automáticamente.
         </p>
         <button id="startButton">¡Inicia la Batalla!</button>
       </div>
@@ -45,7 +41,7 @@
       <span>Tiempo: <span id="timerDisplay">60</span>s</span>
     </div>
     <div id="cardsContainer">
-      <!-- Aquí se mostrarán las cartas de la mano -->
+      <!-- Las cartas se generarán dinámicamente -->
     </div>
     <div id="messageArea">Selecciona una carta para jugar tu turno.</div>
   </div>
@@ -57,10 +53,10 @@
     <button id="restartButton">Reiniciar la Batalla</button>
   </div>
 
-  <!-- Efectos sonoros -->
-  <audio id="sound-card" src="assets/sounds/card-play.mp3"></audio>
-  <audio id="sound-victory" src="assets/sounds/victory.mp3"></audio>
-  <audio id="sound-defeat" src="assets/sounds/defeat.mp3"></audio>
+  <!-- Efectos sonoros (URLs directas) -->
+  <audio id="sound-card" src="https://freesound.org/people/InspectorJ/sounds/411642/download/411642__inspectorj__card-flip.mp3"></audio>
+  <audio id="sound-victory" src="https://freesound.org/people/juskiddink/sounds/403008/download/403008__juskiddink__victory-fanfare.mp3"></audio>
+  <audio id="sound-defeat" src="https://freesound.org/people/cfork/sounds/200905/download/200905__cfork__game-over.wav"></audio>
 
   <script src="script.js"></script>
 </body>
