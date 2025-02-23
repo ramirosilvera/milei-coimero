@@ -1,9 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
   /* --- Configuración Inicial --- */
   const initialFavores = 150;
-  const winCount = 5; // Número de diputados necesarios para ganar
+  const winCount = 5; // Diputados necesarios para ganar
   const boardLength = 16;
-  
+  const squareSize = 70; // Tamaño de cada casilla en px
+
   // Jugadores: Milei (usuario) y la Oposición (IA)
   let players = [
     { name: "Milei", position: 0, favores: initialFavores, properties: [] },
@@ -12,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let currentPlayerIndex = 0; // 0: Milei, 1: Oposición
   let gameActive = false;
   
-  // Definición del tablero (16 casillas)
+  // Definición del tablero: 16 casillas con diferentes tipos y costos
   let boardSquares = [
     { id: 0, name: "Salida", type: "start" },
     { id: 1, name: "Diputado Radical 1", type: "property", subtype: "radical", cost: 70, rent: 10 },
@@ -54,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
     positionEl.textContent = currentPlayer.position;
     turnoEl.textContent = currentPlayer.name;
     ownedCountEl.textContent = currentPlayer.properties.length;
-    // Reactivar el botón si es Milei
+    // Solo Milei puede lanzar el dado manualmente
     if (currentPlayer.name === "Milei") {
       rollDiceBtn.disabled = false;
     } else {
@@ -76,20 +77,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const boardDiameter = boardContainer.offsetWidth;
     const centerX = boardDiameter / 2;
     const centerY = boardDiameter / 2;
-    const squareSize = 100; // tamaño de cada casilla
     const radius = (boardDiameter - squareSize) / 2;
     boardSquares.forEach((sq, index) => {
       const squareDiv = document.createElement("div");
       squareDiv.classList.add("board-square");
       squareDiv.id = "square-" + sq.id;
       squareDiv.innerHTML = `<strong>${sq.name}</strong>`;
-      // Agregar clases según tipo
+      // Asigna clases según el tipo de casilla
       if (sq.type === "start") squareDiv.classList.add("start");
       if (sq.type === "event") squareDiv.classList.add("event");
       if (sq.type === "tax" || sq.type === "penalty") squareDiv.classList.add("tax");
       if (sq.type === "property") squareDiv.classList.add("property");
-      // Calcular posición circular
-      const angle = (2 * Math.PI / boardLength) * index - Math.PI / 2; // -90° para que la casilla 0 esté arriba
+      // Posición circular: repartir uniformemente 360°
+      const angle = (2 * Math.PI / boardLength) * index - Math.PI / 2;
       const x = centerX + radius * Math.cos(angle) - squareSize / 2;
       const y = centerY + radius * Math.sin(angle) - squareSize / 2;
       squareDiv.style.left = x + "px";
@@ -100,9 +100,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   
   function updateBoard() {
-    // Elimina fichas previas
+    // Remueve fichas anteriores
     document.querySelectorAll(".token").forEach(el => el.remove());
-    // Coloca fichas para ambos jugadores
+    // Coloca las fichas de ambos jugadores en su casilla actual
     players.forEach((player, index) => {
       const square = document.getElementById("square-" + player.position);
       if (square) {
@@ -211,7 +211,8 @@ document.addEventListener("DOMContentLoaded", function () {
   /* --- Comprobación de Condiciones de Victoria/Derrota --- */
   function checkGameStatus() {
     let currentPlayer = players[currentPlayerIndex];
-    if (currentPlayer.favores < 0) {
+    // Solo Milei pierde por saldo negativo; la Oposición continúa aunque tenga favores negativos.
+    if (currentPlayer.name === "Milei" && currentPlayer.favores < 0) {
       endGame(false, currentPlayer);
       return;
     }
@@ -246,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function () {
   /* --- Eventos de Botón --- */
   rollDiceBtn.addEventListener("click", function () {
     if (!gameActive) return;
-    rollDiceBtn.disabled = true;
+    rollDiceBtn.disabled = true; // Para evitar múltiples clics
     let dice = rollDice();
     diceResultEl.textContent = `${players[currentPlayerIndex].name} saca ${dice}`;
     movePlayer(dice);
