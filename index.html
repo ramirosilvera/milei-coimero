@@ -1,61 +1,61 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Milei vs La Oposición</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <!-- Se fuerza la escala adecuada para dispositivos móviles -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Milei vs. la Oposición: La Batalla por el Quorum</title>
+  <!-- Google Fonts para una tipografía moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="orientationWarning">
-        <div class="modal-content">
-            <h2>¡Gire su dispositivo a horizontal para jugar!</h2>
-        </div>
+  <!-- Advertencia de orientación (solo se muestra en portrait) -->
+  <div id="orientation-warning">Por favor, gira tu dispositivo a horizontal para jugar.</div>
+  
+  <!-- Pantalla de Inicio -->
+  <div id="startScreen" class="screen">
+    <h1>Milei vs. la Oposición: La Batalla por el Quorum</h1>
+    <p class="slogan">¡La política se convierte en un campo de batalla!</p>
+    <div id="instructions">
+      <h2>¿Cómo jugar?</h2>
+      <p>
+        Cada jugador inicia con 150 favores. El objetivo es ser el primero en comprar 5 diputados clave. Si Milei (tú) consigue 5, evitarás que se vote la comisión investigadora por el escándalo cripto. La Oposición, sin nombre específico, también compra diputados. Además, si 60 segundos transcurren sin que Milei logre su objetivo, la Oposición gana por tiempo.
+      </p>
+      <p>
+        Lanza el dado para mover tu ficha por un tablero circular de 16 casillas. Al caer en una casilla de diputado podrás comprarlo (si tienes suficientes favores). ¡Cuidado con las casillas de evento, fiscalización y tribunal, que pueden hacerte perder favores o uno de tus diputados!
+      </p>
+      <p>
+        ¡Que empiece la lucha por el poder en el Congreso!
+      </p>
     </div>
+    <button id="startButton">¡Inicia la Batalla!</button>
+  </div>
 
-    <div id="gameContainer">
-        <div id="stats">
-            <div class="stat-item">
-                <span class="stat-label">Comprados:</span>
-                <span id="senatorsCount">0</span>/7
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">Dinero:</span>
-                $<span id="money">150</span>
-            </div>
-        </div>
-        <div id="timer">
-            <div id="timeBar"></div>
-            <span id="timeText">60</span>
-        </div>
-        <div id="board"></div>
-        <div id="controls">
-            <button id="rollDice" class="dice-button">🎲 Lanzar Dado</button>
-        </div>
+  <!-- Pantalla del Juego -->
+  <div id="gameScreen" class="screen" style="display:none;">
+    <div id="infoPanel">
+      <span>Favores: <span id="favores">150</span></span>
+      <span>Turno: <span id="turno">Milei</span></span>
+      <span>Diputados Comprados: <span id="ownedCount">0</span>/5</span>
+      <span>Casilla: <span id="position">0</span>/16</span>
+      <span>Tiempo: <span id="timerDisplay">60</span>s</span>
     </div>
-
-    <div id="instructionsModal" class="modal">
-        <div class="modal-content">
-            <h1>¡Batalla Política!</h1>
-            <div class="instructions-list">
-                <p>▶️ Objetivo: Compra 7 legisladores</p>
-                <p>🔵 Radicales: $20</p>
-                <p>🔴 PRO: $30</p>
-                <p>🟣 Peronistas: $40</p>
-                <p>⏳ Tienes 60 segundos!</p>
-                <p>⚠️ Cuidado con la oposición!</p>
-            </div>
-            <button class="start-button" onclick="startGame()">COMENZAR</button>
-        </div>
+    <div id="boardContainer"></div>
+    <div id="controls">
+      <button id="rollDiceBtn">Lanzar Dado</button>
+      <div id="diceResult"></div>
     </div>
+    <div id="messageArea">¡Que comience la batalla!</div>
+  </div>
 
-    <div id="gameOverModal" class="modal">
-        <div class="modal-content">
-            <h2 id="gameOverText"></h2>
-            <button class="restart-button" onclick="location.reload()">JUGAR DE NUEVO</button>
-        </div>
-    </div>
+  <!-- Pantalla de Fin -->
+  <div id="endScreen" class="screen" style="display:none;">
+    <h2 id="endTitle"></h2>
+    <p id="endMessage"></p>
+    <button id="restartButton">Reiniciar la Batalla</button>
+  </div>
 
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
