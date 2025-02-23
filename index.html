@@ -5,7 +5,7 @@
   <!-- Se fuerza la escala adecuada para dispositivos móviles -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Milei vs. la Oposición: La Batalla por el Quorum</title>
-  <!-- Google Fonts para una tipografía moderna -->
+  <!-- Google Fonts para tipografía moderna -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -15,21 +15,28 @@
   
   <!-- Pantalla de Inicio -->
   <div id="startScreen" class="screen">
-    <h1>Milei vs. la Oposición: La Batalla por el Quorum</h1>
-    <p class="slogan">¡La comisión investigadora por el escándalo cripto!</p>
-    <div id="instructions">
-      <h2>¿Cómo jugar?</h2>
-      <p>
-        Cada jugador inicia con 150 favores. El objetivo es ser el primero en comprar 5 diputados clave. Si Milei (tú) consigue 5, evitarás que se vote la comisión investigadora por el escándalo cripto. Además, si 60 segundos transcurren sin que Milei logre su objetivo, la Oposición gana por tiempo.
-      </p>
-      <p>
-        Lanza el dado para mover tu ficha por un tablero circular de 16 casillas. Al caer en una casilla de diputado podrás comprarlo (si tienes suficientes favores). ¡Cuidado con las casillas de evento, fiscalización y tribunal, que pueden hacerte perder favores o uno de tus diputados!
-      </p>
-      <p>
-        ¡Que empiece la lucha por el poder en el Congreso!
-      </p>
+    <div class="start-container">
+      <div class="start-left">
+        <h1>Milei vs. la Oposición</h1>
+        <p class="intro">
+          En medio del escándalo cripto y la inminente votación de la comisión investigadora, el poder se disputa en el Congreso.  
+          ¡Tú, como Milei, debes impedir la investigación comprando diputados clave!
+        </p>
+      </div>
+      <div class="start-right">
+        <h2>¿Cómo jugar?</h2>
+        <p>
+          Cada jugador inicia con 150 favores. El objetivo es ser el primero en comprar 5 diputados clave.
+          Si tú, Milei, compras 5, evitarás que se vote la comisión investigadora.
+          La Oposición (IA) también compra diputados y, si el tiempo se agota (60 segundos), gana automáticamente.
+        </p>
+        <p>
+          Lanza el dado para mover tu ficha por un tablero circular de 16 casillas. Al caer en una casilla de diputado, podrás comprarlo (si tienes suficientes favores).
+          ¡Cuidado con las casillas de evento, fiscalización y tribunal, que pueden reducir tu capital!
+        </p>
+        <button id="startButton">¡Inicia la Batalla!</button>
+      </div>
     </div>
-    <button id="startButton">¡Inicia la Batalla!</button>
   </div>
 
   <!-- Pantalla del Juego -->
