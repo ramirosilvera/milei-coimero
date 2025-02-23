@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <!-- Escala para responsividad -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Campaña en Marcha: La Batalla por la Influencia</title>
+  <title>Cartas del Congreso: La Batalla por el Poder</title>
   <!-- Google Fonts para tipografía moderna -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -17,23 +17,21 @@
   <div id="startScreen" class="screen">
     <div class="start-container">
       <div class="start-left">
-        <h1>Campaña en Marcha</h1>
+        <h1>Cartas del Congreso</h1>
         <p class="intro">
-          En medio del escándalo cripto y la inminente votación de la comisión investigadora, el poder se disputa en el Congreso.  
-          Como Milei, deberás gestionar tus recursos para evitar la investigación y ganar el apoyo popular.
+          La lucha por el poder en el Congreso es real. Con el escándalo cripto a la vuelta de la esquina, tu misión como Milei es construir un mazo poderoso y usar tus cartas para bloquear la comisión investigadora.
         </p>
       </div>
       <div class="start-right">
         <h2>¿Cómo jugar?</h2>
         <p>
-          - Comienzas con 150 favores y 0 influencia.<br>
+          - Recibes un mazo básico de 5 cartas (acciones políticas).<br>
+          - Cada carta cuesta favores y otorga un efecto (ganancia de influencia, bloqueo de la oposición, etc.).<br>
+          - Juega una carta por turno para acumular influencia.<br>
           - Tienes 10 turnos para alcanzar 500 puntos de influencia.<br>
-          - En cada turno, elige una acción: Invertir en Propaganda, Organizar Mítin, Negociar Alianzas, Contratar Asesores, Campaña Digital o Investigar Oposición.<br>
-          - Cada acción cuesta favores y te otorga ganancia aleatoria de influencia.<br>
-          - Al finalizar cada turno se aplica un evento aleatorio (50% probabilidad).<br>
-          - Si el tiempo de 60 segundos se agota o finalizan los 10 turnos, se evalúa la campaña.
+          - Si se agota el tiempo (60 segundos), la Oposición gana automáticamente.
         </p>
-        <button id="startButton">¡Inicia la Campaña!</button>
+        <button id="startButton">¡Inicia la Batalla!</button>
       </div>
     </div>
   </div>
@@ -46,16 +44,23 @@
       <span>Turno: <span id="turno">1/10</span></span>
       <span>Tiempo: <span id="timerDisplay">60</span>s</span>
     </div>
-    <div id="actionsPanel"></div>
-    <div id="messageArea">Selecciona una acción para iniciar tu turno.</div>
+    <div id="cardsContainer">
+      <!-- Aquí se mostrarán las cartas de la mano -->
+    </div>
+    <div id="messageArea">Selecciona una carta para jugar tu turno.</div>
   </div>
 
   <!-- Pantalla de Fin -->
   <div id="endScreen" class="screen" style="display:none;">
     <h2 id="endTitle"></h2>
     <p id="endMessage"></p>
-    <button id="restartButton">Reiniciar la Campaña</button>
+    <button id="restartButton">Reiniciar la Batalla</button>
   </div>
+
+  <!-- Efectos sonoros -->
+  <audio id="sound-card" src="assets/sounds/card-play.mp3"></audio>
+  <audio id="sound-victory" src="assets/sounds/victory.mp3"></audio>
+  <audio id="sound-defeat" src="assets/sounds/defeat.mp3"></audio>
 
   <script src="script.js"></script>
 </body>
