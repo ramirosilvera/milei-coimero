@@ -1,4 +1,4 @@
-/* Fuente moderna y fondo degradado */
+/* Fuente y colores modernos */
 body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
@@ -7,7 +7,7 @@ body {
   color: #333;
 }
 
-/* Estilo general para todas las pantallas */
+/* Estilo general para pantallas */
 .screen {
   display: flex;
   flex-direction: column;
@@ -20,26 +20,27 @@ body {
 
 /* Pantalla de Inicio */
 #startScreen {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 10px;
   margin: 20px;
-  box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  max-width: 800px;
 }
 
 #startScreen h1 {
-  font-size: 3em;
+  font-size: 2.8em;
   margin-bottom: 10px;
 }
 
 .slogan {
-  font-size: 1.5em;
-  margin-bottom: 20px;
+  font-size: 1.6em;
   color: #0288d1;
+  margin-bottom: 20px;
 }
 
 #instructions {
   text-align: left;
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto 20px;
 }
 
@@ -65,89 +66,88 @@ button {
   background: #0288d1;
   color: #fff;
   transition: background 0.3s ease;
+  margin: 10px;
 }
 
 button:hover {
   background: #0277bd;
 }
 
-/* Pantalla del Juego */
-header {
+/* Panel de Información del Juego */
+#infoPanel {
+  width: 100%;
+  max-width: 800px;
   background: #0288d1;
   color: #fff;
-  width: 100%;
-  padding: 20px 10px;
-  box-sizing: border-box;
-  text-align: center;
-}
-
-#stats {
-  margin-bottom: 10px;
-}
-
-#stats span {
-  margin: 0 10px;
-  font-size: 1.2em;
-}
-
-#actions {
-  margin-top: 10px;
-}
-
-#actions button {
-  margin: 5px;
-  font-size: 1em;
-  padding: 10px 15px;
-}
-
-main {
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 20px;
-}
-
-.candidate {
-  background: #fff;
-  border: 2px solid #0288d1;
-  border-radius: 10px;
-  width: 220px;
-  margin: 10px;
-  padding: 15px;
-  text-align: center;
-  box-shadow: 2px 2px 12px rgba(0,0,0,0.15);
-  transition: transform 0.3s ease;
-}
-
-.candidate:hover {
-  transform: translateY(-5px);
-}
-
-.candidate h3 {
-  margin: 10px 0;
-  font-size: 1.5em;
-  color: #e65100;
-}
-
-.candidate p {
-  margin: 5px 0;
+  justify-content: space-around;
   font-size: 1.1em;
 }
 
-.candidate button {
-  margin-top: 10px;
-  font-size: 1em;
-  padding: 8px 12px;
+/* Tablero (16 casillas en forma de cuadrado) */
+#boardContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 120px);
+  grid-template-rows: repeat(4, 120px);
+  gap: 5px;
+  margin-bottom: 20px;
 }
 
-/* Footer */
-footer {
-  text-align: center;
-  padding: 15px;
-  background: #0288d1;
-  color: #fff;
-  width: 100%;
-  position: fixed;
-  bottom: 0;
-  left: 0;
+.board-square {
+  background: #fff;
+  border: 2px solid #0288d1;
+  border-radius: 5px;
+  position: relative;
+  padding: 5px;
+  font-size: 0.9em;
+}
+
+.board-square.start {
+  background: #ffeb3b;
+}
+
+.board-square.event {
+  background: #e1f5fe;
+}
+
+.board-square.tax, .board-square.penalty {
+  background: #ffcdd2;
+}
+
+.board-square.property {
+  background: #c8e6c9;
+}
+
+/* Ficha del jugador */
+.token {
+  width: 20px;
+  height: 20px;
+  background: #e65100;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  border: 2px solid #fff;
+}
+
+/* Controles */
+#controls {
+  margin-bottom: 20px;
+}
+
+#diceResult {
+  font-size: 1.5em;
+  margin-top: 10px;
+}
+
+/* Pantalla de Fin */
+#endScreen {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
+  margin: 20px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  max-width: 800px;
 }
