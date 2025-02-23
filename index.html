@@ -3,36 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Milei Monopoly: La Revolución del Senado</title>
-  <!-- Se incluye Google Fonts para tipografía moderna -->
+  <title>Milei vs. la Oposición: La Batalla por el Quorum</title>
+  <!-- Se incluye Google Fonts para una tipografía moderna -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- Pantalla de Inicio -->
   <div id="startScreen" class="screen">
-    <h1>Milei Monopoly: La Revolución del Senado</h1>
-    <p class="slogan">¡La política se vuelve un juego de poder!</p>
+    <h1>Milei vs. la Oposición: La Batalla por el Quorum</h1>
+    <p class="slogan">¡La política se convierte en un campo de batalla!</p>
     <div id="instructions">
       <h2>¿Cómo jugar?</h2>
       <p>
-        Comienzas con 150 favores. Lanza el dado para mover tu ficha por el tablero y adquiere propiedades (senadores) de tipo <strong>radical</strong> o <strong>peronista</strong> para lograr un monopolio político.
+        Cada jugador inicia con 150 favores. El objetivo es ser el primero en comprar 5 diputados clave. Si Milei consigue 5, evitará que se vote la comisión investigadora para investigar el escándalo cripto; si la Oposición lo logra, se aprueba la comisión.
       </p>
       <p>
-        Los senadores del <em>PRO</em> son de bajo costo, pero no cuentan para ganar. Al caer en casillas especiales, se activarán eventos que pueden aumentar o disminuir tu capital.
+        Lanza el dado para mover tu ficha por un tablero de 16 casillas. Al caer en una casilla de diputado podrás comprarlo (si tienes suficientes favores). Pero ¡cuidado! Hay casillas de evento, fiscalización y tribunales que te harán perder favores o incluso uno de tus diputados.
       </p>
       <p>
-        Al pasar por la casilla de <strong>Salida</strong> recibirás un bono. ¡Tu objetivo es comprar 5 senadores clave antes de quedarte sin favores!
+        ¡Que empiece la lucha por el poder en el Congreso!
       </p>
     </div>
-    <button id="startButton">¡Iniciar la Revolución!</button>
+    <button id="startButton">¡Inicia la Batalla!</button>
   </div>
 
   <!-- Pantalla del Juego -->
   <div id="gameScreen" class="screen" style="display:none;">
     <div id="infoPanel">
       <span>Favores: <span id="favores">150</span></span>
-      <span>Propiedades Clave: <span id="ownedCount">0</span>/5</span>
+      <span>Turno: <span id="turno">Milei</span></span>
+      <span>Diputados Comprados: <span id="ownedCount">0</span>/5</span>
       <span>Posición: <span id="position">0</span>/16</span>
     </div>
     <div id="boardContainer"></div>
@@ -47,7 +48,7 @@
   <div id="endScreen" class="screen" style="display:none;">
     <h2 id="endTitle"></h2>
     <p id="endMessage"></p>
-    <button id="restartButton">Reiniciar la Revolución</button>
+    <button id="restartButton">Reiniciar la Batalla</button>
   </div>
 
   <script src="script.js"></script>
