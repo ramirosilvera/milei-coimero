@@ -1,326 +1,243 @@
+// Espera a que se cargue el DOM
 document.addEventListener("DOMContentLoaded", function () {
-  // Variables globales del juego
-  let favores = 10;
-  let congreso = 0; // Contador del Senado (acumula senadores presentes)
-  let comprados = 0; // Senadores radicales o peronistas comprados
-  const maxComprados = 5;
-  let venderCount = 0;
-  const maxVender = 3;
-  let voucherUsed = false;
-  let purchaseEnabled = true;
-  let congressInterval, donationInterval, hintInterval;
-  let gameActive = false;
-  let finalTitle = "";
-  let finalMessage = "";
-  let interveneCooldown = false;
-  let congressIncrement = 5; // Incremento normal en el Senado cada intervalo
-
-  // Definición de candidatos (ahora senadores)
-  // Se reemplaza el candidato "libertario" por "del PRO"
-  let candidates = [
-    { id: 1, type: "radical", name: "Senador Radical 1", basePrice: 10, currentPrice: 10 },
-    { id: 2, type: "peronista", name: "Senador Peronista 1", basePrice: 15, currentPrice: 15 },
-    { id: 3, type: "pro", name: "Senador del PRO 1", basePrice: 5, currentPrice: 5 },
+  /* --- Variables de Estado --- */
+  const initialFavores = 150;
+  let player = {
+    position: 0,
+    favores: initialFavores,
+    properties: [] // Almacenará IDs de propiedades compradas
+  };
+  const winCount = 5; // Número de propiedades clave (radical o peronista) necesarias para ganar
+  let boardSquares = [
+    { id: 0, name: "Salida", type: "start" },
+    { id: 1, name: "Senador Radical 1", type: "property", subtype: "radical", cost: 100, rent: 20 },
+    { id: 2, name: "Carta Política", type: "event" },
+    { id: 3, name: "Senador Peronista 1", type: "property", subtype: "peronista", cost: 150, rent: 25 },
+    { id: 4, name: "Fiscalización", type: "tax", amount: 50 },
+    { id: 5, name: "Senador del PRO 1", type: "property", subtype: "pro", cost: 80, rent: 10 },
+    { id: 6, name: "Carta Política", type: "event" },
+    { id: 7, name: "Senador Radical 2", type: "property", subtype: "radical", cost: 120, rent: 22 },
+    { id: 8, name: "Tribunal Político", type: "penalty", amount: 30 },
+    { id: 9, name: "Senador Peronista 2", type: "property", subtype: "peronista", cost: 160, rent: 30 },
+    { id: 10, name: "Carta Política", type: "event" },
+    { id: 11, name: "Senador del PRO 2", type: "property", subtype: "pro", cost: 90, rent: 12 },
+    { id: 12, name: "Fiscalización", type: "tax", amount: 50 },
+    { id: 13, name: "Senador Radical 3", type: "property", subtype: "radical", cost: 130, rent: 23 },
+    { id: 14, name: "Carta Política", type: "event" },
+    { id: 15, name: "Senador Peronista 3", type: "property", subtype: "peronista", cost: 170, rent: 35 }
   ];
+  const boardLength = boardSquares.length;
+  let gameActive = false;
 
-  // Elementos del DOM para las pantallas
+  /* --- Elementos del DOM --- */
   const startScreen = document.getElementById("startScreen");
   const gameScreen = document.getElementById("gameScreen");
   const endScreen = document.getElementById("endScreen");
-
+  const boardContainer = document.getElementById("boardContainer");
   const favoresEl = document.getElementById("favores");
-  const congresoEl = document.getElementById("congreso");
-  const compradosEl = document.getElementById("comprados");
+  const ownedCountEl = document.getElementById("ownedCount");
+  const positionEl = document.getElementById("position");
   const messageArea = document.getElementById("messageArea");
-  const candidateContainer = document.getElementById("candidates");
-
+  const diceResultEl = document.getElementById("diceResult");
+  const rollDiceBtn = document.getElementById("rollDiceBtn");
   const startButton = document.getElementById("startButton");
   const restartButton = document.getElementById("restartButton");
-  const interveneBtn = document.getElementById("interveneBtn");
 
-  // Iniciar el juego
-  startButton.addEventListener("click", function () {
-    startScreen.style.display = "none";
-    gameScreen.style.display = "block";
-    initializeGame();
-  });
-
-  // Reiniciar el juego
-  restartButton.addEventListener("click", function () {
-    endScreen.style.display = "none";
-    gameScreen.style.display = "block";
-    resetGame();
-    initializeGame();
-  });
-
-  // Evento para la acción de intervención
-  interveneBtn.addEventListener("click", interveneAction);
-
-  // Inicialización del juego
-  function initializeGame() {
-    favores = 10;
-    congreso = 0;
-    comprados = 0;
-    venderCount = 0;
-    voucherUsed = false;
-    purchaseEnabled = true;
-    gameActive = true;
-    congressIncrement = 5;
-    // Reinicia los precios base
-    candidates.forEach(candidate => {
-      candidate.currentPrice = candidate.basePrice;
+  /* --- Funciones de Utilidad --- */
+  function updateInfoPanel() {
+    favoresEl.textContent = player.favores;
+    positionEl.textContent = player.position;
+    // Cuento solo las propiedades de tipo radical o peronista
+    const keyProps = player.properties.filter(id => {
+      let prop = boardSquares.find(sq => sq.id === id);
+      return prop && (prop.subtype === "radical" || prop.subtype === "peronista");
     });
-    renderCandidates();
-    updateStats();
-    showMessage("¡Que comience la revolución!");
-    // Intervalo para el avance del Senado (quorum a 72)
-    congressInterval = setInterval(function () {
-      congreso += congressIncrement;
-      updateStats();
-      checkDefeat();
-    }, 5000);
-    // Intervalo para donaciones
-    donationInterval = setInterval(function () {
-      favores += 5;
-      showMessage("Donación anónima: +5 favores.");
-      updateStats();
-    }, 20000);
-    // Intervalo para mostrar pistas cada 30 segundos
-    hintInterval = setInterval(showHint, 30000);
-    scheduleRandomEvent();
+    ownedCountEl.textContent = keyProps.length;
   }
 
-  // Reinicia el juego deteniendo intervalos y reseteando banderas
-  function resetGame() {
-    clearInterval(congressInterval);
-    clearInterval(donationInterval);
-    clearInterval(hintInterval);
-    purchaseEnabled = true;
-    gameActive = false;
-  }
-
-  // Renderiza las cartas de los senadores
-  function renderCandidates() {
-    candidateContainer.innerHTML = "";
-    candidates.forEach((candidate) => {
-      let card = document.createElement("div");
-      card.className = "candidate";
-      card.id = "candidate-" + candidate.id;
-      card.innerHTML = `
-          <h3>${candidate.name}</h3>
-          <p>Tipo: ${candidate.type.charAt(0).toUpperCase() + candidate.type.slice(1)}</p>
-          <p>Precio: <span id="price-${candidate.id}">${Math.round(candidate.currentPrice)}</span> favores</p>
-          <button id="buy-${candidate.id}">Comprar</button>
-        `;
-      candidateContainer.appendChild(card);
-      document.getElementById("buy-" + candidate.id).addEventListener("click", function () {
-        if (!purchaseEnabled) return;
-        comprarSenador(candidate.id);
-      });
-    });
-  }
-
-  // Actualiza las estadísticas del juego
-  function updateStats() {
-    favoresEl.textContent = Math.floor(favores);
-    congresoEl.textContent = congreso;
-    compradosEl.textContent = comprados;
-  }
-
-  // Muestra mensajes en el área designada
   function showMessage(text) {
     messageArea.textContent = text;
   }
 
-  // Función para mostrar pistas si el jugador parece estancado
-  function showHint() {
-    if (!gameActive) return;
-    if (favores < 5) {
-      showMessage("Pista: ¡Vende un cargo público para conseguir más favores!");
-    } else if (comprados < maxComprados && favores >= 5) {
-      showMessage("Pista: Recuerda, solo senadores radicales o peronistas cuentan para ganar.");
-    } else if (congreso > 50 && comprados < maxComprados) {
-      showMessage("Pista: El Senado se llena rápido, ¡actúa ya!");
-    }
+  function rollDice() {
+    return Math.floor(Math.random() * 6) + 1;
   }
 
-  // Función para comprar un senador
-  function comprarSenador(candidateId) {
-    let candidate = candidates.find((c) => c.id === candidateId);
-    if (favores < candidate.currentPrice) {
-      showMessage("No tienes suficientes favores.");
-      return;
+  function movePlayer(steps) {
+    let prevPos = player.position;
+    player.position = (player.position + steps) % boardLength;
+    // Si se pasó por la casilla 0, se otorga un bono
+    if (player.position < prevPos) {
+      player.favores += 50;
+      showMessage("¡Pasaste por Salida! Recibes 50 favores.");
     }
-    favores -= candidate.currentPrice;
-    candidate.currentPrice *= 1.15;
-    document.getElementById("price-" + candidate.id).textContent = Math.round(candidate.currentPrice);
-
-    // Solo los senadores radicales y peronistas cuentan para la victoria
-    if (candidate.type === "radical") {
-      comprados++;
-      showMessage("Te liberaste del yugo de la casta.");
-    } else if (candidate.type === "peronista") {
-      comprados++;
-      showMessage("Ahora sí, ¡viva la libertad, carajo!");
-    } else if (candidate.type === "pro") {
-      showMessage("¡El PRO se hace presente en el Senado!");
-    }
-    updateStats();
-    checkVictory();
+    updateInfoPanel();
+    updateBoard();
+    processSquare();
   }
 
-  // Acción del Voucher Libertario
-  document.getElementById("voucherBtn").addEventListener("click", function () {
-    if (voucherUsed) {
-      showMessage("El voucher ya fue utilizado.");
-      return;
-    }
-    voucherUsed = true;
-    showMessage("Voucher activado: precios reducidos en un 20% por 10 segundos.");
-    candidates.forEach((candidate) => {
-      candidate.currentPrice *= 0.8;
-      document.getElementById("price-" + candidate.id).textContent = Math.round(candidate.currentPrice);
+  /* --- Funciones del Tablero --- */
+  function createBoard() {
+    boardContainer.innerHTML = "";
+    boardSquares.forEach(sq => {
+      const squareDiv = document.createElement("div");
+      squareDiv.classList.add("board-square");
+      squareDiv.id = "square-" + sq.id;
+      squareDiv.innerHTML = `<strong>${sq.name}</strong>`;
+      // Agregar clases según tipo para estilizar
+      if (sq.type === "start") squareDiv.classList.add("start");
+      if (sq.type === "event") squareDiv.classList.add("event");
+      if (sq.type === "tax" || sq.type === "penalty") squareDiv.classList.add("tax");
+      if (sq.type === "property") squareDiv.classList.add("property");
+      boardContainer.appendChild(squareDiv);
     });
-    setTimeout(() => {
-      candidates.forEach((candidate) => {
-        candidate.currentPrice /= 0.8;
-        document.getElementById("price-" + candidate.id).textContent = Math.round(candidate.currentPrice);
-      });
-      showMessage("El efecto del voucher ha finalizado.");
-    }, 10000);
-  });
+    updateBoard();
+  }
 
-  // Acción de vender un cargo público
-  document.getElementById("venderBtn").addEventListener("click", function () {
-    if (venderCount >= maxVender) {
-      showMessage("Ya alcanzaste el límite de ventas de cargos públicos.");
-      return;
-    }
-    venderCount++;
-    favores += 10;
-    showMessage("Cargo vendido. Obtienes 10 favores. (Ventas: " + venderCount + "/" + maxVender + ")");
-    updateStats();
-  });
+  function updateBoard() {
+    // Elimina cualquier ficha de casilla
+    document.querySelectorAll(".token").forEach(el => el.remove());
+    // Agrega la ficha del jugador en la casilla actual
+    const currentSquare = document.getElementById("square-" + player.position);
+    const tokenDiv = document.createElement("div");
+    tokenDiv.classList.add("token");
+    currentSquare.appendChild(tokenDiv);
+  }
 
-  // Acción de intervención para activar bonos y evitar tiempos muertos
-  function interveneAction() {
-    if (interveneCooldown) {
-      showMessage("Espera, ¡la intervención está en enfriamiento!");
-      return;
-    }
-    interveneCooldown = true;
-    interveneBtn.disabled = true;
-    let bonus = Math.floor(Math.random() * 3); // 0, 1 o 2
-    switch(bonus) {
-      case 0:
-        favores += 5;
-        showMessage("Intervención exitosa: ¡Recibes 5 favores extra!");
+  /* --- Procesamiento de Casilla --- */
+  function processSquare() {
+    let sq = boardSquares[player.position];
+    switch (sq.type) {
+      case "start":
+        showMessage("Estás en Salida. ¡Buena jugada!");
         break;
-      case 1:
-        candidates.forEach(candidate => {
-          candidate.currentPrice *= 0.9;
-          document.getElementById("price-" + candidate.id).textContent = Math.round(candidate.currentPrice);
-        });
-        showMessage("Intervención especial: ¡Los precios bajan un 10% por 10 segundos!");
-        setTimeout(() => {
-          candidates.forEach(candidate => {
-            candidate.currentPrice /= 0.9;
-            document.getElementById("price-" + candidate.id).textContent = Math.round(candidate.currentPrice);
+      case "property":
+        // Si ya es propiedad del jugador, nada pasa
+        if (player.properties.includes(sq.id)) {
+          showMessage(`Ya posees ${sq.name}.`);
+        } else {
+          // Ofrecer compra si hay suficientes favores
+          if (player.favores >= sq.cost) {
+            let confirmBuy = confirm(`Has caído en ${sq.name} (${sq.subtype}). ¿Deseas comprarlo por ${sq.cost} favores?`);
+            if (confirmBuy) {
+              player.favores -= sq.cost;
+              player.properties.push(sq.id);
+              showMessage(`¡Compraste ${sq.name}!`);
+            } else {
+              showMessage(`Decidiste no comprar ${sq.name}.`);
+            }
+          } else {
+            showMessage(`No tienes suficientes favores para comprar ${sq.name}.`);
+          }
+        }
+        break;
+      case "tax":
+        player.favores -= sq.amount;
+        showMessage(`¡Fiscalización! Pierdes ${sq.amount} favores.`);
+        break;
+      case "penalty":
+        player.favores -= sq.amount;
+        showMessage(`Tribunal Político: pierdes ${sq.amount} favores.`);
+        break;
+      case "event":
+        triggerEvent();
+        break;
+    }
+    updateInfoPanel();
+    checkGameStatus();
+  }
+
+  function triggerEvent() {
+    // Selecciona aleatoriamente un evento político
+    const events = [
+      { message: "Donación secreta: +30 favores.", effect: () => { player.favores += 30; } },
+      { message: "Denuncia mediática: -20 favores.", effect: () => { player.favores -= 20; } },
+      { message: "Sublevación interna: pierdes una propiedad clave.", effect: () => {
+          // Remover la última propiedad clave comprada (si existe)
+          let keyProps = player.properties.filter(id => {
+            let p = boardSquares.find(s => s.id === id);
+            return p && (p.subtype === "radical" || p.subtype === "peronista");
           });
-          showMessage("El efecto de la intervención en precios ha terminado.");
-        }, 10000);
-        break;
-      case 2:
-        let originalIncrement = congressIncrement;
-        congressIncrement = 2;
-        showMessage("Intervención en el Senado: ¡El avance se ralentiza por 10 segundos!");
-        setTimeout(() => {
-          congressIncrement = originalIncrement;
-          showMessage("El ritmo del Senado vuelve a la normalidad.");
-        }, 10000);
-        break;
-    }
-    updateStats();
-    // Enfriamiento de 60 segundos para la intervención
-    setTimeout(() => {
-      interveneCooldown = false;
-      interveneBtn.disabled = false;
-      showMessage("¡La intervención está disponible de nuevo!");
-    }, 60000);
+          if (keyProps.length > 0) {
+            let remId = keyProps[keyProps.length - 1];
+            player.properties = player.properties.filter(id => id !== remId);
+            showMessage("Sublevación interna: pierdes " + boardSquares.find(s => s.id === remId).name);
+          } else {
+            showMessage("Sublevación interna: pero no tienes propiedades clave para perder.");
+          }
+      } }
+    ];
+    let ev = events[Math.floor(Math.random() * events.length)];
+    ev.effect();
+    showMessage(ev.message);
   }
 
-  // Eventos aleatorios que afectan la partida
-  function triggerRandomEvent() {
-    const events = ["sublevacion", "oferta", "denuncia"];
-    const event = events[Math.floor(Math.random() * events.length)];
-    if (event === "sublevacion") {
-      if (comprados > 0) {
-        comprados--;
-        showMessage("¡Sublevación! Un senador se retractó: 'No todos resisten la tentación de la casta...'");
-        updateStats();
-      }
-    } else if (event === "oferta") {
-      let randomCandidate = candidates[Math.floor(Math.random() * candidates.length)];
-      showMessage("Oferta relámpago en " + randomCandidate.name + " por 10 segundos.");
-      randomCandidate.currentPrice *= 0.7;
-      document.getElementById("price-" + randomCandidate.id).textContent = Math.round(randomCandidate.currentPrice);
-      setTimeout(() => {
-        randomCandidate.currentPrice /= 0.7;
-        document.getElementById("price-" + randomCandidate.id).textContent = Math.round(randomCandidate.currentPrice);
-        showMessage("La oferta relámpago ha finalizado en " + randomCandidate.name + ".");
-      }, 10000);
-    } else if (event === "denuncia") {
-      purchaseEnabled = false;
-      showMessage("Denuncia mediática: ¡Los zurdos operadores nos quieren ensuciar! Compras bloqueadas por 5 segundos.");
-      setTimeout(() => {
-        purchaseEnabled = true;
-        showMessage("Las compras se han reactivado.");
-      }, 5000);
-    }
-    scheduleRandomEvent();
-  }
-
-  function scheduleRandomEvent() {
-    let randomTime = Math.floor(Math.random() * 20000) + 10000;
-    setTimeout(triggerRandomEvent, randomTime);
-  }
-
-  // Condición de victoria: compra 5 senadores (radical o peronista) antes de que el Senado llegue a 72
-  function checkVictory() {
-    if (comprados >= maxComprados) {
-      finalTitle = "¡Misión cumplida!";
-      finalMessage = "No habrá comisión investigadora. ¡La casta tiembla ante la revolución!";
-      endGame(true);
-    }
-  }
-
-  // Condición de derrota: el Senado alcanza o supera 72 senadores
-  function checkDefeat() {
-    if (congreso >= 72) {
-      finalTitle = "¡Fracaso total!";
-      finalMessage = "La casta llenó el Senado. ¡La revolución se detuvo!";
+  /* --- Comprobación de Condiciones de Victoria/Derrota --- */
+  function checkGameStatus() {
+    // Derrota si favores < 0
+    if (player.favores < 0) {
       endGame(false);
+      return;
+    }
+    // Victoria si posee 5 propiedades clave (radical o peronista)
+    let keyProps = player.properties.filter(id => {
+      let prop = boardSquares.find(sq => sq.id === id);
+      return prop && (prop.subtype === "radical" || prop.subtype === "peronista");
+    });
+    if (keyProps.length >= winCount) {
+      endGame(true);
+      return;
     }
   }
 
-  // Finaliza el juego mostrando la pantalla de fin
-  function endGame(isVictory) {
-    clearInterval(congressInterval);
-    clearInterval(donationInterval);
-    clearInterval(hintInterval);
-    purchaseEnabled = false;
-    candidates.forEach((candidate) => {
-      let btn = document.getElementById("buy-" + candidate.id);
-      if (btn) {
-        btn.disabled = true;
-      }
-    });
-    document.getElementById("voucherBtn").disabled = true;
-    document.getElementById("venderBtn").disabled = true;
-    interveneBtn.disabled = true;
+  /* --- Función para finalizar el juego --- */
+  function endGame(victory) {
+    gameActive = false;
+    rollDiceBtn.disabled = true;
+    if (victory) {
+      document.getElementById("endTitle").textContent = "¡Revolución Completa!";
+      document.getElementById("endMessage").textContent = "Has monopolizado el poder político. ¡La casta tiembla ante tu fuerza!";
+    } else {
+      document.getElementById("endTitle").textContent = "¡Fracaso Total!";
+      document.getElementById("endMessage").textContent = "Te quedaste sin favores. La comisión investigadora te detuvo.";
+    }
     gameScreen.style.display = "none";
-    document.getElementById("endTitle").textContent = finalTitle;
-    document.getElementById("endMessage").textContent = finalMessage;
     endScreen.style.display = "flex";
   }
+
+  /* --- Eventos de Botones --- */
+  rollDiceBtn.addEventListener("click", function () {
+    if (!gameActive) return;
+    let dice = rollDice();
+    diceResultEl.textContent = `¡Saliste ${dice}!`;
+    movePlayer(dice);
+  });
+
+  startButton.addEventListener("click", function () {
+    startScreen.style.display = "none";
+    gameScreen.style.display = "block";
+    initializeGameState();
+  });
+
+  restartButton.addEventListener("click", function () {
+    endScreen.style.display = "none";
+    gameScreen.style.display = "block";
+    initializeGameState();
+  });
+
+  /* --- Inicialización del Estado del Juego --- */
+  function initializeGameState() {
+    // Reiniciar estado del jugador y activar el juego
+    player.position = 0;
+    player.favores = initialFavores;
+    player.properties = [];
+    gameActive = true;
+    diceResultEl.textContent = "";
+    showMessage("¡Comienza tu turno! Lanza el dado para avanzar.");
+    updateInfoPanel();
+    createBoard();
+  }
+
+  // Inicia la aplicación mostrando la pantalla de inicio
+  startScreen.style.display = "flex";
 });
