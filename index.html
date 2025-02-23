@@ -2,37 +2,37 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <!-- Permite escalado y responsividad -->
+  <!-- Escala para responsividad -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Milei vs. la Oposición: La Batalla por el Quorum</title>
-  <!-- Google Fonts para tipografía moderna -->
+  <title>Campaña en Marcha: La Batalla por la Influencia</title>
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Advertencia de orientación (solo se muestra en portrait) -->
-  <div id="orientation-warning">Por favor, gira tu dispositivo a horizontal para jugar.</div>
-  
   <!-- Pantalla de Inicio -->
   <div id="startScreen" class="screen">
     <div class="start-container">
       <div class="start-left">
-        <h1>Milei vs. la Oposición</h1>
+        <h1>Campaña en Marcha</h1>
         <p class="intro">
-          En medio del escándalo cripto y la inminente votación de la comisión investigadora, el poder se disputa en el Congreso. ¡Tú, como Milei, debes impedir la investigación comprando diputados clave!
+          En medio del escándalo cripto y la inminente votación de la comisión investigadora, el poder se disputa en el Congreso.  
+          Como Milei, deberás gestionar tus recursos para evitar la investigación y ganar el apoyo popular.
         </p>
       </div>
       <div class="start-right">
         <h2>¿Cómo jugar?</h2>
         <p>
-          Cada jugador inicia con 150 favores. El objetivo es ser el primero en comprar 5 diputados clave.
-          Si tú, Milei, compras 5, evitarás que se vote la comisión investigadora.
-          La Oposición (IA) también compra diputados y, si el tiempo se agota (60 segundos), gana automáticamente.
+          - Comienzas con 150 favores y 0 puntos de influencia.  
+          - Tienes 10 turnos para alcanzar 500 puntos de influencia.  
+          - En cada turno, elige una acción: invertir en propaganda, organizar mítines, negociar alianzas, contratar asesores, realizar campaña digital o investigar a la oposición.  
+          - Cada acción tiene un costo en favores y te otorga una ganancia aleatoria en influencia.
         </p>
         <p>
-          Lanza el dado para mover tu ficha por un tablero circular de 16 casillas. Al caer en una casilla de diputado, podrás comprarlo (si tienes suficientes favores). ¡Cuidado con las casillas de evento, fiscalización y tribunal!
+          Además, al final de cada turno se activará un evento aleatorio que puede afectar tus recursos.  
+          Si Milei se queda sin favores, pierdes. Si al final de los 10 turnos alcanzas 500 influencia, ¡ganas la campaña!
         </p>
-        <button id="startButton">¡Inicia la Batalla!</button>
+        <button id="startButton">¡Inicia la Campaña!</button>
       </div>
     </div>
   </div>
@@ -41,24 +41,26 @@
   <div id="gameScreen" class="screen" style="display:none;">
     <div id="infoPanel">
       <span>Favores: <span id="favores">150</span></span>
-      <span>Turno: <span id="turno">Milei</span></span>
-      <span>Diputados Comprados: <span id="ownedCount">0</span>/5</span>
-      <span>Casilla: <span id="position">0</span>/16</span>
-      <span>Tiempo: <span id="timerDisplay">60</span>s</span>
+      <span>Influencia: <span id="influencia">0</span></span>
+      <span>Turno: <span id="turno">1/10</span></span>
     </div>
-    <div id="boardContainer"></div>
-    <div id="controls">
-      <button id="rollDiceBtn">Lanzar Dado</button>
-      <div id="diceResult"></div>
+    <div id="actionsPanel">
+      <!-- Botones de acción -->
+      <button class="action-btn" data-action="propaganda">Invertir en Propaganda</button>
+      <button class="action-btn" data-action="mitin">Organizar Mítin</button>
+      <button class="action-btn" data-action="alianza">Negociar Alianzas</button>
+      <button class="action-btn" data-action="asesor">Contratar Asesores</button>
+      <button class="action-btn" data-action="digital">Campaña Digital</button>
+      <button class="action-btn" data-action="investigar">Investigar Oposición</button>
     </div>
-    <div id="messageArea">¡Que comience la batalla!</div>
+    <div id="messageArea">Selecciona una acción para iniciar tu turno.</div>
   </div>
 
   <!-- Pantalla de Fin -->
   <div id="endScreen" class="screen" style="display:none;">
     <h2 id="endTitle"></h2>
     <p id="endMessage"></p>
-    <button id="restartButton">Reiniciar la Batalla</button>
+    <button id="restartButton">Reiniciar la Campaña</button>
   </div>
 
   <script src="script.js"></script>
