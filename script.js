@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const winCount = 5; // Número de diputados necesarios para ganar
   const boardLength = 16;
   
-  // Definición de jugadores: Milei (usuario) y la Oposición (máquina)
+  // Jugadores: Milei (usuario) y la Oposición (IA)
   let players = [
     { name: "Milei", position: 0, favores: initialFavores, properties: [] },
     { name: "Oposición", position: 0, favores: initialFavores, properties: [] }
@@ -12,11 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let currentPlayerIndex = 0; // 0: Milei, 1: Oposición
   let gameActive = false;
   
-  // Definición del tablero de 16 casillas
-  // Se usan diputados; los costos se ajustan:
-  // - Diputado Radical: más baratos
-  // - Diputado del PRO: intermedios
-  // - Diputado Peronista: más caros
+  // Definición del tablero (16 casillas)
   let boardSquares = [
     { id: 0, name: "Salida", type: "start" },
     { id: 1, name: "Diputado Radical 1", type: "property", subtype: "radical", cost: 70, rent: 10 },
@@ -58,6 +54,12 @@ document.addEventListener("DOMContentLoaded", function () {
     positionEl.textContent = currentPlayer.position;
     turnoEl.textContent = currentPlayer.name;
     ownedCountEl.textContent = currentPlayer.properties.length;
+    // Reactivar el botón si es Milei
+    if (currentPlayer.name === "Milei") {
+      rollDiceBtn.disabled = false;
+    } else {
+      rollDiceBtn.disabled = true;
+    }
   }
   
   function showMessage(text) {
@@ -68,8 +70,37 @@ document.addEventListener("DOMContentLoaded", function () {
     return Math.floor(Math.random() * 6) + 1;
   }
   
+  /* --- Tablero Circular --- */
+  function createBoard() {
+    boardContainer.innerHTML = "";
+    const boardDiameter = boardContainer.offsetWidth;
+    const centerX = boardDiameter / 2;
+    const centerY = boardDiameter / 2;
+    const squareSize = 100; // tamaño de cada casilla
+    const radius = (boardDiameter - squareSize) / 2;
+    boardSquares.forEach((sq, index) => {
+      const squareDiv = document.createElement("div");
+      squareDiv.classList.add("board-square");
+      squareDiv.id = "square-" + sq.id;
+      squareDiv.innerHTML = `<strong>${sq.name}</strong>`;
+      // Agregar clases según tipo
+      if (sq.type === "start") squareDiv.classList.add("start");
+      if (sq.type === "event") squareDiv.classList.add("event");
+      if (sq.type === "tax" || sq.type === "penalty") squareDiv.classList.add("tax");
+      if (sq.type === "property") squareDiv.classList.add("property");
+      // Calcular posición circular
+      const angle = (2 * Math.PI / boardLength) * index - Math.PI / 2; // -90° para que la casilla 0 esté arriba
+      const x = centerX + radius * Math.cos(angle) - squareSize / 2;
+      const y = centerY + radius * Math.sin(angle) - squareSize / 2;
+      squareDiv.style.left = x + "px";
+      squareDiv.style.top = y + "px";
+      boardContainer.appendChild(squareDiv);
+    });
+    updateBoard();
+  }
+  
   function updateBoard() {
-    // Elimina fichas anteriores
+    // Elimina fichas previas
     document.querySelectorAll(".token").forEach(el => el.remove());
     // Coloca fichas para ambos jugadores
     players.forEach((player, index) => {
@@ -81,22 +112,6 @@ document.addEventListener("DOMContentLoaded", function () {
         square.appendChild(token);
       }
     });
-  }
-  
-  function createBoard() {
-    boardContainer.innerHTML = "";
-    boardSquares.forEach(sq => {
-      const squareDiv = document.createElement("div");
-      squareDiv.classList.add("board-square");
-      squareDiv.id = "square-" + sq.id;
-      squareDiv.innerHTML = `<strong>${sq.name}</strong>`;
-      if (sq.type === "start") squareDiv.classList.add("start");
-      if (sq.type === "event") squareDiv.classList.add("event");
-      if (sq.type === "tax" || sq.type === "penalty") squareDiv.classList.add("tax");
-      if (sq.type === "property") squareDiv.classList.add("property");
-      boardContainer.appendChild(squareDiv);
-    });
-    updateBoard();
   }
   
   /* --- Procesamiento de Casilla --- */
@@ -121,7 +136,7 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
               showMessage(`Milei decide esperar... ¡La batalla sigue!`);
             }
-          } else { // Turno de la Oposición (AI)
+          } else { // Turno de la Oposición (IA)
             currentPlayer.favores -= sq.cost;
             currentPlayer.properties.push(sq.id);
             showMessage(`La Oposición se hace con ${sq.name}. ¡El quorum se acerca para la comisión investigadora!`);
@@ -180,6 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function switchTurn() {
     currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
     updateInfoPanel();
+    // Si es el turno de la Oposición, simula su jugada tras un breve retraso
     if (players[currentPlayerIndex].name === "Oposición" && gameActive) {
       setTimeout(machineTurn, 1500);
     }
@@ -203,18 +219,14 @@ document.addEventListener("DOMContentLoaded", function () {
       endGame(true, currentPlayer);
       return;
     }
-    if (currentPlayer.name === "Milei") {
-      rollDiceBtn.disabled = false;
-    } else {
-      rollDiceBtn.disabled = true;
-    }
+    updateInfoPanel();
   }
   
   function endGame(victory, player) {
     gameActive = false;
     rollDiceBtn.disabled = true;
-    let endTitle = document.getElementById("endTitle");
-    let endMessage = document.getElementById("endMessage");
+    const endTitle = document.getElementById("endTitle");
+    const endMessage = document.getElementById("endMessage");
     if (victory) {
       if (player.name === "Milei") {
         endTitle.textContent = "¡Victoria Rotunda de Milei!";
