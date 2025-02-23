@@ -7,6 +7,7 @@ body, html {
   font-family: 'Roboto', sans-serif;
   background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
   color: #333;
+  overflow-y: auto; /* Permite scroll si es necesario */
 }
 
 .screen {
@@ -16,13 +17,31 @@ body, html {
   justify-content: center;
   padding: 20px;
   box-sizing: border-box;
-  width: 100%;
+  width: 100vw;
   min-height: 100vh;
 }
 
-/* Pantalla de Inicio */
+/* Advertencia de orientación */
+#orientation-warning {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  color: #e65100;
+  font-size: 2em;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Pantalla de Inicio - Diseño dividido */
 #startScreen {
-  background: rgba(255,255,255,0.95);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
   max-width: 900px;
@@ -66,7 +85,7 @@ body, html {
   margin-bottom: 10px;
 }
 
-/* Botones */
+/* Botones generales */
 button {
   padding: 15px 25px;
   font-size: 1.2em;
@@ -83,7 +102,7 @@ button:hover {
   background: #0277bd;
 }
 
-/* Panel de Información del Juego */
+/* Panel de Información */
 #infoPanel {
   background: #0288d1;
   color: #fff;
@@ -93,8 +112,8 @@ button:hover {
   max-width: 800px;
   margin-bottom: 20px;
   display: flex;
-  justify-content: space-around;
   flex-wrap: wrap;
+  justify-content: space-around;
   font-size: 1em;
 }
 
@@ -113,7 +132,7 @@ button:hover {
   flex: 1 1 200px;
 }
 
-/* Mensaje */
+/* Zona de mensajes llamativos */
 #messageArea {
   background: #fff;
   color: #333;
@@ -130,7 +149,7 @@ button:hover {
 
 /* Pantalla de Fin */
 #endScreen {
-  background: rgba(255,255,255,0.95);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
   max-width: 800px;
@@ -138,7 +157,7 @@ button:hover {
   margin: 20px auto;
 }
 
-/* Ajustes responsivos */
+/* Responsive: en pantallas pequeñas, la pantalla de inicio se organiza en columna */
 @media screen and (max-width: 600px) {
   .start-container {
     flex-direction: column;
