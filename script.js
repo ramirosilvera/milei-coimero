@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const countdownTotal = 60; // Tiempo total en segundos para la campaña
   
   let timeLeft = countdownTotal;
-  let timerInterval; // Para la cuenta regresiva
+  let timerInterval; // Intervalo del temporizador
 
   // Estado del juego
   let gameState = {
@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
     propaganda: {
       nombre: "Invertir en Propaganda",
       costo: 20,
-      // Ganancia aleatoria de influencia entre 30 y 50
       efecto: () => getRandomInt(30, 50)
     },
     mitin: {
@@ -48,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
     investigar: {
       nombre: "Investigar Oposición",
       costo: 30,
-      efecto: () => 30 // Fija: +30 influencia
+      efecto: () => 30
     }
   };
 
@@ -66,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const restartButton = document.getElementById("restartButton");
   const orientationWarning = document.getElementById("orientation-warning");
 
-  /* --- Funciones de Utilidad --- */
+  /* --- Función de Utilidad --- */
   function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
@@ -89,7 +88,6 @@ document.addEventListener("DOMContentLoaded", function () {
       showMessage(`No tienes suficientes favores para ${accion.nombre}.`);
       return;
     }
-    // Aplica costo y ganancia
     gameState.favores -= accion.costo;
     const ganancia = accion.efecto();
     gameState.influencia += ganancia;
@@ -98,7 +96,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function finalizarTurno() {
-    // Evento aleatorio al finalizar el turno
     aplicarEventoAleatorio();
     gameState.turno++;
     if (gameState.turno > maxTurnos) {
@@ -110,7 +107,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function aplicarEventoAleatorio() {
-    // 50% de probabilidad de evento
     if (Math.random() < 0.5) {
       const eventos = [
         { mensaje: "Donación Secreta: +30 favores.", efecto: () => { gameState.favores += getRandomInt(20, 40); } },
@@ -127,7 +123,6 @@ document.addEventListener("DOMContentLoaded", function () {
   function finalizarCampaña() {
     clearInterval(timerInterval);
     if (gameState.influencia >= winInfluence) {
-      // Victoria de Milei
       showMessage("¡Victoria! Has alcanzado la influencia necesaria y bloqueado la comisión investigadora.");
       endGame(true);
     } else {
@@ -159,7 +154,6 @@ document.addEventListener("DOMContentLoaded", function () {
       timerDisplay.textContent = timeLeft;
       if (timeLeft <= 0) {
         clearInterval(timerInterval);
-        // Si el tiempo se agota antes de finalizar los turnos, se declara derrota para Milei
         finalizarCampaña();
       }
     }, 1000);
@@ -184,7 +178,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* --- Inicialización y Reinicio --- */
   function initializeGame() {
-    // Reinicia estado de la campaña
     gameState.favores = initialFavores;
     gameState.influencia = initialInfluencia;
     gameState.turno = 1;
