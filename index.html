@@ -3,58 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Milei Compra Senadores</title>
-  <!-- Se incluye Google Fonts para una tipografía moderna -->
+  <title>Milei Monopoly: La Revolución del Senado</title>
+  <!-- Se incluye Google Fonts para tipografía moderna -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- Pantalla de Inicio -->
   <div id="startScreen" class="screen">
-    <h1>Milei Compra Senadores</h1>
-    <p class="slogan">¡La revolución en el Senado ya comienza!</p>
+    <h1>Milei Monopoly: La Revolución del Senado</h1>
+    <p class="slogan">¡La política se vuelve un juego de poder!</p>
     <div id="instructions">
       <h2>¿Cómo jugar?</h2>
       <p>
-        Tu objetivo es impedir que se llene el Senado comprando <strong>5 senadores</strong> (solo los de tipo <em>radical</em> o <em>peronista</em>) antes de que se alcance el quórum de <strong>72</strong> senadores.
+        Comienzas con 150 favores. Lanza el dado para mover tu ficha por el tablero y adquiere propiedades (senadores) de tipo <strong>radical</strong> o <strong>peronista</strong> para lograr un monopolio político.
       </p>
       <p>
-        Comienzas con 10 favores. Úsalos para comprar senadores; cada compra encarece al siguiente. Si te quedas sin favores, activa el <em>Voucher Libertario</em>, vende un cargo público o haz una intervención para conseguir más.
+        Los senadores del <em>PRO</em> son de bajo costo, pero no cuentan para ganar. Al caer en casillas especiales, se activarán eventos que pueden aumentar o disminuir tu capital.
       </p>
       <p>
-        Durante la partida aparecerán eventos y pistas que te orientarán si no sabes qué hacer. ¡Mantente atento y actúa rápido!
+        Al pasar por la casilla de <strong>Salida</strong> recibirás un bono. ¡Tu objetivo es comprar 5 senadores clave antes de quedarte sin favores!
       </p>
     </div>
-    <button id="startButton">¡A romper el Senado!</button>
+    <button id="startButton">¡Iniciar la Revolución!</button>
   </div>
 
   <!-- Pantalla del Juego -->
   <div id="gameScreen" class="screen" style="display:none;">
-    <header>
-      <div id="stats">
-        <span>Favores: <span id="favores">10</span></span>
-        <span>Senado: <span id="congreso">0</span>/72</span>
-        <span>Senadores Comprados: <span id="comprados">0</span>/5</span>
-      </div>
-      <div id="actions">
-        <button id="voucherBtn">Usar Voucher Libertario (Una vez)</button>
-        <button id="venderBtn">Vender Cargo Público (Máx 3 veces)</button>
-        <button id="interveneBtn">¡Intervenir!</button>
-      </div>
-    </header>
-    <main>
-      <div id="candidates"></div>
-    </main>
-    <footer>
-      <div id="messageArea"></div>
-    </footer>
+    <div id="infoPanel">
+      <span>Favores: <span id="favores">150</span></span>
+      <span>Propiedades Clave: <span id="ownedCount">0</span>/5</span>
+      <span>Posición: <span id="position">0</span>/16</span>
+    </div>
+    <div id="boardContainer"></div>
+    <div id="controls">
+      <button id="rollDiceBtn">Lanzar Dado</button>
+      <div id="diceResult"></div>
+    </div>
+    <div id="messageArea"></div>
   </div>
 
   <!-- Pantalla de Fin -->
   <div id="endScreen" class="screen" style="display:none;">
     <h2 id="endTitle"></h2>
     <p id="endMessage"></p>
-    <button id="restartButton">Reiniciar la revolución</button>
+    <button id="restartButton">Reiniciar la Revolución</button>
   </div>
 
   <script src="script.js"></script>
