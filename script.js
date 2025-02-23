@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const winInfluence = 500; // Influencia necesaria para ganar
   const maxTurnos = 10;
   let turnoActual = 1;
-  const countdownTotal = 60; // Tiempo total en segundos para la campaña
+  const countdownTotal = 60; // Tiempo total en segundos para la partida
   
   let timeLeft = countdownTotal;
   let timerInterval; // Intervalo del temporizador
@@ -22,37 +22,37 @@ document.addEventListener("DOMContentLoaded", function () {
       nombre: "Invertir en Propaganda",
       costo: 20,
       efecto: () => getRandomInt(30, 50),
-      imagen: "assets/images/propaganda.png"
+      imagen: "https://unsplash.com/photos/dH1RMn6DUIk/download?force=true&w=500"
     },
     mitin: {
       nombre: "Organizar Mítin",
       costo: 30,
       efecto: () => getRandomInt(40, 70),
-      imagen: "assets/images/mitin.png"
+      imagen: "https://unsplash.com/photos/3PeSjpLVtLg/download?force=true&w=500"
     },
     alianza: {
       nombre: "Negociar Alianzas",
       costo: 25,
       efecto: () => getRandomInt(20, 60),
-      imagen: "assets/images/alianza.png"
+      imagen: "https://unsplash.com/photos/5fNmWej4tAA/download?force=true&w=500"
     },
     asesor: {
       nombre: "Contratar Asesores",
       costo: 40,
       efecto: () => getRandomInt(50, 80),
-      imagen: "assets/images/asesor.png"
+      imagen: "https://unsplash.com/photos/9l_326FISzk/download?force=true&w=500"
     },
     digital: {
       nombre: "Campaña Digital",
       costo: 15,
       efecto: () => getRandomInt(15, 35),
-      imagen: "assets/images/digital.png"
+      imagen: "https://unsplash.com/photos/o0Qqw21-0NI/download?force=true&w=500"
     },
     investigar: {
       nombre: "Investigar Oposición",
       costo: 30,
       efecto: () => 30,
-      imagen: "assets/images/investigar.png"
+      imagen: "https://unsplash.com/photos/mEZ3PoFGs_k/download?force=true&w=500"
     }
   };
 
@@ -68,9 +68,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const actionsPanel = document.getElementById("cardsContainer");
   const startButton = document.getElementById("startButton");
   const restartButton = document.getElementById("restartButton");
-  const orientationWarning = document.getElementById("orientation-warning");
 
-  // Sonidos
+  // Sonidos (con URL directa)
   const soundCard = document.getElementById("sound-card");
   const soundVictory = document.getElementById("sound-victory");
   const soundDefeat = document.getElementById("sound-defeat");
@@ -101,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Reproducir sonido de carta
     soundCard.currentTime = 0;
     soundCard.play();
-    
+
     gameState.favores -= accion.costo;
     const ganancia = accion.efecto();
     gameState.influencia += ganancia;
@@ -176,14 +175,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 1000);
   }
 
-  /* --- Configuración de la Interfaz de Acciones (Mano de Cartas) --- */
+  /* --- Configuración de la Interfaz de Acciones --- */
   function setupActions() {
     actionsPanel.innerHTML = "";
     for (let key in acciones) {
       const card = document.createElement("div");
       card.classList.add("card");
       card.dataset.accion = key;
-      // Imagen de la carta
+      // Imagen de la carta (URL directa)
       const img = document.createElement("img");
       img.src = acciones[key].imagen;
       img.alt = acciones[key].nombre;
@@ -211,4 +210,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* --- Inicialización y Reinicio --- */
   function initializeGame() {
-    gameState.favores = initial
+    gameState.favores = initialFavores;
+    gameState.influencia = 0;
+    gameState.turno = 1;
+    timeLeft = countdownTotal;
+    updateInfoPanel();
+    showMessage("¡Comienza la campaña! Selecciona una carta para impulsar tu influencia.");
+    setupActions();
+    startTimer();
+  }
+
+  /* --- Eventos de Botón --- */
+  startButton.addEventListener("click", function () {
+    startScreen.style.display = "none";
+    gameScreen.style.display = "flex";
+    endScreen.style.display = "none";
+    initializeGame();
+  });
+
+  restartButton.addEventListener("click", function () {
+    endScreen.style.display = "none";
+    gameScreen.style.display = "flex";
+    initializeGame();
+  });
+
+  /* --- Eliminamos la obligación de orientación horizontal --- */
+  // Ya no se fuerza ni se muestra advertencia de orientación; se permite vertical.
+
+});
