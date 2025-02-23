@@ -20,24 +20,6 @@ body, html {
   min-height: 100vh;
 }
 
-/* Advertencia de orientación */
-#orientation-warning {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #fff;
-  color: #e65100;
-  font-size: 2em;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  text-align: center;
-  padding: 20px;
-}
-
 /* Pantalla de Inicio - Diseño dividido */
 #startScreen {
   background: rgba(255,255,255,0.95);
@@ -190,7 +172,7 @@ button:hover {
   margin: 20px auto;
 }
 
-/* Responsive */
+/* Responsive: en pantallas pequeñas, la pantalla de inicio se organiza en columna */
 @media screen and (max-width: 600px) {
   .start-container {
     flex-direction: column;
