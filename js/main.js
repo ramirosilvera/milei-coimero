@@ -1,4 +1,5 @@
 import BootScene from './scenes/boot-scene.js';
+import TutorialScene from './scenes/tutorial-scene.js';
 import MenuScene from './scenes/menu-scene.js';
 import DecisionScene from './scenes/decision-scene.js';
 import BoicotScene from './scenes/boicot-scene.js';
@@ -10,13 +11,10 @@ const config = {
   parent: 'game-container',
   width: 1200,
   height: 800,
-  scene: [BootScene, MenuScene, DecisionScene, BoicotScene, SutilScene, EndScene],
+  scene: [BootScene, TutorialScene, MenuScene, DecisionScene, BoicotScene, SutilScene, EndScene],
   physics: {
     default: 'arcade',
-    arcade: {
-      gravity: { y: 0 },
-      debug: false
-    }
+    arcade: { gravity: { y: 0 }, debug: false }
   },
   scale: {
     mode: Phaser.Scale.FIT,
@@ -25,3 +23,4 @@ const config = {
 };
 
 const game = new Phaser.Game(config);
+
