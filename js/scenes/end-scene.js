@@ -23,12 +23,10 @@ export default class EndScene extends Phaser.Scene {
     this.add.text(600, 100, titleText, { fontSize: '40px', fill: '#0f0' }).setOrigin(0.5);
     this.add.text(600, 200, this.finalText, { fontSize: '28px', fill: '#fff', align: 'center', wordWrap: { width: 1000 } }).setOrigin(0.5);
     
-    // Mostrar estado final de facciones
     const status = this.factionSystem.getStatus();
     const statusText = `Establecimiento: ${status.establishment} | Medios: ${status.medios} | Apoyo Popular: ${status.poblacion} | Libertarios: ${status.libertarios}`;
     this.add.text(600, 350, statusText, { fontSize: '24px', fill: '#ffdd00', align: 'center' }).setOrigin(0.5);
     
-    // Popup de logro (ejemplo)
     const achievements = new AchievementSystem();
     if (status.medios >= 80) {
       achievements.unlock('Maestro de los Medios');
