@@ -4,13 +4,17 @@ export default class TutorialScene extends Phaser.Scene {
   }
   
   create() {
+    // Fondo semitransparente para el tutorial
     this.add.image(600, 400, 'menu_bg').setAlpha(0.5);
+    // Overlay para mejorar legibilidad
+    this.add.rectangle(600, 400, 1100, 300, 0x000000, 0.6);
+    
     const tutorialText = [
       "Bienvenido a Cripto Revolución - La Jugada de Milei.",
-      "En este juego tomarás decisiones que afectan el destino del país.",
-      "Lee la narrativa, elige tus acciones y, en ocasiones, enfrentarás mini-juegos que pondrán a prueba tu rapidez y estrategia.",
+      "Aquí tomarás decisiones estratégicas que afectarán el destino del país.",
+      "Lee la narrativa, elige tus acciones y enfrenta mini-juegos que pondrán a prueba tu rapidez y estrategia.",
       "Tus elecciones modificarán el poder del establecimiento, los medios y el apoyo popular.",
-      "¡Prepárate para vivir una experiencia política interactiva y dinámica!"
+      "¡Prepárate para una experiencia política interactiva y dinámica!"
     ];
     
     let currentLine = 0;
@@ -20,6 +24,7 @@ export default class TutorialScene extends Phaser.Scene {
       align: 'center',
       wordWrap: { width: 1000 }
     }).setOrigin(0.5);
+    textObj.setShadow(2, 2, "#000", 2, true, true);
     
     const nextButton = this.add.text(600, 600, 'Siguiente', { fontSize: '28px', fill: '#0f0' })
       .setInteractive({ useHandCursor: true })
@@ -39,4 +44,5 @@ export default class TutorialScene extends Phaser.Scene {
     });
   }
 }
+
 
