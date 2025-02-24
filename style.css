@@ -1,46 +1,63 @@
-/* styles.css - Versión mejorada */
+:root {
+  --main-color: #8b4513;
+  --accent-color: #ffd700;
+  --dark-bg: #0d0d0d;
+}
+
 body {
   margin: 0;
-  padding: 0;
-  background: #0d0d0d radial-gradient(circle at center, #2a2a2a 0%, #0d0d0d 100%);
+  background: var(--dark-bg) url('assets/bg-pattern.png');
   font-family: 'Roboto Condensed', sans-serif;
   color: #fff;
-  overflow: hidden;
 }
 
 #game-container {
   position: relative;
-  margin: 20px auto;
+  margin: 2rem auto;
   width: 1200px;
   height: 800px;
-  border: 3px solid #444;
-  border-radius: 5px;
-  overflow: hidden;
-  box-shadow: 0 0 30px rgba(0, 100, 0, 0.3);
+  border: 3px solid var(--main-color);
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(139, 69, 19, 0.5);
 }
 
-/* Efectos de diálogo tipo cómic */
-.dialog-box {
+/* Sistema de diálogos estilo cómic */
+.comic-dialog {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1000px;
   background: rgba(0, 0, 0, 0.9);
-  border: 2px solid #8b4513;
-  border-radius: 10px;
+  border: 3px solid var(--accent-color);
+  border-radius: 15px;
   padding: 20px;
-  box-shadow: 0 0 15px rgba(139, 69, 19, 0.5);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
 }
 
 .choice-button {
-  background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
-  border: 1px solid #444;
-  border-radius: 5px;
+  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  border: 2px solid var(--main-color);
+  border-radius: 8px;
   padding: 15px 30px;
   margin: 10px;
+  font-size: 1.1em;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 1.1em;
 }
 
 .choice-button:hover {
-  background: linear-gradient(to bottom, #3d3d3d, #2a2a2a);
-  transform: scale(1.05);
-  border-color: #8b4513;
+  background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(139, 69, 19, 0.4);
+}
+
+/* Barra de reputación */
+.reputation-bar {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 8px;
 }
