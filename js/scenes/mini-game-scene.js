@@ -4,7 +4,7 @@ export default class MiniGameScene extends Phaser.Scene {
   }
   
   init(data) {
-    // data.gameType indica el tipo de mini-juego ("boicot", "influencia" o "campaña")
+    // data.gameType: "boicot", "influencia" o "campaña"
     this.gameType = data.gameType;
   }
   
@@ -30,7 +30,7 @@ export default class MiniGameScene extends Phaser.Scene {
     this.progressBar = this.add.graphics();
     this.drawProgressBar();
     
-    // Partículas para efecto al hacer clic
+    // Partículas para efecto de clic
     this.particles = this.add.particles('milei');
     this.emitter = this.particles.createEmitter({
       speed: { min: -100, max: 100 },
@@ -73,7 +73,6 @@ export default class MiniGameScene extends Phaser.Scene {
       loop: true
     });
     
-    // Timeout
     this.time.delayedCall(15000, () => { if (!this.challengeSuccess) this.finishGame(); });
   }
   
@@ -135,19 +134,24 @@ export default class MiniGameScene extends Phaser.Scene {
       }
     });
     
-    // Timeout para la secuencia
     this.time.delayedCall(15000, () => { if (!this.challengeSuccess) this.finishGame(); });
   }
   
   finishGame() {
-    // Transición rápida y regreso a la narrativa.
     this.cameras.main.fade(500, 0, 0, 0);
     this.cameras.main.on('camerafadeoutcomplete', () => {
-      // Recupera el nodo siguiente guardado en el registry
       const nextNode = this.registry.get('nextNode') || "start";
-      // Recupera el sistema de facciones actual
       const factionSystem = this.registry.get('currentFaction');
       this.scene.start('NarrativeScene', { currentNode: nextNode, factionSystem });
     });
+  }
+  
+  drawProgressBar() {
+    this.progressBar.clear();
+    this.progressBar.fillStyle(0x222222, 0.8);
+    this.progressBar.fillRect(400, 720, 400, 20);
+    this.progressBar.fillStyle(0xff0000, 1);
+    let barWidth = 400 * (this.progress / 100);
+    this.progressBar.fillRect(400, 720, barWidth, 20);
   }
 }
