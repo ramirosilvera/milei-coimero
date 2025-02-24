@@ -14,10 +14,10 @@ body {
   height: 100vh;
 }
 
-/* Botones interactivos */
+/* Botones interactivos con transición y hover */
 .button {
   cursor: pointer;
-  transition: color 0.2s ease, scale 0.2s ease;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .button:hover {
