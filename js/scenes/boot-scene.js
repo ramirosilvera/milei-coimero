@@ -4,9 +4,8 @@ export default class BootScene extends Phaser.Scene {
   }
   
   preload() {
-    // Elementos de la pantalla de carga
-    let width = this.cameras.main.width;
-    let height = this.cameras.main.height;
+    const width = this.cameras.main.width;
+    const height = this.cameras.main.height;
     let progressBar = this.add.graphics();
     let progressBox = this.add.graphics();
     progressBox.fillStyle(0x222222, 0.8);
@@ -16,12 +15,8 @@ export default class BootScene extends Phaser.Scene {
       x: width / 2,
       y: height / 2 - 50,
       text: 'Cargando...',
-      style: {
-        font: '20px monospace',
-        fill: '#ffffff'
-      }
-    });
-    loadingText.setOrigin(0.5, 0.5);
+      style: { font: '20px monospace', fill: '#ffffff' }
+    }).setOrigin(0.5);
 
     this.load.on('progress', (value) => {
       progressBar.clear();
@@ -35,7 +30,7 @@ export default class BootScene extends Phaser.Scene {
       loadingText.destroy();
     });
     
-    // Pre-cargar imágenes
+    // Cargar imágenes
     this.load.image('menu_bg', 'assets/images/menu_bg.jpg');
     this.load.image('congress_bg', 'assets/images/congress_bg.jpg');
     this.load.image('milei', 'assets/images/milei.png');
@@ -45,7 +40,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('success_bg', 'assets/images/success_bg.jpg');
     this.load.image('failure_bg', 'assets/images/failure_bg.jpg');
 
-    // Pre-cargar audios
+    // Cargar audios
     this.load.audio('background', 'assets/sounds/background.mp3');
     this.load.audio('click', 'assets/sounds/click.wav');
     this.load.audio('success', 'assets/sounds/success.wav');
@@ -55,11 +50,11 @@ export default class BootScene extends Phaser.Scene {
   }
   
   create() {
-    // Música de fondo opcional
-    let music = this.sound.add('background', { volume: 0.5, loop: true });
+    // Música de fondo
+    const music = this.sound.add('background', { volume: 0.5, loop: true });
     music.play();
-    
-    // Iniciar el menú principal
-    this.scene.start('MenuScene');
+    // Transición a Tutorial
+    this.scene.start('TutorialScene');
   }
 }
+
