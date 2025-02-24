@@ -1,16 +1,16 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #222;
+  background-color: #1a1a1a;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
   color: #fff;
-  font-family: Arial, sans-serif;
 }
 
 #game-container {
   display: block;
-  margin: auto;
-  /* Ajusta el tamaño según el juego (en este ejemplo 800x600) */
+  margin: 20px auto;
   width: 800px;
   height: 600px;
   border: 2px solid #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.8);
 }
