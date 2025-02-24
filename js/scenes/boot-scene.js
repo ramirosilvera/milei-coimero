@@ -2,8 +2,40 @@ export default class BootScene extends Phaser.Scene {
   constructor() {
     super({ key: 'BootScene' });
   }
+  
   preload() {
-    // Cargamos imágenes
+    // Elementos de la pantalla de carga
+    let width = this.cameras.main.width;
+    let height = this.cameras.main.height;
+    let progressBar = this.add.graphics();
+    let progressBox = this.add.graphics();
+    progressBox.fillStyle(0x222222, 0.8);
+    progressBox.fillRect(width/2 - 160, height/2 - 30, 320, 50);
+
+    let loadingText = this.make.text({
+      x: width / 2,
+      y: height / 2 - 50,
+      text: 'Cargando...',
+      style: {
+        font: '20px monospace',
+        fill: '#ffffff'
+      }
+    });
+    loadingText.setOrigin(0.5, 0.5);
+
+    this.load.on('progress', (value) => {
+      progressBar.clear();
+      progressBar.fillStyle(0xffffff, 1);
+      progressBar.fillRect(width/2 - 150, height/2 - 20, 300 * value, 30);
+    });
+
+    this.load.on('complete', () => {
+      progressBar.destroy();
+      progressBox.destroy();
+      loadingText.destroy();
+    });
+    
+    // Pre-cargar imágenes
     this.load.image('menu_bg', 'assets/images/menu_bg.jpg');
     this.load.image('congress_bg', 'assets/images/congress_bg.jpg');
     this.load.image('milei', 'assets/images/milei.png');
@@ -12,7 +44,8 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('debate_icon', 'assets/images/debate_icon.png');
     this.load.image('success_bg', 'assets/images/success_bg.jpg');
     this.load.image('failure_bg', 'assets/images/failure_bg.jpg');
-    // Cargamos audios
+
+    // Pre-cargar audios
     this.load.audio('background', 'assets/sounds/background.mp3');
     this.load.audio('click', 'assets/sounds/click.wav');
     this.load.audio('success', 'assets/sounds/success.wav');
@@ -20,9 +53,13 @@ export default class BootScene extends Phaser.Scene {
     this.load.audio('debate', 'assets/sounds/debate.mp3');
     this.load.audio('boicot', 'assets/sounds/boicot.wav');
   }
+  
   create() {
-    // Una vez precargados los assets, vamos al menú principal.
+    // Música de fondo opcional
+    let music = this.sound.add('background', { volume: 0.5, loop: true });
+    music.play();
+    
+    // Iniciar el menú principal
     this.scene.start('MenuScene');
   }
 }
-
