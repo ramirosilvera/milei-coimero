@@ -11,9 +11,9 @@ export default class BootScene extends Phaser.Scene {
     progressBox.fillStyle(0x222222, 0.8);
     progressBox.fillRect(width/2 - 160, height/2 - 30, 320, 50);
 
-    let loadingText = this.make.text({
-      x: width / 2,
-      y: height / 2 - 50,
+    const loadingText = this.make.text({
+      x: width/2,
+      y: height/2 - 50,
       text: 'Cargando...',
       style: { font: '20px monospace', fill: '#ffffff' }
     }).setOrigin(0.5);
@@ -30,7 +30,7 @@ export default class BootScene extends Phaser.Scene {
       loadingText.destroy();
     });
     
-    // Cargar imágenes
+    // Imágenes
     this.load.image('menu_bg', 'assets/images/menu_bg.jpg');
     this.load.image('congress_bg', 'assets/images/congress_bg.jpg');
     this.load.image('milei', 'assets/images/milei.png');
@@ -40,7 +40,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('success_bg', 'assets/images/success_bg.jpg');
     this.load.image('failure_bg', 'assets/images/failure_bg.jpg');
 
-    // Cargar audios
+    // Audios
     this.load.audio('background', 'assets/sounds/background.mp3');
     this.load.audio('click', 'assets/sounds/click.wav');
     this.load.audio('success', 'assets/sounds/success.wav');
@@ -50,11 +50,8 @@ export default class BootScene extends Phaser.Scene {
   }
   
   create() {
-    // Música de fondo
     const music = this.sound.add('background', { volume: 0.5, loop: true });
     music.play();
-    // Transición a Tutorial
     this.scene.start('TutorialScene');
   }
 }
-
