@@ -2,62 +2,15 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cartas del Congreso: La Batalla por el Poder</title>
-  <!-- Google Fonts para tipografía moderna -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <title>Boicot Cripto: La Jugada de Milei</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Carga Phaser desde CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
 </head>
 <body>
-  <!-- Pantalla de Inicio -->
-  <div id="startScreen" class="screen">
-    <div class="start-container">
-      <div class="start-left">
-        <h1>Cartas del Congreso</h1>
-        <p class="intro">
-          La lucha por el poder en el Congreso es real. Con el escándalo cripto a la vuelta de la esquina, tu misión como Milei es construir un mazo poderoso y usar tus cartas para bloquear la comisión investigadora.
-        </p>
-      </div>
-      <div class="start-right">
-        <h2>¿Cómo jugar?</h2>
-        <p>
-          - Recibes un mazo básico de 5 cartas (acciones políticas).<br>
-          - Cada carta cuesta favores y otorga un efecto (ganancia de influencia, bloqueo de la oposición, etc.).<br>
-          - Juega una carta por turno para acumular influencia.<br>
-          - Tienes 10 turnos para alcanzar 500 puntos de influencia.<br>
-          - Si se agota el tiempo (60 segundos), la oposición gana automáticamente.
-        </p>
-        <button id="startButton">¡Inicia la Batalla!</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Pantalla del Juego -->
-  <div id="gameScreen" class="screen" style="display:none;">
-    <div id="infoPanel">
-      <span>Favores: <span id="favores">150</span></span>
-      <span>Influencia: <span id="influencia">0</span></span>
-      <span>Turno: <span id="turno">1/10</span></span>
-      <span>Tiempo: <span id="timerDisplay">60</span>s</span>
-    </div>
-    <div id="cardsContainer">
-      <!-- Las cartas se generarán dinámicamente -->
-    </div>
-    <div id="messageArea">Selecciona una carta para jugar tu turno.</div>
-  </div>
-
-  <!-- Pantalla de Fin -->
-  <div id="endScreen" class="screen" style="display:none;">
-    <h2 id="endTitle"></h2>
-    <p id="endMessage"></p>
-    <button id="restartButton">Reiniciar la Batalla</button>
-  </div>
-
-  <!-- Efectos sonoros (URLs directas) -->
-  <audio id="sound-card" src="https://freesound.org/people/InspectorJ/sounds/411642/download/411642__inspectorj__card-flip.mp3"></audio>
-  <audio id="sound-victory" src="https://freesound.org/people/juskiddink/sounds/403008/download/403008__juskiddink__victory-fanfare.mp3"></audio>
-  <audio id="sound-defeat" src="https://freesound.org/people/cfork/sounds/200905/download/200905__cfork__game-over.wav"></audio>
-
-  <script src="script.js"></script>
+  <!-- Contenedor para el juego -->
+  <div id="game-container"></div>
+  <!-- Nuestro script principal -->
+  <script src="js/main.js"></script>
 </body>
 </html>
