@@ -13,3 +13,9 @@ body {
   align-items: center;
   height: 100vh;
 }
+
+/* Efectos para botones */
+.button {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
