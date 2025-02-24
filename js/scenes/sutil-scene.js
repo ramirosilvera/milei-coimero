@@ -4,26 +4,29 @@ export default class SutilScene extends Phaser.Scene {
   }
   
   create() {
-    // Fondo
     this.add.image(600, 400, 'congress_bg');
-    
-    // Recuperar la estrategia seleccionada
     this.strategy = this.registry.get('strategy');
     
-    // Instrucciones según estrategia
+    // Selección aleatoria de tecla requerida según estrategia
     if (this.strategy === 'influencia') {
+      this.requiredKeys = ['I', 'U'];
       this.add.text(600, 50, 'Influencia Sutil: Manipula los medios', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
-      this.add.text(600, 100, 'Conecta las ideas presionando la tecla "I" en el momento adecuado', { fontSize: '20px', fill: '#fff' }).setOrigin(0.5);
+      this.add.text(600, 100, 'Presiona la tecla indicada cuando aparezca en pantalla', { fontSize: '20px', fill: '#fff' }).setOrigin(0.5);
     } else if (this.strategy === 'campaña') {
+      this.requiredKeys = ['C', 'V'];
       this.add.text(600, 50, 'Campaña Medial: Gana apoyo popular', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
-      this.add.text(600, 100, 'Sigue el ritmo y presiona la tecla "C" en sincronía', { fontSize: '20px', fill: '#fff' }).setOrigin(0.5);
+      this.add.text(600, 100, 'Presiona la tecla indicada en sincronía con el ritmo', { fontSize: '20px', fill: '#fff' }).setOrigin(0.5);
     }
+    
+    // Selecciona aleatoriamente la tecla a presionar y muéstrala
+    this.currentKey = Phaser.Utils.Array.GetRandom(this.requiredKeys);
+    this.keyText = this.add.text(600, 200, `Presiona: ${this.currentKey}`, { fontSize: '48px', fill: '#ff0' }).setOrigin(0.5);
     
     // Reto con cuenta regresiva (10 segundos)
     this.challengeTime = 10;
-    this.timerText = this.add.text(600, 150, `Tiempo: ${this.challengeTime}`, { fontSize: '24px', fill: '#fff' }).setOrigin(0.5);
+    this.timerText = this.add.text(600, 250, `Tiempo: ${this.challengeTime}`, { fontSize: '24px', fill: '#fff' }).setOrigin(0.5);
     
-    this.time.addEvent({
+    this.timeEvent = this.time.addEvent({
       delay: 1000,
       callback: () => {
         this.challengeTime--;
@@ -33,23 +36,28 @@ export default class SutilScene extends Phaser.Scene {
           this.scene.start('EndScene', { result: 'failure', strategy: this.strategy });
         }
       },
-      callbackScope: this,
       loop: true
     });
     
-    // Escuchar entrada del teclado según estrategia
+    // Escucha de entrada del teclado
     this.input.keyboard.on('keydown', (event) => {
-      if (this.strategy === 'influencia' && (event.key === 'I' || event.key === 'i')) {
+      if (event.key.toUpperCase() === this.currentKey) {
         this.sound.play('debate');
-        this.scene.start('EndScene', { result: 'success', strategy: this.strategy });
-      } else if (this.strategy === 'campaña' && (event.key === 'C' || event.key === 'c')) {
-        this.sound.play('debate');
+        // Efecto visual de acierto
+        this.tweens.add({
+          targets: this.keyText,
+          scale: 1.5,
+          duration: 200,
+          yoyo: true
+        });
+        // Cancelar el timer y avanzar al final
+        this.timeEvent.remove();
         this.scene.start('EndScene', { result: 'success', strategy: this.strategy });
       }
     });
     
     // Botón de retroceso
-    let backButton = this.add.text(50, 750, 'Atrás', { fontSize: '24px', fill: '#fff' })
+    const backButton = this.add.text(50, 750, 'Atrás', { fontSize: '24px', fill: '#fff' })
       .setInteractive({ useHandCursor: true });
     backButton.on('pointerdown', () => {
       this.sound.play('click');
