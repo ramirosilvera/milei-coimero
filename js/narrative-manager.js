@@ -1,12 +1,12 @@
 /**
  * Árbol Narrativo para Cripto Revolución.
- * Cada nodo tiene:
+ * Cada nodo contiene:
  * - id: Identificador único.
  * - text: Texto narrativo.
  * - choices: Array de opciones; cada opción contiene:
  *    • text: Texto de la opción.
  *    • next: id del siguiente nodo.
- *    • miniGame: (opcional) tipo de mini-juego a lanzar ("boicot", "influencia" o "campaña").
+ *    • miniGame: (opcional) tipo de mini-juego ("boicot", "influencia" o "campaña").
  *    • effect: Objeto con cambios en facciones (ej. { establishment: -10, medios: +5 }).
  */
 export const narrativeTree = {
