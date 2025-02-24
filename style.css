@@ -1,17 +1,46 @@
+/* styles.css - Versión mejorada */
 body {
   margin: 0;
   padding: 0;
-  background-color: #1a1a1a;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background: #0d0d0d radial-gradient(circle at center, #2a2a2a 0%, #0d0d0d 100%);
+  font-family: 'Roboto Condensed', sans-serif;
   color: #fff;
+  overflow: hidden;
 }
 
 #game-container {
-  display: block;
+  position: relative;
   margin: 20px auto;
-  width: 800px;
-  height: 600px;
-  border: 2px solid #fff;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.9);
-  background-color: #000; /* Fondo de seguridad para evitar pantalla negra */
+  width: 1200px;
+  height: 800px;
+  border: 3px solid #444;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0, 100, 0, 0.3);
+}
+
+/* Efectos de diálogo tipo cómic */
+.dialog-box {
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #8b4513;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(139, 69, 19, 0.5);
+}
+
+.choice-button {
+  background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
+  border: 1px solid #444;
+  border-radius: 5px;
+  padding: 15px 30px;
+  margin: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.1em;
+}
+
+.choice-button:hover {
+  background: linear-gradient(to bottom, #3d3d3d, #2a2a2a);
+  transform: scale(1.05);
+  border-color: #8b4513;
 }
