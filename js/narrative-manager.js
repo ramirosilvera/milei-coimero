@@ -13,7 +13,6 @@ export class FactionSystem {
   updateFaction(faction, change) {
     if (this.hasOwnProperty(faction)) {
       this[faction] += change;
-      // Limitar valores entre 0 y 100
       this[faction] = Phaser.Math.Clamp(this[faction], 0, 100);
     }
   }
@@ -43,8 +42,6 @@ export class AchievementSystem {
       console.log(`Logro desbloqueado: ${name}`);
       localStorage.setItem('achievements', JSON.stringify(this.achievements));
     }
-    
     return this.achievements;
   }
 }
-
