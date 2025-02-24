@@ -1,3 +1,5 @@
+import { AchievementSystem } from '../narrative-manager.js';
+
 export default class EndScene extends Phaser.Scene {
   constructor() {
     super({ key: 'EndScene' });
@@ -9,15 +11,20 @@ export default class EndScene extends Phaser.Scene {
   }
   
   create() {
-    if (this.result === 'success') {
-      this.add.image(600, 400, 'success_bg');
-      this.add.text(600, 400, '¡Misión Cumplida!', { fontSize: '40px', fill: '#0f0' }).setOrigin(0.5);
-    } else {
-      this.add.image(600, 400, 'failure_bg');
-      this.add.text(600, 400, 'Fracaso en la Misión', { fontSize: '40px', fill: '#f00' }).setOrigin(0.5);
-    }
+    // Fondo y efecto de fade in
+    const bgKey = this.result === 'success' ? 'success_bg' : 'failure_bg';
+    this.add.image(600, 400, bgKey).setAlpha(0);
+    this.tweens.add({
+      targets: this.cameras.main,
+      alpha: { from: 0, to: 1 },
+      duration: 500
+    });
     
-    // Narrativa según estrategia y resultado
+    // Título del resultado
+    const titleText = this.result === 'success' ? '¡Misión Cumplida!' : 'Fracaso en la Misión';
+    this.add.text(600, 400, titleText, { fontSize: '40px', fill: this.result === 'success' ? '#0f0' : '#f00' }).setOrigin(0.5);
+    
+    // Narrativa dinámica según estrategia
     let narrativeText = '';
     if (this.strategy === 'boicot') {
       narrativeText = this.result === 'success' ? 
@@ -33,15 +40,46 @@ export default class EndScene extends Phaser.Scene {
         'La campaña no logró conectar con la gente, y la presión aumenta.';
     }
     
-    this.add.text(600, 500, narrativeText, { fontSize: '24px', fill: '#fff', align: 'center', wordWrap: { width: 1000 } }).setOrigin(0.5);
+    this.add.text(600, 500, narrativeText, {
+      fontSize: '24px',
+      fill: '#fff',
+      align: 'center',
+      wordWrap: { width: 1000 }
+    }).setOrigin(0.5);
+    
+    // Mostrar popup de logro (simulado)
+    const achievements = new AchievementSystem();
+    // Ejemplo: si completaste exitosamente un boicot, desbloquea un logro
+    if (this.strategy === 'boicot' && this.result === 'success') {
+      achievements.unlock('Revolucionario');
+      this.showAchievementPopup('Logro Desbloqueado: Revolucionario');
+    }
     
     // Botón para volver al menú
-    let menuButton = this.add.text(600, 700, 'Volver al Menú', { fontSize: '28px', fill: '#fff' })
-      .setInteractive({ useHandCursor: true });
-    menuButton.setOrigin(0.5);
+    const menuButton = this.add.text(600, 700, 'Volver al Menú', { fontSize: '28px', fill: '#fff' })
+      .setInteractive({ useHandCursor: true })
+      .setOrigin(0.5);
     menuButton.on('pointerdown', () => {
       this.sound.play('click');
       this.scene.start('MenuScene');
+    });
+  }
+  
+  showAchievementPopup(message) {
+    const popup = this.add.text(600, 350, message, {
+      fontSize: '28px',
+      fill: '#ff0',
+      backgroundColor: '#000',
+      padding: { x: 10, y: 10 }
+    }).setOrigin(0.5).setAlpha(0);
+    
+    this.tweens.add({
+      targets: popup,
+      alpha: { from: 0, to: 1 },
+      duration: 500,
+      yoyo: true,
+      hold: 1000,
+      onComplete: () => popup.destroy()
     });
   }
 }
