@@ -1,11 +1,11 @@
-// BootScene: carga todos los assets y muestra mensajes de depuración.
+// BootScene: carga de assets y mensajes de depuración.
 class BootScene extends Phaser.Scene {
   constructor() {
     super({ key: 'BootScene' });
   }
   
   preload() {
-    console.log("BootScene: cargando assets...");
+    console.log("BootScene: Cargando assets...");
     // Imágenes
     this.load.image('menuBg', 'assets/images/menu_bg.jpg');
     this.load.image('congressBg', 'assets/images/congress_bg.jpg');
@@ -26,38 +26,37 @@ class BootScene extends Phaser.Scene {
   }
   
   create() {
-    console.log("BootScene: assets cargados, iniciando MenuScene...");
+    console.log("BootScene: Assets cargados. Iniciando MenuScene...");
     this.scene.start('MenuScene');
   }
 }
 
-// MenuScene: Menú principal con contenedores para fondo, título y botón.
+// MenuScene: Menú principal con contenedores y estilos mejorados.
 class MenuScene extends Phaser.Scene {
   constructor() {
     super({ key: 'MenuScene' });
   }
   
   create() {
-    console.log("MenuScene: iniciando...");
-    // Contenedor principal del menú
+    console.log("MenuScene: Iniciando...");
     let menuContainer = this.add.container(0, 0);
-
+    
     // Fondo del menú con transparencia
     let bg = this.add.image(400, 300, 'menuBg').setDisplaySize(800,600);
-    bg.setAlpha(0.9);
+    bg.setAlpha(0.85);
     menuContainer.add(bg);
-
+    
     // Caja semitransparente para el título
-    let titleBg = this.add.rectangle(400, 150, 500, 60, 0x000000, 0.5);
+    let titleBg = this.add.rectangle(400, 150, 600, 70, 0x000000, 0.6);
     menuContainer.add(titleBg);
-    let title = this.add.text(400, 150, 'Boicot Cripto: El Escándalo de Milei', { fontSize: '32px', fill: '#fff' });
+    let title = this.add.text(400, 150, 'Milei: La Jugada Cripto', { fontSize: '36px', fill: '#fff' });
     title.setOrigin(0.5);
     menuContainer.add(title);
-
-    // Contenedor para el botón "Iniciar Juego"
-    let buttonBg = this.add.rectangle(400, 300, 200, 50, 0x000000, 0.5);
+    
+    // Botón "Iniciar Juego"
+    let buttonBg = this.add.rectangle(400, 300, 250, 60, 0x000000, 0.6);
     menuContainer.add(buttonBg);
-    let startButton = this.add.text(400, 300, 'Iniciar Juego', { fontSize: '28px', fill: '#0f0' })
+    let startButton = this.add.text(400, 300, 'Iniciar Juego', { fontSize: '30px', fill: '#0f0' })
       .setInteractive({ useHandCursor: true })
       .on('pointerover', () => startButton.setStyle({ fill: '#ff0' }))
       .on('pointerout', () => startButton.setStyle({ fill: '#0f0' }))
@@ -68,7 +67,7 @@ class MenuScene extends Phaser.Scene {
     startButton.setOrigin(0.5);
     menuContainer.add(startButton);
     
-    // Música de fondo en bucle
+    // Reproducir música de fondo
     let music = this.sound.add('bgMusic', { loop: true, volume: 0.5 });
     if (!music.isPlaying) {
       music.play();
@@ -76,33 +75,34 @@ class MenuScene extends Phaser.Scene {
   }
 }
 
-// StoryScene: Presenta la narrativa con contenedor para fondo y caja de texto.
+// StoryScene: Presenta la narrativa ampliada en un contenedor con caja de texto.
 class StoryScene extends Phaser.Scene {
   constructor() {
     super({ key: 'StoryScene' });
   }
   
   create() {
-    console.log("StoryScene: iniciando...");
+    console.log("StoryScene: Iniciando...");
     let storyContainer = this.add.container(0, 0);
     
-    // Fondo de la narrativa con transparencia
+    // Fondo con imagen de congreso y transparencia
     let bg = this.add.image(400, 300, 'congressBg').setDisplaySize(800,600);
     bg.setAlpha(0.85);
     storyContainer.add(bg);
     
-    // Caja para el texto narrativo
-    let textBox = this.add.rectangle(400, 200, 700, 150, 0x000000, 0.6);
+    // Caja para la narrativa
+    let textBox = this.add.rectangle(400, 230, 750, 180, 0x000000, 0.65);
     storyContainer.add(textBox);
     
-    const storyText = "Milei se ve envuelto en un escándalo cripto tras la polémica promoción del token Libra. Con la comisión investigadora a punto de votar en el Congreso, decide boicotear la votación para evitar la investigación. ¿Será su jugada maestra o desencadenará mayores complicaciones?";
-    let narrative = this.add.text(100, 130, storyText, { fontSize: '20px', fill: '#fff', wordWrap: { width: 600 } });
+    // Texto narrativo mejorado y más complejo
+    const storyText = "El token Libra ha generado controversia y desconfianza. Milei, en medio del escándalo cripto, descubre que la comisión investigadora del Congreso está a punto de aprobarse. Decidido a frenar el proceso, planifica una estrategia audaz: un boicot radical o una intervención sutil que altere el debate. Cada decisión que tomes definirá el destino de su jugada y la estabilidad política del país. ¿Logrará Milei cambiar el curso de la historia o se verá envuelto en consecuencias aún mayores?";
+    let narrative = this.add.text(60, 160, storyText, { fontSize: '20px', fill: '#fff', wordWrap: { width: 680 } });
     storyContainer.add(narrative);
     
     // Botón "Continuar"
-    let buttonBg = this.add.rectangle(400, 520, 200, 50, 0x000000, 0.5);
+    let buttonBg = this.add.rectangle(400, 500, 220, 60, 0x000000, 0.6);
     storyContainer.add(buttonBg);
-    let continueButton = this.add.text(400, 520, 'Continuar', { fontSize: '26px', fill: '#0f0' })
+    let continueButton = this.add.text(400, 500, 'Continuar', { fontSize: '28px', fill: '#0f0' })
       .setInteractive({ useHandCursor: true })
       .on('pointerdown', () => {
           this.sound.play('clickSound');
@@ -113,28 +113,28 @@ class StoryScene extends Phaser.Scene {
   }
 }
 
-// DecisionScene: Pantalla para elegir la estrategia de Milei.
+// DecisionScene: Escena para elegir la estrategia con estilos mejorados.
 class DecisionScene extends Phaser.Scene {
   constructor() {
     super({ key: 'DecisionScene' });
   }
   
   create() {
-    console.log("DecisionScene: iniciando...");
+    console.log("DecisionScene: Iniciando...");
     let decisionContainer = this.add.container(0, 0);
     
     // Fondo sólido para la escena de decisiones
-    let bgRect = this.add.rectangle(400, 300, 800, 600, 0x333333, 1);
+    let bgRect = this.add.rectangle(400, 300, 800, 600, 0x222222, 1);
     decisionContainer.add(bgRect);
     
-    let title = this.add.text(400, 80, 'Elige la estrategia de Milei:', { fontSize: '28px', fill: '#fff' });
+    let title = this.add.text(400, 80, 'Elige la estrategia de Milei:', { fontSize: '30px', fill: '#fff' });
     title.setOrigin(0.5);
     decisionContainer.add(title);
     
-    // Opción 1: Boicot Total
-    let option1Bg = this.add.rectangle(400, 180, 300, 50, 0x000000, 0.5);
+    // Opción 1: Boicot Radical
+    let option1Bg = this.add.rectangle(400, 180, 350, 60, 0x000000, 0.6);
     decisionContainer.add(option1Bg);
-    let option1 = this.add.text(400, 180, '1. Boicot Total', { fontSize: '26px', fill: '#0f0' })
+    let option1 = this.add.text(400, 180, '1. Boicot Radical', { fontSize: '28px', fill: '#0f0' })
       .setInteractive({ useHandCursor: true })
       .on('pointerover', () => option1.setStyle({ fill: '#ff0' }))
       .on('pointerout', () => option1.setStyle({ fill: '#0f0' }))
@@ -146,10 +146,10 @@ class DecisionScene extends Phaser.Scene {
     option1.setOrigin(0.5);
     decisionContainer.add(option1);
     
-    // Opción 2: Influencia Sutil
-    let option2Bg = this.add.rectangle(400, 260, 300, 50, 0x000000, 0.5);
+    // Opción 2: Intervención Sutil
+    let option2Bg = this.add.rectangle(400, 260, 350, 60, 0x000000, 0.6);
     decisionContainer.add(option2Bg);
-    let option2 = this.add.text(400, 260, '2. Influencia Sutil', { fontSize: '26px', fill: '#0f0' })
+    let option2 = this.add.text(400, 260, '2. Intervención Sutil', { fontSize: '28px', fill: '#0f0' })
       .setInteractive({ useHandCursor: true })
       .on('pointerover', () => option2.setStyle({ fill: '#ff0' }))
       .on('pointerout', () => option2.setStyle({ fill: '#0f0' }))
@@ -163,22 +163,22 @@ class DecisionScene extends Phaser.Scene {
   }
 }
 
-// MiniGameScene: Mini juego interactivo con contenedores para instrucciones, puntaje e íconos.
+// MiniGameScene: Mini juego con íconos reducidos y contenedores para instrucciones y puntaje.
 class MiniGameScene extends Phaser.Scene {
   constructor() {
     super({ key: 'MiniGameScene' });
   }
   
   create() {
-    console.log("MiniGameScene: iniciando...");
+    console.log("MiniGameScene: Iniciando...");
     const strategy = this.registry.get('strategy');
     let instruction = (strategy === 'boicot') ? 
-      '¡Haz clic en los íconos de voto para bloquear la votación!' : 
-      '¡Haz clic en los íconos correctos para influir en el debate y evita distracciones!';
+      '¡Haz clic en los pequeños íconos de voto para bloquear la votación!' : 
+      '¡Haz clic en los íconos clave para influir en el debate y evita distracciones!';
     
     // Contenedor para instrucciones y puntaje
     let miniGameContainer = this.add.container(0, 0);
-    let instructionBg = this.add.rectangle(400, 30, 750, 40, 0x000000, 0.5);
+    let instructionBg = this.add.rectangle(400, 30, 750, 40, 0x000000, 0.6);
     miniGameContainer.add(instructionBg);
     let instructionText = this.add.text(400, 30, instruction, { fontSize: '22px', fill: '#fff' });
     instructionText.setOrigin(0.5);
@@ -189,17 +189,17 @@ class MiniGameScene extends Phaser.Scene {
     this.scoreText = this.add.text(20, 20, 'Puntos: 0', { fontSize: '24px', fill: '#fff' });
     miniGameContainer.add(this.scoreText);
     
-    // Contenedor para los íconos que se generarán
+    // Contenedor para los íconos (se reducirán a un 50-60% de tamaño)
     this.iconsContainer = this.add.container(0, 0);
     
-    // Temporizador de 10 segundos para finalizar el mini juego
-    this.time.delayedCall(10000, () => {
+    // Temporizador: 12 segundos para aumentar la complejidad
+    this.time.delayedCall(12000, () => {
       this.scene.start('EndScene', { score: this.score, strategy: strategy });
     });
     
-    // Evento para crear íconos cada 800 ms
+    // Generar íconos cada 700 ms
     this.time.addEvent({
-      delay: 800,
+      delay: 700,
       callback: () => { this.spawnIcon(strategy); },
       loop: true
     });
@@ -210,8 +210,9 @@ class MiniGameScene extends Phaser.Scene {
     let x = Phaser.Math.Between(50, 750);
     let y = Phaser.Math.Between(80, 550);
     let icon = this.add.sprite(x, y, iconKey).setInteractive();
+    // Reducir tamaño de los íconos (0.6 de escala)
+    icon.setScale(0.6);
     
-    // Agregar el ícono al contenedor de íconos
     this.iconsContainer.add(icon);
     
     icon.on('pointerdown', () => {
@@ -221,22 +222,22 @@ class MiniGameScene extends Phaser.Scene {
       icon.destroy();
     });
     
-    // Animación de rotación para el ícono
+    // Animación de rotación
     this.tweens.add({
       targets: icon,
       angle: 360,
-      duration: 1500,
+      duration: 1200,
       ease: 'Linear'
     });
     
-    // Eliminar el ícono después de 1.5 segundos si no se ha clickeado
-    this.time.delayedCall(1500, () => {
+    // Eliminar el ícono tras 1.2 segundos si no se clickea
+    this.time.delayedCall(1200, () => {
       if (icon && icon.active) { icon.destroy(); }
     });
   }
 }
 
-// EndScene: Escena final con contenedores para fondo, mensaje y botón de reinicio.
+// EndScene: Escena final con contenedores, mensaje y botón de reinicio.
 class EndScene extends Phaser.Scene {
   constructor() {
     super({ key: 'EndScene' });
@@ -248,38 +249,38 @@ class EndScene extends Phaser.Scene {
   }
   
   create() {
-    console.log("EndScene: iniciando...");
+    console.log("EndScene: Iniciando...");
     let endContainer = this.add.container(0, 0);
     
-    // Selección de fondo según el resultado
-    let bgKey = (this.finalScore >= 20) ? 'successBg' : 'failureBg';
+    // Seleccionar fondo según resultado
+    let bgKey = (this.finalScore >= 30) ? 'successBg' : 'failureBg';
     let bg = this.add.image(400, 300, bgKey).setDisplaySize(800,600);
     bg.setAlpha(0.9);
     endContainer.add(bg);
     
     // Caja para el mensaje final
-    let resultBg = this.add.rectangle(400, 280, 750, 100, 0x000000, 0.6);
+    let resultBg = this.add.rectangle(400, 280, 750, 100, 0x000000, 0.65);
     endContainer.add(resultBg);
     
     let resultText = '';
     if (this.strategy === 'boicot') {
-      resultText = (this.finalScore >= 20) ? 
-        '¡Éxito total! El boicot de Milei detuvo la votación, generando euforia entre sus seguidores.' : 
-        'El boicot falló. La votación siguió y las críticas se intensificaron.';
+      resultText = (this.finalScore >= 30) ? 
+        '¡Gran éxito! El boicot radical de Milei paralizó la votación y su estrategia sacudió al Congreso.' : 
+        'El boicot no fue suficiente. La votación continuó y las consecuencias se hicieron notar.';
     } else {
-      resultText = (this.finalScore >= 20) ? 
-        'La influencia sutil alteró el debate. Aunque el resultado fue ambiguo, Milei se consolidó como estratega.' : 
-        'La estrategia de influencia fracasó y el debate se volvió caótico.';
+      resultText = (this.finalScore >= 30) ? 
+        'La intervención sutil cambió el curso del debate, consolidando a Milei como un estratega astuto.' : 
+        'La influencia encubierta fracasó. El debate se volvió caótico y la situación empeoró.';
     }
     
     let result = this.add.text(400, 280, resultText, { fontSize: '24px', fill: '#fff', wordWrap: { width: 700 } });
     result.setOrigin(0.5);
     endContainer.add(result);
     
-    // Botón para reiniciar el juego
-    let buttonBg = this.add.rectangle(400, 500, 200, 50, 0x000000, 0.5);
+    // Botón para reiniciar
+    let buttonBg = this.add.rectangle(400, 500, 250, 60, 0x000000, 0.6);
     endContainer.add(buttonBg);
-    let restartButton = this.add.text(400, 500, 'Reiniciar Juego', { fontSize: '26px', fill: '#0f0' })
+    let restartButton = this.add.text(400, 500, 'Reiniciar Juego', { fontSize: '28px', fill: '#0f0' })
       .setInteractive({ useHandCursor: true })
       .on('pointerdown', () => {
           this.sound.play('clickSound');
@@ -288,8 +289,8 @@ class EndScene extends Phaser.Scene {
     restartButton.setOrigin(0.5);
     endContainer.add(restartButton);
     
-    // Reproducir sonido acorde al resultado
-    if (this.finalScore >= 20) {
+    // Sonido final acorde al resultado
+    if (this.finalScore >= 30) {
       this.sound.play('successSound');
     } else {
       this.sound.play('failureSound');
