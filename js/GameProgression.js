@@ -1,37 +1,29 @@
 class GameProgression {
     constructor() {
         this.unlockedEndings = [];
-        this.achievements = {
-            revolucionario: false,
-            estratega: false,
-            influencer: false
-        };
+        this.achievements = [];
         this.highScores = {
             boicot: 0,
-            sutil: 0,
-            media: 0
+            sutil: 0
         };
     }
 
     checkAchievements(narrative) {
-        if (narrative.factions.establishment <= 10 && !this.achievements.revolucionario) {
-            this.unlockAchievement('¡Revolucionario!', 'Derrocaste al establishment');
-        }
-        if (narrative.factions.medios >= 80 && !this.achievements.influencer) {
-            this.unlockAchievement('Influencer Cripto', 'Control total de los medios');
+        if (narrative.factions.establishment <= 10 && !this.achievements.includes('revolucionario')) {
+            this.unlockAchievement('Revolucionario', 'Derrocaste al establishment');
         }
     }
 
-    unlockAchievement(title, description) {
-        this.achievements[title] = true;
+    unlockAchievement(name, description) {
+        this.achievements.push({ name, description });
+        this.showAchievementPopup(name);
+    }
+
+    showAchievementPopup(name) {
         const popup = document.createElement('div');
         popup.className = 'achievement-popup';
-        popup.innerHTML = `<h3>${title}</h3><p>${description}</p>`;
+        popup.textContent = `¡Logro desbloqueado: ${name}!`;
         document.body.appendChild(popup);
-        
-        setTimeout(() => {
-            popup.style.right = '20px';
-            setTimeout(() => popup.remove(), 3000);
-        }, 100);
+        setTimeout(() => popup.remove(), 3000);
     }
 }
