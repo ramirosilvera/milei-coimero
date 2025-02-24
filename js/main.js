@@ -1,10 +1,11 @@
-// BootScene: carga de assets.
+// BootScene: carga todos los assets y muestra mensajes de depuración.
 class BootScene extends Phaser.Scene {
   constructor() {
-    super('BootScene');
+    super({ key: 'BootScene' });
   }
   
   preload() {
+    console.log("BootScene: cargando assets...");
     // Imágenes
     this.load.image('menuBg', 'assets/images/menu_bg.jpg');
     this.load.image('congressBg', 'assets/images/congress_bg.jpg');
@@ -25,6 +26,7 @@ class BootScene extends Phaser.Scene {
   }
   
   create() {
+    console.log("BootScene: assets cargados, iniciando MenuScene...");
     this.scene.start('MenuScene');
   }
 }
@@ -32,19 +34,20 @@ class BootScene extends Phaser.Scene {
 // MenuScene: Menú principal con contenedores para fondo, título y botón.
 class MenuScene extends Phaser.Scene {
   constructor() {
-    super('MenuScene');
+    super({ key: 'MenuScene' });
   }
   
   create() {
-    // Contenedor del menú
+    console.log("MenuScene: iniciando...");
+    // Contenedor principal del menú
     let menuContainer = this.add.container(0, 0);
 
-    // Fondo del menú con transparencia ajustada
+    // Fondo del menú con transparencia
     let bg = this.add.image(400, 300, 'menuBg').setDisplaySize(800,600);
     bg.setAlpha(0.9);
     menuContainer.add(bg);
 
-    // Contenedor para el título con fondo semitransparente
+    // Caja semitransparente para el título
     let titleBg = this.add.rectangle(400, 150, 500, 60, 0x000000, 0.5);
     menuContainer.add(titleBg);
     let title = this.add.text(400, 150, 'Boicot Cripto: El Escándalo de Milei', { fontSize: '32px', fill: '#fff' });
@@ -73,21 +76,22 @@ class MenuScene extends Phaser.Scene {
   }
 }
 
-// StoryScene: Presenta la narrativa con contenedor para fondo y texto.
+// StoryScene: Presenta la narrativa con contenedor para fondo y caja de texto.
 class StoryScene extends Phaser.Scene {
   constructor() {
-    super('StoryScene');
+    super({ key: 'StoryScene' });
   }
   
   create() {
+    console.log("StoryScene: iniciando...");
     let storyContainer = this.add.container(0, 0);
     
-    // Fondo de la historia con transparencia
+    // Fondo de la narrativa con transparencia
     let bg = this.add.image(400, 300, 'congressBg').setDisplaySize(800,600);
     bg.setAlpha(0.85);
     storyContainer.add(bg);
     
-    // Caja de texto para la narrativa
+    // Caja para el texto narrativo
     let textBox = this.add.rectangle(400, 200, 700, 150, 0x000000, 0.6);
     storyContainer.add(textBox);
     
@@ -109,13 +113,14 @@ class StoryScene extends Phaser.Scene {
   }
 }
 
-// DecisionScene: Pantalla de elección de estrategia con contenedores para cada opción.
+// DecisionScene: Pantalla para elegir la estrategia de Milei.
 class DecisionScene extends Phaser.Scene {
   constructor() {
-    super('DecisionScene');
+    super({ key: 'DecisionScene' });
   }
   
   create() {
+    console.log("DecisionScene: iniciando...");
     let decisionContainer = this.add.container(0, 0);
     
     // Fondo sólido para la escena de decisiones
@@ -158,13 +163,14 @@ class DecisionScene extends Phaser.Scene {
   }
 }
 
-// MiniGameScene: Mini juego con contenedores para instrucciones, puntaje e íconos.
+// MiniGameScene: Mini juego interactivo con contenedores para instrucciones, puntaje e íconos.
 class MiniGameScene extends Phaser.Scene {
   constructor() {
-    super('MiniGameScene');
+    super({ key: 'MiniGameScene' });
   }
   
   create() {
+    console.log("MiniGameScene: iniciando...");
     const strategy = this.registry.get('strategy');
     let instruction = (strategy === 'boicot') ? 
       '¡Haz clic en los íconos de voto para bloquear la votación!' : 
@@ -183,15 +189,15 @@ class MiniGameScene extends Phaser.Scene {
     this.scoreText = this.add.text(20, 20, 'Puntos: 0', { fontSize: '24px', fill: '#fff' });
     miniGameContainer.add(this.scoreText);
     
-    // Contenedor para íconos
+    // Contenedor para los íconos que se generarán
     this.iconsContainer = this.add.container(0, 0);
     
-    // Temporizador de 10 segundos
+    // Temporizador de 10 segundos para finalizar el mini juego
     this.time.delayedCall(10000, () => {
       this.scene.start('EndScene', { score: this.score, strategy: strategy });
     });
     
-    // Evento para crear íconos periódicamente
+    // Evento para crear íconos cada 800 ms
     this.time.addEvent({
       delay: 800,
       callback: () => { this.spawnIcon(strategy); },
@@ -205,7 +211,7 @@ class MiniGameScene extends Phaser.Scene {
     let y = Phaser.Math.Between(80, 550);
     let icon = this.add.sprite(x, y, iconKey).setInteractive();
     
-    // Agregar el ícono al contenedor
+    // Agregar el ícono al contenedor de íconos
     this.iconsContainer.add(icon);
     
     icon.on('pointerdown', () => {
@@ -215,7 +221,7 @@ class MiniGameScene extends Phaser.Scene {
       icon.destroy();
     });
     
-    // Animación de rotación
+    // Animación de rotación para el ícono
     this.tweens.add({
       targets: icon,
       angle: 360,
@@ -223,7 +229,7 @@ class MiniGameScene extends Phaser.Scene {
       ease: 'Linear'
     });
     
-    // Eliminar el ícono tras 1.5 segundos si no se ha clickeado
+    // Eliminar el ícono después de 1.5 segundos si no se ha clickeado
     this.time.delayedCall(1500, () => {
       if (icon && icon.active) { icon.destroy(); }
     });
@@ -233,7 +239,7 @@ class MiniGameScene extends Phaser.Scene {
 // EndScene: Escena final con contenedores para fondo, mensaje y botón de reinicio.
 class EndScene extends Phaser.Scene {
   constructor() {
-    super('EndScene');
+    super({ key: 'EndScene' });
   }
   
   init(data) {
@@ -242,9 +248,10 @@ class EndScene extends Phaser.Scene {
   }
   
   create() {
+    console.log("EndScene: iniciando...");
     let endContainer = this.add.container(0, 0);
     
-    // Fondo según resultado, con leve transparencia
+    // Selección de fondo según el resultado
     let bgKey = (this.finalScore >= 20) ? 'successBg' : 'failureBg';
     let bg = this.add.image(400, 300, bgKey).setDisplaySize(800,600);
     bg.setAlpha(0.9);
@@ -269,7 +276,7 @@ class EndScene extends Phaser.Scene {
     result.setOrigin(0.5);
     endContainer.add(result);
     
-    // Botón para reiniciar
+    // Botón para reiniciar el juego
     let buttonBg = this.add.rectangle(400, 500, 200, 50, 0x000000, 0.5);
     endContainer.add(buttonBg);
     let restartButton = this.add.text(400, 500, 'Reiniciar Juego', { fontSize: '26px', fill: '#0f0' })
@@ -281,7 +288,7 @@ class EndScene extends Phaser.Scene {
     restartButton.setOrigin(0.5);
     endContainer.add(restartButton);
     
-    // Sonido final acorde al resultado
+    // Reproducir sonido acorde al resultado
     if (this.finalScore >= 20) {
       this.sound.play('successSound');
     } else {
@@ -296,10 +303,9 @@ const config = {
   width: 800,
   height: 600,
   parent: 'game-container',
+  backgroundColor: '#000000',
   scene: [BootScene, MenuScene, StoryScene, DecisionScene, MiniGameScene, EndScene],
-  audio: {
-    disableWebAudio: false
-  }
+  audio: { disableWebAudio: false }
 };
 
 const game = new Phaser.Game(config);
