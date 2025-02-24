@@ -9,45 +9,73 @@ class DecisionScene extends Phaser.Scene {
     }
 
     create() {
-        // Fondo dinámico
-        this.add.image(600, 400, 'congress_bg')
-            .setAlpha(0.9)
-            .setScale(1.1);
-
-        // Texto de contexto
-        this.add.text(600, 100, 'Elige tu estrategia:', {
-            fontSize: '36px',
-            color: '#FFD700'
+        // Fondo dinámico con animación
+        this.add.tileSprite(600, 400, 1200, 800, 'congress_bg')
+            .setScrollFactor(0)
+            .setTileScale(1.1);
+        
+        // Título con efecto
+        const title = this.add.text(600, 100, 'Estrategia Cripto', {
+            fontSize: '48px',
+            color: '#FFD700',
+            fontFamily: 'Arial',
+            stroke: '#000',
+            strokeThickness: 4
         }).setOrigin(0.5);
+        
+        this.tweens.add({
+            targets: title,
+            y: 110,
+            duration: 1000,
+            yoyo: true,
+            repeat: -1
+        });
 
         // Opciones de decisión
-        this.createDecisionOption('boicot', 250, 'Boicot Radical', 'boicot_icon');
-        this.createDecisionOption('sutil', 400, 'Intervención Sutil', 'debate_icon');
-        this.createDecisionOption('media', 550, 'Campaña en Medios', 'vote_icon');
+        this.createDecisionCard('boicot', 300, 'Boicot Radical', 'Destruye el sistema actual');
+        this.createDecisionCard('sutil', 450, 'Influencia Sutil', 'Manipula las instituciones');
+        this.createDecisionCard('media', 600, 'Campaña Medial', 'Controla la narrativa pública');
     }
 
-    createDecisionOption(decisionKey, y, text, iconKey) {
-        const container = this.add.container(600, y)
-            .setInteractive(new Phaser.Geom.Rectangle(-200, -50, 400, 100), Phaser.Geom.Rectangle.Contains)
-            .on('pointerdown', () => this.selectDecision(decisionKey));
+    createDecisionCard(key, y, title, description) {
+        const card = this.add.container(600, y)
+            .setInteractive(new Phaser.Geom.Rectangle(-250, -75, 500, 150), Phaser.Geom.Rectangle.Contains)
+            .on('pointerdown', () => this.selectStrategy(key));
 
         // Fondo animado
-        const bg = this.add.rectangle(0, 0, 400, 100, 0x000000, 0.6)
-            .setStrokeStyle(2, 0x8b4513);
+        const bg = this.add.rectangle(0, 0, 500, 150, 0x000000, 0.7)
+            .setStrokeStyle(3, 0x8b4513);
         
-        // Ícono
-        const icon = this.add.image(-150, 0, iconKey)
-            .setScale(0.7);
+        // Icono
+        const icon = this.add.image(-200, 0, `${key}_icon`)
+            .setScale(0.8);
         
-        // Texto
-        const label = this.add.text(0, 0, text, {
+        // Textos
+        const titleText = this.add.text(-50, -30, title, {
             fontSize: '24px',
-            color: '#FFF'
-        }).setOrigin(0.5, 0.5);
+            color: '#FFD700',
+            fontFamily: 'Arial'
+        }).setOrigin(0, 0.5);
+        
+        const descText = this.add.text(-50, 30, description, {
+            fontSize: '18px',
+            color: '#FFF',
+            fontFamily: 'Arial',
+            wordWrap: { width: 350 }
+        }).setOrigin(0, 0.5);
 
         // Animación hover
-        container.on('pointerover', () => {
+        card.on('pointerover', () => {
             bg.setFillStyle(0x8b4513, 0.3);
+            this.tweens.add({
+                targets: icon,
+                scale: 0.9,
+                duration: 200
+            });
+        });
+
+        card.on('pointerout', () => {
+            bg.setFillStyle(0x000000, 0.7);
             this.tweens.add({
                 targets: icon,
                 scale: 0.8,
@@ -55,32 +83,22 @@ class DecisionScene extends Phaser.Scene {
             });
         });
 
-        container.on('pointerout', () => {
-            bg.setFillStyle(0x000000, 0.6);
-            this.tweens.add({
-                targets: icon,
-                scale: 0.7,
-                duration: 200
-            });
-        });
-
-        container.add([bg, icon, label]);
+        card.add([bg, icon, titleText, descText]);
     }
 
-    selectDecision(decisionKey) {
-        this.narrative.applyDecision(decisionKey);
-        this.progression.checkAchievements(this.narrative);
+    selectStrategy(key) {
+        this.narrative.applyDecision(key);
+        this.progression.saveGame();
         
-        let targetScene;
-        switch(decisionKey) {
-            case 'boicot': targetScene = 'BoicotScene'; break;
-            case 'sutil': targetScene = 'SutilScene'; break;
-            case 'media': targetScene = 'BoicotScene'; break; // Temporal
-        }
-        
+        const sceneMap = {
+            boicot: 'BoicotScene',
+            sutil: 'SutilScene',
+            media: 'MediaScene'
+        };
+
         this.cameras.main.fadeOut(500, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
-            this.scene.start(targetScene, {
+            this.scene.start(sceneMap[key], {
                 narrative: this.narrative,
                 progression: this.progression
             });
