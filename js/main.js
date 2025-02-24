@@ -7,20 +7,19 @@ const config = {
         BootScene,
         MenuScene,
         DecisionScene,
-        BoicotMiniGame,
-        SutilMiniGame,
-        MediaMiniGame,
+        BoicotScene,
+        SutilScene,
         EndScene
     ],
     physics: {
         default: 'arcade',
-        arcade: { gravity: { y: 0 } }
+        arcade: { gravity: { y: 200 } }
     },
     audio: {
         disableWebAudio: false
     }
 };
 
-let game = new Phaser.Game(config);
-let narrativeManager = new NarrativeManager();
-let gameProgression = new GameProgression();
+const game = new Phaser.Game(config);
+const narrativeManager = new NarrativeManager();
+const gameProgression = new GameProgression();
