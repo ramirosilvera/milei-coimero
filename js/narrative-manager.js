@@ -10,7 +10,7 @@
  */
 export const narrativeTree = {
   start: {
-    text: "El escándalo cripto de Milei amenaza con desatar una investigación devastadora. La comisión investigadora se votará en breve, lo que podría exponer el escándalo. Tu misión es comprar la lealtad de diputados y senadores corruptos para evitar la aprobación de la comisión. ¿Qué estrategia emplearás?",
+    text: "El escándalo cripto de Milei está a punto de desencadenar una investigación que podría destruir su carrera. La comisión investigadora se votará en breve, y tú tienes la misión de comprar la lealtad de diputados y senadores para evitar que se apruebe. ¿Cómo comenzarás?",
     choices: [
       { text: "Identificar a los corruptos", next: "identificar", miniGame: "identificacion" },
       { text: "Ofrecer cargos y favores", next: "ofrecer_cargos", miniGame: "negociacion" },
@@ -18,37 +18,55 @@ export const narrativeTree = {
     ]
   },
   identificar: {
-    text: "Has analizado los perfiles y descubierto a varios políticos corruptos. Ahora debes elegir a quién abordar: ¿los peronistas, los radicales o los del PRO?",
+    text: "Después de un exhaustivo análisis, descubres a varios políticos corruptos. Debes decidir con quién negociar: ¿los peronistas, los radicales o los del PRO? La decisión influirá en la estrategia a seguir.",
     choices: [
-      { text: "Peronistas", next: "ofrecer_cargos", miniGame: "negociacion", effect: { poblacion: +5, establishment: -5 } },
-      { text: "Radicales", next: "ofrecer_cargos", miniGame: "negociacion", effect: { medios: +5 } },
+      { text: "Peronistas", next: "estrategia_peronista", miniGame: "negociacion", effect: { poblacion: +5, establishment: -5 } },
+      { text: "Radicales", next: "estrategia_radical", miniGame: "negociacion", effect: { medios: +5 } },
       { text: "Del PRO", next: "ofrecer_dinero", miniGame: "soborno", effect: { libertarios: +5 } }
     ]
   },
-  ofrecer_cargos: {
-    text: "Decides ofrecer cargos y favores a cambio de la lealtad de los políticos. Negocia con precisión para convencerlos y evitar que se vote la comisión investigadora.",
+  estrategia_peronista: {
+    text: "Decides enfocarte en los peronistas. Ahora debes negociar con ellos para ofrecer cargos y favores que aseguren su apoyo sin levantar sospechas. ¿Cómo te comportarás?",
     choices: [
-      { text: "Negociar exitosamente", next: "final_exito", effect: { medios: +10 } },
-      { text: "Negociar mediocremente", next: "final_mitad", effect: { medios: 0 } }
+      { text: "Negociación agresiva (alto riesgo, alta recompensa)", next: "final_exito", effect: { medios: +15, poblacion: +5 } },
+      { text: "Negociación equilibrada (riesgo moderado)", next: "final_mitad", effect: { medios: +5, poblacion: +5 } },
+      { text: "Negociación deficiente (fracaso parcial)", next: "final_fracaso", effect: { medios: -5, poblacion: -5 } }
+    ]
+  },
+  estrategia_radical: {
+    text: "Te diriges a los radicales. Su base es fuerte, pero son impredecibles. Debes ofrecerles cargos y favores de manera precisa para ganar su lealtad.",
+    choices: [
+      { text: "Ofrecer una propuesta contundente", next: "final_exito", effect: { medios: +15 } },
+      { text: "Ofrecer una propuesta moderada", next: "final_mitad", effect: { medios: +5 } },
+      { text: "Fracasar en la propuesta", next: "final_fracaso", effect: { medios: -5 } }
+    ]
+  },
+  ofrecer_cargos: {
+    text: "Decides ofrecer cargos y favores a cambio de lealtad. Debes negociar con precisión para que acepten tu propuesta sin levantar sospechas y evitar la votación de la comisión investigadora.",
+    choices: [
+      { text: "Negociación arriesgada con altos beneficios", next: "final_exito", effect: { medios: +15, establishment: -10 } },
+      { text: "Negociación prudente", next: "final_mitad", effect: { medios: +5 } },
+      { text: "Negociación deficiente", next: "final_fracaso", effect: { medios: -5 } }
     ]
   },
   ofrecer_dinero: {
-    text: "Optas por ofrecer sobornos en efectivo. La precisión es crucial para que acepten tu propuesta sin levantar sospechas y evitar la votación de la comisión investigadora.",
+    text: "Optas por ofrecer sobornos en efectivo. La precisión es crucial para entregar el dinero sin levantar sospechas. ¿Cómo ejecutarás el plan?",
     choices: [
-      { text: "Sobornar con éxito", next: "final_exito", effect: { establishment: -10, poblacion: +10 } },
-      { text: "Sobornar mal", next: "final_fracaso", effect: { establishment: +5, poblacion: -10 } }
+      { text: "Soborno perfecto", next: "final_exito", effect: { establishment: -10, poblacion: +10 } },
+      { text: "Soborno intermedio", next: "final_mitad", effect: { establishment: -5 } },
+      { text: "Soborno desastroso", next: "final_fracaso", effect: { establishment: +5, poblacion: -10 } }
     ]
   },
   final_exito: {
-    text: "¡Éxito! Has comprado la lealtad de suficientes diputados y senadores para evitar que se vote la comisión investigadora. Milei se salva del escándalo cripto y el control político queda en tus manos.",
+    text: "¡Éxito total! Has comprado la lealtad de suficientes diputados y senadores para evitar que se vote la comisión investigadora. El escándalo cripto queda en el olvido y el poder político se inclina a tu favor.",
     choices: []
   },
   final_mitad: {
-    text: "Aunque lograste ciertos avances, no compraste la lealtad necesaria y la votación se pospone por poco. El futuro es incierto.",
+    text: "Tu estrategia ha tenido resultados mixtos. Aunque algunos políticos se han comprado, la votación se pospone por poco. El futuro es incierto, pero aún hay margen de maniobra.",
     choices: []
   },
   final_fracaso: {
-    text: "El plan ha fracasado. La comisión investigadora fue votada, el escándalo cripto se intensificó y Milei enfrenta graves consecuencias.",
+    text: "El plan ha fracasado. La comisión investigadora es aprobada y el escándalo cripto de Milei se desata, dejando el país al borde del colapso.",
     choices: []
   }
 };
@@ -100,6 +118,7 @@ export class AchievementSystem {
     return this.achievements;
   }
 }
+
 
 
 
