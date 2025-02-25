@@ -52,13 +52,7 @@ export default class BootScene extends Phaser.Scene {
   create() {
     const music = this.sound.add('background', { volume: 0.5, loop: true });
     music.play();
+    console.log("BootScene creada, iniciando TutorialScene...");
     this.scene.start('TutorialScene');
   }
-}
-
-create() {
-  const music = this.sound.add('background', { volume: 0.5, loop: true });
-  music.play();
-  console.log("BootScene creada, iniciando TutorialScene...");
-  this.scene.start('TutorialScene');
 }
