@@ -4,6 +4,7 @@ export default class MiniGameScene extends Phaser.Scene {
   }
   
   init(data) {
+    // gameType: "identificacion", "negociacion", "soborno"
     this.gameType = data.gameType;
   }
   
@@ -11,24 +12,33 @@ export default class MiniGameScene extends Phaser.Scene {
     this.add.image(600, 400, 'congress_bg').setAlpha(0.9);
     this.challengeSuccess = false;
     
-    // Mostrar overlay de instrucciones
-    this.add.rectangle(600, 100, 1200, 100, 0x000000, 0.6);
-    
-    if (this.gameType === "boicot") {
-      this.createBoicotGame();
-    } else if (this.gameType === "influencia") {
-      this.createInfluenciaGame();
-    } else if (this.gameType === "campaña") {
-      this.createCampanaGame();
+    // Instrucciones según el minijuego
+    let instructions = "";
+    if (this.gameType === "identificacion") {
+      instructions = "Identificación: Toca al político corrupto (sprite) y evita distracciones.";
+    } else if (this.gameType === "negociacion") {
+      instructions = "Negociación: Detén el indicador en la zona óptima para negociar cargos y favores.";
+    } else if (this.gameType === "soborno") {
+      instructions = "Soborno: Toca en secuencia los círculos que aparecen para entregar el dinero con precisión.";
+    }
+    this.add.rectangle(600, 80, 1200, 60, 0x000000, 0.7);
+    this.add.text(600, 80, instructions, { fontSize: '28px', fill: '#fff', align: 'center' })
+      .setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
+      
+    if (this.gameType === "identificacion") {
+      this.createIdentificacionGame();
+    } else if (this.gameType === "negociacion") {
+      this.createNegociacionGame();
+    } else if (this.gameType === "soborno") {
+      this.createSobornoGame();
     }
   }
   
-  // Minijuego "Boicot": el objetivo se mueve y hay distractores.
-  createBoicotGame() {
-    this.add.text(600, 50, 'Minijuego: Boicot Radical', { fontSize: '32px', fill: '#fff' })
-      .setOrigin(0.5).setShadow(2,2,"#000",2,true,true);
+  // Minijuego "Identificación": basado en el minijuego boicot, re-tematizado.
+  createIdentificacionGame() {
+    this.add.text(600, 130, 'Minijuego: Identificación de Corruptos', { fontSize: '32px', fill: '#fff' })
+      .setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
     
-    // Objetivo móvil
     this.target = this.add.sprite(600, 400, 'milei').setInteractive({ useHandCursor: true });
     this.target.alpha = 1;
     this.tweens.add({
@@ -41,7 +51,6 @@ export default class MiniGameScene extends Phaser.Scene {
     this.progressBar = this.add.graphics();
     this.drawProgressBar();
     
-    // Partículas al tocar el objetivo
     this.particles = this.add.particles('milei');
     this.emitter = this.particles.createEmitter({
       speed: { min: -100, max: 100 },
@@ -91,29 +100,26 @@ export default class MiniGameScene extends Phaser.Scene {
     this.time.delayedCall(20000, () => { if (!this.challengeSuccess) this.finishGame(); });
   }
   
-  // Minijuego "Influencia": slider que se mueve y el jugador debe detenerlo en una zona verde.
-  createInfluenciaGame() {
-    this.add.text(600, 50, 'Minijuego: Influencia Sutil', { fontSize: '32px', fill: '#fff' })
-      .setOrigin(0.5).setShadow(2,2,"#000",2,true,true);
+  // Minijuego "Negociación": basado en slider (influencia) re-tematizado.
+  createNegociacionGame() {
+    this.add.text(600, 130, 'Minijuego: Negociación de Cargos', { fontSize: '32px', fill: '#fff' })
+      .setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
     
-    // Barra de slider
     const sliderWidth = 600;
-    const sliderX = 600 - sliderWidth/2;
+    const sliderX = 600 - sliderWidth / 2;
     const sliderY = 400;
     this.add.rectangle(600, sliderY, sliderWidth, 30, 0x555555, 1);
-    // Zona verde óptima
+    
     const optimalZoneX = sliderX + sliderWidth * 0.4;
     const optimalZoneWidth = sliderWidth * 0.2;
-    this.add.rectangle(optimalZoneX + optimalZoneWidth/2, sliderY, optimalZoneWidth, 30, 0x00ff00, 0.8);
+    this.add.rectangle(optimalZoneX + optimalZoneWidth / 2, sliderY, optimalZoneWidth, 30, 0x00ff00, 0.8);
     
-    // Indicador que se mueve
     this.indicator = this.add.rectangle(sliderX, sliderY, 20, 40, 0xff0000);
     this.tweens.add({
       targets: this.indicator,
       x: { value: sliderX + sliderWidth, duration: 1500, ease: 'Linear', yoyo: true, repeat: -1 }
     });
     
-    // Botón para detener el indicador
     const stopButton = this.add.text(600, 500, 'Detener', { fontSize: '32px', fill: '#0f0' })
       .setInteractive({ useHandCursor: true })
       .setOrigin(0.5)
@@ -121,25 +127,21 @@ export default class MiniGameScene extends Phaser.Scene {
       
     stopButton.on('pointerdown', () => {
       this.sound.play('click');
-      // Detener el tween
       this.tweens.killTweensOf(this.indicator);
-      // Comprobar si el indicador está en la zona óptima
       if (this.indicator.x >= optimalZoneX && this.indicator.x <= optimalZoneX + optimalZoneWidth) {
         this.challengeSuccess = true;
       }
       this.finishGame();
     });
     
-    // Timeout
     this.time.delayedCall(15000, () => { if (!this.challengeSuccess) this.finishGame(); });
   }
   
-  // Minijuego "Campaña": secuencia rítmica de toques en pantalla.
-  createCampanaGame() {
-    this.add.text(600, 50, 'Minijuego: Campaña Medial', { fontSize: '32px', fill: '#fff' })
-      .setOrigin(0.5).setShadow(2,2,"#000",2,true,true);
+  // Minijuego "Soborno": basado en secuencia (campaña) re-tematizado.
+  createSobornoGame() {
+    this.add.text(600, 130, 'Minijuego: Soborno Efectivo', { fontSize: '32px', fill: '#fff' })
+      .setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
       
-    // Mostrar una secuencia de círculos que aparecen en posiciones aleatorias y el jugador debe tocarlos en orden.
     this.sequence = [];
     const sequenceLength = 4;
     for (let i = 0; i < sequenceLength; i++) {
@@ -149,15 +151,13 @@ export default class MiniGameScene extends Phaser.Scene {
       });
     }
     this.currentIndex = 0;
-    // Mostrar la secuencia (todos los círculos, con opacidad baja, que se iluminan cuando el jugador toca correctamente)
     this.circles = [];
-    this.sequence.forEach((pos, idx) => {
+    this.sequence.forEach((pos) => {
       const circle = this.add.circle(pos.x, pos.y, 30, 0x00ff00, 0.3);
       this.circles.push(circle);
     });
     
     this.input.on('pointerdown', (pointer) => {
-      // Comprobar si el toque está cerca del círculo correspondiente
       const target = this.sequence[this.currentIndex];
       const distance = Phaser.Math.Distance.Between(pointer.x, pointer.y, target.x, target.y);
       if (distance < 50) {
@@ -192,3 +192,4 @@ export default class MiniGameScene extends Phaser.Scene {
     this.progressBar.fillRect(300, 750, barWidth, 20);
   }
 }
+
