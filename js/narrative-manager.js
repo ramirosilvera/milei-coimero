@@ -1,78 +1,78 @@
 /**
  * Árbol Narrativo para Cripto Revolución.
  * Cada nodo contiene:
- * - id: Identificador único.
- * - text: Texto narrativo.
- * - choices: Array de opciones; cada opción contiene:
+ * - text: Narrativa del nodo.
+ * - choices: Opciones disponibles; cada opción incluye:
  *    • text: Texto de la opción.
  *    • next: id del siguiente nodo.
- *    • miniGame: (opcional) tipo de mini-juego ("boicot", "influencia" o "campaña").
+ *    • miniGame: (opcional) tipo de minijuego ("boicot", "influencia" o "campaña").
  *    • effect: Objeto con cambios en facciones (ej. { establishment: -10, medios: +5 }).
  */
 export const narrativeTree = {
   start: {
-    text: "La nación está al borde del colapso. Milei, en medio de un escándalo cripto, debe actuar para evitar una investigación que podría derrumbar al establecimiento.",
+    text: "La nación está al borde del colapso. Milei, inmerso en un escándalo cripto, debe actuar para evitar una investigación que podría derrumbar al establecimiento. ¿Qué camino tomarás?",
     choices: [
       { text: "Lanzar un boicot radical", next: "boicot1", miniGame: "boicot", effect: { establishment: -10 } },
-      { text: "Manipular a los medios", next: "influencia1", miniGame: "influencia", effect: { medios: +10 } }
+      { text: "Manipular a los medios", next: "influencia1", miniGame: "influencia", effect: { medios: +10 } },
+      { text: "Organizar una campaña ciudadana", next: "campana1", miniGame: "campaña", effect: { poblacion: +10 } }
     ]
   },
   boicot1: {
-    text: "Con un boicot arriesgado, intentas debilitar al sistema. La tensión se siente en cada esquina.",
+    text: "Decides atacar de manera directa el sistema. El ambiente se llena de tensión y protestas. ¿Te arriesgas a intensificar el ataque o reconsideras tu estrategia?",
     choices: [
-      { text: "Presiona para intensificar el ataque", next: "boicot2", miniGame: "boicot", effect: { establishment: -15 } },
-      { text: "Retrocede y reevalúa la estrategia", next: "regreso", effect: { establishment: +5 } }
+      { text: "Intensificar el ataque", next: "boicot2", miniGame: "boicot", effect: { establishment: -15 } },
+      { text: "Replantear la estrategia", next: "regreso", effect: { establishment: +5 } }
     ]
   },
   influencia1: {
-    text: "Usas tus contactos en los medios para sembrar dudas sobre la investigación. La opinión pública comienza a inclinarse.",
+    text: "Con tus contactos en los medios, comienzas a difundir información que pone en duda la veracidad de la investigación. La opinión pública empieza a cambiar. ¿Deseas amplificar el mensaje o diversificar tus tácticas?",
     choices: [
-      { text: "Amplifica el mensaje", next: "influencia2", miniGame: "influencia", effect: { medios: +15 } },
-      { text: "Opta por una campaña mediática vibrante", next: "campaña1", miniGame: "campaña", effect: { poblacion: +10 } }
+      { text: "Amplificar el mensaje", next: "influencia2", miniGame: "influencia", effect: { medios: +15 } },
+      { text: "Diversificar con una campaña", next: "campana1", miniGame: "campaña", effect: { poblacion: +5 } }
+    ]
+  },
+  campana1: {
+    text: "Lanzas una campaña ciudadana que busca unir a la población contra el sistema. Las redes se llenan de mensajes de esperanza y protesta. ¿Aprovechas el momento o ajustas la estrategia?",
+    choices: [
+      { text: "Aprovechar el momento", next: "final_exito", miniGame: "campaña", effect: { poblacion: +15 } },
+      { text: "Ajustar la estrategia", next: "final_mitad", effect: { poblacion: -5 } }
     ]
   },
   boicot2: {
-    text: "El ataque se intensifica y logras dañar significativamente la reputación del establecimiento. Pero el riesgo crece...",
+    text: "El ataque se intensifica, y logras debilitar notablemente al establecimiento. Sin embargo, la presión aumenta y el riesgo se multiplica.",
     choices: [
-      { text: "¡Arriesga todo!", next: "final_exito", effect: { libertarios: +10, establishment: -20 } },
-      { text: "Retrocede antes de que sea demasiado tarde", next: "final_mitad", effect: { establishment: -5 } }
+      { text: "Arriesgarlo todo", next: "final_exito", effect: { libertarios: +10, establishment: -20 } },
+      { text: "Retroceder para reagruparse", next: "final_mitad", effect: { establishment: -5 } }
     ]
   },
   influencia2: {
-    text: "La manipulación se afianza y el discurso mediático está de tu lado. La comisión comienza a tambalearse.",
+    text: "La manipulación de los medios se afianza y la narrativa comienza a girar a tu favor. ¿Consolidar este control o buscar alianzas en otros sectores?",
     choices: [
-      { text: "Consolidar el control mediático", next: "final_exito", effect: { medios: +10, poblacion: +5 } },
-      { text: "Buscar apoyo en otras áreas", next: "campaña1", miniGame: "campaña", effect: { poblacion: +5 } }
-    ]
-  },
-  campaña1: {
-    text: "Lanzas una campaña mediática vibrante que conquista al pueblo. Las calles se llenan de fervor.",
-    choices: [
-      { text: "Aprovecha el momento para cambiar el curso", next: "final_exito", effect: { poblacion: +15 } },
-      { text: "El riesgo de sobreexposición es alto", next: "final_fracaso", effect: { poblacion: -10 } }
+      { text: "Consolidar control", next: "final_exito", effect: { medios: +10, poblacion: +5 } },
+      { text: "Buscar nuevas alianzas", next: "campana1", miniGame: "campaña", effect: { poblacion: +5 } }
     ]
   },
   regreso: {
-    text: "Decides retroceder y reorganizar tus ideas. La situación se estabiliza, pero la oportunidad se desvanece.",
-    choices: [] // Nodo terminal
+    text: "Decides replantear la estrategia y te retiras momentáneamente. Aunque la situación se estabiliza, se pierde parte de la oportunidad.",
+    choices: []
   },
   final_exito: {
-    text: "Tu estrategia ha funcionado. Has conseguido boicotear la comisión y cambiar la narrativa del país. La revolución está en marcha.",
-    choices: [] // Final feliz
+    text: "Tu estrategia ha sido un éxito rotundo. Has logrado boicotear la comisión y cambiar el rumbo del país. Una nueva era se abre ante ti.",
+    choices: []
   },
   final_mitad: {
     text: "Aunque no alcanzaste todos tus objetivos, lograste debilitar al establecimiento. El futuro es incierto, pero se han abierto nuevas posibilidades.",
-    choices: [] // Final intermedio
+    choices: []
   },
   final_fracaso: {
-    text: "La campaña no logra conectar y la presión se vuelve insoportable. El escándalo se intensifica y el país se sumerge en el caos.",
-    choices: [] // Final negativo
+    text: "La campaña fracasa y la presión se vuelve insoportable. El escándalo se intensifica y la nación cae en el caos.",
+    choices: []
   }
 };
   
 /**
  * Sistema de Facciones.
- * Cada acción puede modificar estos valores.
+ * Permite llevar un seguimiento de cómo afectan tus decisiones a distintos poderes.
  */
 export class FactionSystem {
   constructor() {
@@ -103,7 +103,7 @@ export class FactionSystem {
 
 /**
  * Sistema de Logros.
- * Desbloquea y guarda logros alcanzados durante el juego.
+ * Desbloquea y almacena logros durante la partida.
  */
 export class AchievementSystem {
   constructor() {
@@ -119,4 +119,5 @@ export class AchievementSystem {
     return this.achievements;
   }
 }
+
 
