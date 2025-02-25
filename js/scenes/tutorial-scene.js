@@ -10,9 +10,9 @@ export default class TutorialScene extends Phaser.Scene {
     
     const tutorialText = [
       "Bienvenido a Cripto Revolución – La Jugada de Milei.",
-      "En este juego, deberás comprar la lealtad de diputados y senadores corruptos.",
-      "Podrás: identificar a los políticos, ofrecerles cargos/favores o sobornarlos con dinero.",
-      "Cada elección disparará un minijuego diferente. ¡Presta atención a las instrucciones en cada escenario!",
+      "Tu misión es evitar que se vote la comisión investigadora del escándalo cripto de Milei, comprando la lealtad de diputados y senadores corruptos.",
+      "Podrás identificar a los corruptos, ofrecerles cargos/favores o sobornarlos con dinero.",
+      "Cada elección disparará un minijuego único con instrucciones: ¡presta atención a cómo jugar en cada escenario!",
       "¡Tu éxito determinará el futuro del país!"
     ];
     
