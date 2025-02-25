@@ -1,16 +1,16 @@
 /**
- * Árbol Narrativo para Cripto Revolución.
+ * Árbol Narrativo para Cripto Revolución – La Jugada de Milei.
  * Cada nodo contiene:
  * - text: Narrativa del nodo.
  * - choices: Opciones disponibles; cada opción incluye:
  *    • text: Texto de la opción.
  *    • next: id del siguiente nodo.
- *    • miniGame: (opcional) tipo de minijuego ("identificacion", "negociacion" o "soborno").
+ *    • miniGame: (opcional) tipo de minijuego ("identificacion", "negociacion", "soborno").
  *    • effect: Objeto con cambios en facciones.
  */
 export const narrativeTree = {
   start: {
-    text: "La crisis política ha alcanzado niveles sin precedentes. Los diputados y senadores están en venta y tu misión es comprar sus votos. Debes actuar con astucia: identifica a los corruptos y ofréceles cargos, dinero o favores. ¿Qué estrategia emprenderás?",
+    text: "El escándalo cripto de Milei amenaza con desatar una investigación devastadora. La comisión investigadora se votará en breve, lo que podría exponer el escándalo. Tu misión es comprar la lealtad de diputados y senadores corruptos para evitar la aprobación de la comisión. ¿Qué estrategia emplearás?",
     choices: [
       { text: "Identificar a los corruptos", next: "identificar", miniGame: "identificacion" },
       { text: "Ofrecer cargos y favores", next: "ofrecer_cargos", miniGame: "negociacion" },
@@ -18,7 +18,7 @@ export const narrativeTree = {
     ]
   },
   identificar: {
-    text: "Has analizado los perfiles y descubierto a varios políticos corruptos. Ahora debes decidir a quién abordar: ¿los peronistas, los radicales o los del PRO?",
+    text: "Has analizado los perfiles y descubierto a varios políticos corruptos. Ahora debes elegir a quién abordar: ¿los peronistas, los radicales o los del PRO?",
     choices: [
       { text: "Peronistas", next: "ofrecer_cargos", miniGame: "negociacion", effect: { poblacion: +5, establishment: -5 } },
       { text: "Radicales", next: "ofrecer_cargos", miniGame: "negociacion", effect: { medios: +5 } },
@@ -26,29 +26,29 @@ export const narrativeTree = {
     ]
   },
   ofrecer_cargos: {
-    text: "Decides ofrecer cargos y favores a cambio de lealtad. Debes negociar con precisión para que acepten tu propuesta sin levantar sospechas.",
+    text: "Decides ofrecer cargos y favores a cambio de la lealtad de los políticos. Negocia con precisión para convencerlos y evitar que se vote la comisión investigadora.",
     choices: [
-      { text: "Negociar con éxito", next: "final_exito", effect: { medios: +10 } },
-      { text: "Negociar de forma mediocre", next: "final_mitad", effect: { medios: 0 } }
+      { text: "Negociar exitosamente", next: "final_exito", effect: { medios: +10 } },
+      { text: "Negociar mediocremente", next: "final_mitad", effect: { medios: 0 } }
     ]
   },
   ofrecer_dinero: {
-    text: "Optas por ofrecer dinero y sobornos. La precisión es crucial para no levantar sospechas y lograr comprar su lealtad.",
+    text: "Optas por ofrecer sobornos en efectivo. La precisión es crucial para que acepten tu propuesta sin levantar sospechas y evitar la votación de la comisión investigadora.",
     choices: [
-      { text: "Sobornar con precisión", next: "final_exito", effect: { establishment: -10, poblacion: +10 } },
+      { text: "Sobornar con éxito", next: "final_exito", effect: { establishment: -10, poblacion: +10 } },
       { text: "Sobornar mal", next: "final_fracaso", effect: { establishment: +5, poblacion: -10 } }
     ]
   },
   final_exito: {
-    text: "Tus estrategias han sido un éxito. Has comprado la lealtad de los diputados y senadores, y ahora controlas el poder legislativo.",
+    text: "¡Éxito! Has comprado la lealtad de suficientes diputados y senadores para evitar que se vote la comisión investigadora. Milei se salva del escándalo cripto y el control político queda en tus manos.",
     choices: []
   },
   final_mitad: {
-    text: "Aunque lograste avances, tu estrategia no fue del todo exitosa. El control es parcial y la incertidumbre persiste.",
+    text: "Aunque lograste ciertos avances, no compraste la lealtad necesaria y la votación se pospone por poco. El futuro es incierto.",
     choices: []
   },
   final_fracaso: {
-    text: "El intento de soborno fue un desastre y el escándalo estalló. Has fracasado en tu misión y el país se sumerge en el caos.",
+    text: "El plan ha fracasado. La comisión investigadora fue votada, el escándalo cripto se intensificó y Milei enfrenta graves consecuencias.",
     choices: []
   }
 };
@@ -100,5 +100,6 @@ export class AchievementSystem {
     return this.achievements;
   }
 }
+
 
 
