@@ -8,7 +8,7 @@ export default class NarrativeScene extends Phaser.Scene {
   init(data) {
     // Nodo narrativo actual
     this.currentNodeId = data.currentNode || "start";
-    // Sistema de facciones (se puede persistir en el registry)
+    // Sistema de facciones (persistido o nuevo)
     this.factionSystem = data.factionSystem || new FactionSystem();
   }
   
