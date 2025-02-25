@@ -100,3 +100,23 @@ export class FactionSystem {
     };
   }
 }
+
+/**
+ * Sistema de Logros.
+ * Desbloquea y guarda logros alcanzados durante el juego.
+ */
+export class AchievementSystem {
+  constructor() {
+    this.achievements = JSON.parse(localStorage.getItem('achievements')) || [];
+  }
+  
+  unlock(name) {
+    if (!this.achievements.includes(name)) {
+      this.achievements.push(name);
+      console.log(`Logro desbloqueado: ${name}`);
+      localStorage.setItem('achievements', JSON.stringify(this.achievements));
+    }
+    return this.achievements;
+  }
+}
+
