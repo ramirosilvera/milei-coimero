@@ -8,24 +8,22 @@ import EndScene from './scenes/end-scene.js';
 const config = {
   type: Phaser.AUTO,
   parent: 'game-container',
-  width: 1200,
-  height: 800,
+  width: window.innerWidth,
+  height: window.innerHeight,
   scene: [BootScene, TutorialScene, MenuScene, NarrativeScene, MiniGameScene, EndScene],
   physics: {
     default: 'arcade',
     arcade: { gravity: { y: 0 }, debug: false }
   },
   scale: {
-    mode: Phaser.Scale.FIT,
+    mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.CENTER_BOTH
   }
 };
 
-// Evitamos redeclarar la variable "game" si ya existe.
+// Evitamos redeclarar "game"
 if (!window.game) {
   window.game = new Phaser.Game(config);
 } else {
   console.log("La variable 'game' ya ha sido declarada.");
 }
-
-
