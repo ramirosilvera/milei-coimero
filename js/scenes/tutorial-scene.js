@@ -9,11 +9,11 @@ export default class TutorialScene extends Phaser.Scene {
     this.add.rectangle(600, 400, 1100, 300, 0x000000, 0.6);
     
     const tutorialText = [
-      "Bienvenido a Cripto Revolución - La Jugada de Milei.",
-      "Aquí tomarás decisiones estratégicas que afectarán el destino del país.",
-      "Cada elección disparará un minijuego único que pondrá a prueba tu habilidad.",
-      "Tus decisiones modificarán el poder del establecimiento, los medios y el apoyo popular.",
-      "¡Prepárate para una experiencia interactiva, narrativa y desafiante!"
+      "Bienvenido a Cripto Revolución – La Jugada de Milei.",
+      "En este juego, deberás comprar la lealtad de diputados y senadores corruptos.",
+      "Podrás: identificar a los políticos, ofrecerles cargos/favores o sobornarlos con dinero.",
+      "Cada elección disparará un minijuego diferente. ¡Presta atención a las instrucciones en cada escenario!",
+      "¡Tu éxito determinará el futuro del país!"
     ];
     
     let currentLine = 0;
@@ -44,3 +44,4 @@ export default class TutorialScene extends Phaser.Scene {
     });
   }
 }
+
