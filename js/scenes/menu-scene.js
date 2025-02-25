@@ -15,7 +15,7 @@ export default class MenuScene extends Phaser.Scene {
     }).setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
     
     const instructions = this.add.text(600, 200, 
-      'Toma decisiones estratégicas, enfrenta desafiantes minijuegos y cambia el destino del país.', {
+      'Compra la lealtad de diputados y senadores corruptos. ¡Elige tu estrategia y actúa con astucia!', {
       fontSize: '28px',
       fill: '#fff',
       align: 'center',
@@ -37,13 +37,13 @@ export default class MenuScene extends Phaser.Scene {
       this.scene.start('NarrativeScene', { currentNode: "start" });
     });
     
-    const creditsButton = this.add.text(600, 500, 'Créditos', { fontSize: '28px', fill: '#fff' })
+    const creditsButton = this.add.text(600, 500, 'Créditos', { fontSize: '32px', fill: '#fff' })
       .setInteractive({ useHandCursor: true })
       .setOrigin(0.5)
       .setStyle({ padding: '8px 16px', backgroundColor: '#222' });
     
     creditsButton.on('pointerdown', () => {
-      alert("Cripto Revolución - La Jugada de Milei\nDesarrollado por [Tu Nombre]\nInspirado en el escenario político actual.");
+      alert("Cripto Revolución – La Jugada de Milei\nDesarrollado por [Tu Nombre]\nInspirado en la política actual.");
     });
   }
 }
