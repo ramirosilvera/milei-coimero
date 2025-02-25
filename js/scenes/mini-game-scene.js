@@ -15,11 +15,11 @@ export default class MiniGameScene extends Phaser.Scene {
     // Instrucciones según el minijuego
     let instructions = "";
     if (this.gameType === "identificacion") {
-      instructions = "Identificación: Toca al político corrupto (sprite) y evita distracciones.";
+      instructions = "Identificación: Toca al político corrupto y evita distracciones para identificar a los culpables.";
     } else if (this.gameType === "negociacion") {
       instructions = "Negociación: Detén el indicador en la zona óptima para negociar cargos y favores.";
     } else if (this.gameType === "soborno") {
-      instructions = "Soborno: Toca en secuencia los círculos que aparecen para entregar el dinero con precisión.";
+      instructions = "Soborno: Toca en secuencia los círculos para entregar el dinero con precisión.";
     }
     this.add.rectangle(600, 80, 1200, 60, 0x000000, 0.7);
     this.add.text(600, 80, instructions, { fontSize: '28px', fill: '#fff', align: 'center' })
@@ -34,10 +34,10 @@ export default class MiniGameScene extends Phaser.Scene {
     }
   }
   
-  // Minijuego "Identificación": basado en el minijuego boicot, re-tematizado.
+  // Minijuego "Identificación"
   createIdentificacionGame() {
     this.add.text(600, 130, 'Minijuego: Identificación de Corruptos', { fontSize: '32px', fill: '#fff' })
-      .setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
+      .setOrigin(0.5).setShadow(2,2,"#000",2,true,true);
     
     this.target = this.add.sprite(600, 400, 'milei').setInteractive({ useHandCursor: true });
     this.target.alpha = 1;
@@ -100,10 +100,10 @@ export default class MiniGameScene extends Phaser.Scene {
     this.time.delayedCall(20000, () => { if (!this.challengeSuccess) this.finishGame(); });
   }
   
-  // Minijuego "Negociación": basado en slider (influencia) re-tematizado.
+  // Minijuego "Negociación"
   createNegociacionGame() {
-    this.add.text(600, 130, 'Minijuego: Negociación de Cargos', { fontSize: '32px', fill: '#fff' })
-      .setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
+    this.add.text(600, 130, 'Minijuego: Negociación de Cargos y Favores', { fontSize: '32px', fill: '#fff' })
+      .setOrigin(0.5).setShadow(2,2,"#000",2,true,true);
     
     const sliderWidth = 600;
     const sliderX = 600 - sliderWidth / 2;
@@ -137,10 +137,10 @@ export default class MiniGameScene extends Phaser.Scene {
     this.time.delayedCall(15000, () => { if (!this.challengeSuccess) this.finishGame(); });
   }
   
-  // Minijuego "Soborno": basado en secuencia (campaña) re-tematizado.
+  // Minijuego "Soborno"
   createSobornoGame() {
     this.add.text(600, 130, 'Minijuego: Soborno Efectivo', { fontSize: '32px', fill: '#fff' })
-      .setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
+      .setOrigin(0.5).setShadow(2,2,"#000",2,true,true);
       
     this.sequence = [];
     const sequenceLength = 4;
@@ -192,4 +192,5 @@ export default class MiniGameScene extends Phaser.Scene {
     this.progressBar.fillRect(300, 750, barWidth, 20);
   }
 }
+
 
