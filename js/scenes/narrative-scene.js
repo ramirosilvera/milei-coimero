@@ -6,16 +6,14 @@ export default class NarrativeScene extends Phaser.Scene {
   }
   
   init(data) {
-    // Nodo narrativo actual
     this.currentNodeId = data.currentNode || "start";
-    // Sistema de facciones (persistido o nuevo)
     this.factionSystem = data.factionSystem || new FactionSystem();
   }
   
   create() {
     this.add.image(600, 400, 'congress_bg').setAlpha(0.8);
-    // Overlay para mejorar legibilidad
-    this.add.rectangle(600, 400, 1100, 300, 0x000000, 0.6);
+    // Overlay para legibilidad
+    this.add.rectangle(600, 400, 1200, 600, 0x000000, 0.5);
     this.renderNode();
   }
   
@@ -28,22 +26,22 @@ export default class NarrativeScene extends Phaser.Scene {
     }
     
     this.narrativeText = this.add.text(600, 300, node.text, {
-      fontSize: '26px',
+      fontSize: '28px',
       fill: '#fff',
       align: 'center',
-      wordWrap: { width: 1000 }
-    }).setOrigin(0.5);
-    this.narrativeText.setShadow(2, 2, "#000", 2, true, true);
+      wordWrap: { width: 1100 }
+    }).setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
     
     this.choiceButtons = [];
     if (node.choices.length > 0) {
       node.choices.forEach((choice, index) => {
-        const btn = this.add.text(600, 450 + index * 50, choice.text, {
-          fontSize: '24px',
+        const btn = this.add.text(600, 450 + index * 60, choice.text, {
+          fontSize: '26px',
           fill: '#0f0'
         })
           .setInteractive({ useHandCursor: true })
-          .setOrigin(0.5);
+          .setOrigin(0.5)
+          .setStyle({ padding: '10px 20px', backgroundColor: '#222' });
         btn.on('pointerover', () => btn.setStyle({ fill: '#ff0' }));
         btn.on('pointerout', () => btn.setStyle({ fill: '#0f0' }));
         btn.on('pointerdown', () => {
