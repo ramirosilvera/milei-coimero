@@ -21,11 +21,13 @@ body {
   align-items: center;
 }
 
-/* Estilo de botones */
+/* Botones interactivos */
 .button {
   cursor: pointer;
   transition: color 0.2s ease, transform 0.2s ease;
   font-weight: bold;
+  padding: 10px 20px;
+  background-color: #222;
 }
 
 .button:hover {
