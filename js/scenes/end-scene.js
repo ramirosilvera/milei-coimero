@@ -21,14 +21,14 @@ export default class EndScene extends Phaser.Scene {
     
     const titleText = "Fin de la Partida";
     this.add.text(600, 100, titleText, { fontSize: '48px', fill: '#0f0' })
-      .setOrigin(0.5).setShadow(2,2,"#000",2,true,true);
+      .setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
     this.add.text(600, 200, this.finalText, { fontSize: '32px', fill: '#fff', align: 'center', wordWrap: { width: 1100 } })
-      .setOrigin(0.5).setShadow(2,2,"#000",2,true,true);
+      .setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
     
     const status = this.factionSystem.getStatus();
     const statusText = `Establecimiento: ${status.establishment} | Medios: ${status.medios} | Apoyo Popular: ${status.poblacion} | Libertarios: ${status.libertarios}`;
     this.add.text(600, 350, statusText, { fontSize: '28px', fill: '#ffdd00', align: 'center' })
-      .setOrigin(0.5).setShadow(2,2,"#000",2,true,true);
+      .setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
     
     const achievements = new AchievementSystem();
     if (status.medios >= 80) {
