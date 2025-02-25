@@ -192,5 +192,3 @@ export default class MiniGameScene extends Phaser.Scene {
     this.progressBar.fillRect(300, 750, barWidth, 20);
   }
 }
-
-
