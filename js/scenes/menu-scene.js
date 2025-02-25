@@ -15,7 +15,7 @@ export default class MenuScene extends Phaser.Scene {
     }).setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
     
     const instructions = this.add.text(600, 200, 
-      'Compra la lealtad de diputados y senadores corruptos. ¡Elige tu estrategia y actúa con astucia!', {
+      'Compra la lealtad de diputados y senadores para evitar que se vote la comisión investigadora del escándalo cripto.', {
       fontSize: '28px',
       fill: '#fff',
       align: 'center',
@@ -47,4 +47,3 @@ export default class MenuScene extends Phaser.Scene {
     });
   }
 }
-
