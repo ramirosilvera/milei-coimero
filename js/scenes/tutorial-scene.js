@@ -6,14 +6,14 @@ export default class TutorialScene extends Phaser.Scene {
   create() {
     // Fondo y overlay para legibilidad
     this.add.image(600, 400, 'menu_bg').setAlpha(0.5);
-    this.add.rectangle(600, 400, 1100, 300, 0x000000, 0.6);
+    this.add.rectangle(600, 400, this.cameras.main.width, 300, 0x000000, 0.6);
     
     const tutorialText = [
       "Bienvenido a Cripto Revolución – La Jugada de Milei.",
       "Tu misión es evitar que se vote la comisión investigadora del escándalo cripto de Milei, comprando la lealtad de diputados y senadores corruptos.",
-      "Podrás identificar a los corruptos, ofrecerles cargos/favores o sobornarlos con dinero.",
-      "Cada elección disparará un minijuego único con instrucciones: ¡presta atención a cómo jugar en cada escenario!",
-      "¡Tu éxito determinará el futuro del país!"
+      "Podrás identificar a los políticos corruptos, ofrecerles cargos/favores o sobornarlos con dinero.",
+      "Cada elección disparará un minijuego único con instrucciones en pantalla. ¡Atento a cada detalle!",
+      "¡Tu éxito definirá el futuro del país!"
     ];
     
     let currentLine = 0;
@@ -21,7 +21,7 @@ export default class TutorialScene extends Phaser.Scene {
       fontSize: '24px',
       fill: '#fff',
       align: 'center',
-      wordWrap: { width: 1000 }
+      wordWrap: { width: this.cameras.main.width - 100 }
     }).setOrigin(0.5);
     textObj.setShadow(2, 2, "#000", 2, true, true);
     
@@ -44,4 +44,5 @@ export default class TutorialScene extends Phaser.Scene {
     });
   }
 }
+
 
