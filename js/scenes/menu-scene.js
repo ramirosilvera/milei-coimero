@@ -8,7 +8,7 @@ export default class MenuScene extends Phaser.Scene {
     this.add.image(600, 400, 'menu_bg').setDisplaySize(this.cameras.main.width, this.cameras.main.height);
     this.add.rectangle(this.cameras.main.centerX, this.cameras.main.centerY, this.cameras.main.width, this.cameras.main.height, 0x000000, 0.3);
     
-    const title = this.add.text(this.cameras.main.centerX, 100, 'Cripto Revolución\nLa Jugada de Milei', {
+    const title = this.add.text(this.cameras.main.centerX, 100, 'Milei\nEl Gran Soborno', {
       fontSize: '48px',
       fill: '#ffdd00',
       align: 'center'
