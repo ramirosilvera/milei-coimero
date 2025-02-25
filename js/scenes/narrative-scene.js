@@ -11,9 +11,11 @@ export default class NarrativeScene extends Phaser.Scene {
   }
   
   create() {
-    this.add.image(600, 400, 'congress_bg').setAlpha(0.8);
+    this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'congress_bg')
+      .setDisplaySize(this.cameras.main.width, this.cameras.main.height)
+      .setAlpha(0.8);
     // Overlay para legibilidad
-    this.add.rectangle(600, 400, 1200, 600, 0x000000, 0.5);
+    this.add.rectangle(this.cameras.main.centerX, this.cameras.main.centerY, this.cameras.main.width, this.cameras.main.height, 0x000000, 0.5);
     this.renderNode();
   }
   
@@ -25,24 +27,27 @@ export default class NarrativeScene extends Phaser.Scene {
       this.choiceButtons.forEach(btn => btn.destroy());
     }
     
-    this.narrativeText = this.add.text(600, 300, node.text, {
+    this.narrativeText = this.add.text(this.cameras.main.centerX, 300, node.text, {
       fontSize: '28px',
       fill: '#fff',
       align: 'center',
-      wordWrap: { width: 1100 }
+      wordWrap: { width: this.cameras.main.width - 100 }
     }).setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
     
     this.choiceButtons = [];
     if (node.choices.length > 0) {
       node.choices.forEach((choice, index) => {
-        const btn = this.add.text(600, 450 + index * 60, choice.text, {
+        const btn = this.add.text(this.cameras.main.centerX, 450 + index * 60, choice.text, {
           fontSize: '26px',
           fill: '#0f0'
         })
           .setInteractive({ useHandCursor: true })
           .setOrigin(0.5)
           .setStyle({ padding: '10px 20px', backgroundColor: '#222' });
-        btn.on('pointerover', () => btn.setStyle({ fill: '#ff0' }));
+        btn.on('pointerover', () => {
+          btn.setStyle({ fill: '#ff0' });
+          console.log("Opción seleccionada: ", choice.text);
+        });
         btn.on('pointerout', () => btn.setStyle({ fill: '#0f0' }));
         btn.on('pointerdown', () => {
           this.sound.play('click');
@@ -66,4 +71,3 @@ export default class NarrativeScene extends Phaser.Scene {
     }
   }
 }
-
