@@ -43,7 +43,7 @@ export default class MenuScene extends Phaser.Scene {
       .setStyle({ padding: '8px 16px', backgroundColor: '#222' });
     
     creditsButton.on('pointerdown', () => {
-      alert("Cripto Revolución – La Jugada de Milei\nDesarrollado por [Tu Nombre]\nInspirado en la política actual.");
+      alert("Milei - El Gran Soborno\nDesarrollado por [Tu Nombre]\nInspirado en la política actual.");
     });
   }
 }
