@@ -21,12 +21,11 @@ const config = {
   }
 };
 
-// Comprobar si la variable "game" ya existe en window para evitar redeclararla.
+// Evitamos redeclarar la variable "game" si ya existe.
 if (!window.game) {
   window.game = new Phaser.Game(config);
 } else {
   console.log("La variable 'game' ya ha sido declarada.");
 }
-
 
 
