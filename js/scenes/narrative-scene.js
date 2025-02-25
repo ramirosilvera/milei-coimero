@@ -66,3 +66,4 @@ export default class NarrativeScene extends Phaser.Scene {
     }
   }
 }
+
