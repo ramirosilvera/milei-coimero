@@ -30,7 +30,7 @@ export default class MiniGameScene extends Phaser.Scene {
     this.progressBar = this.add.graphics();
     this.drawProgressBar();
     
-    // Partículas para efecto de clic
+    // Partículas para efecto al hacer clic
     this.particles = this.add.particles('milei');
     this.emitter = this.particles.createEmitter({
       speed: { min: -100, max: 100 },
@@ -155,3 +155,4 @@ export default class MiniGameScene extends Phaser.Scene {
     this.progressBar.fillRect(400, 720, barWidth, 20);
   }
 }
+
