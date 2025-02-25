@@ -44,6 +44,3 @@ export default class TutorialScene extends Phaser.Scene {
     });
   }
 }
-
-
-
