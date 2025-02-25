@@ -4,9 +4,8 @@ export default class TutorialScene extends Phaser.Scene {
   }
   
   create() {
-    // Fondo semitransparente para el tutorial
+    // Fondo y overlay para legibilidad
     this.add.image(600, 400, 'menu_bg').setAlpha(0.5);
-    // Overlay para mejorar legibilidad
     this.add.rectangle(600, 400, 1100, 300, 0x000000, 0.6);
     
     const tutorialText = [
