@@ -5,74 +5,56 @@
  * - choices: Opciones disponibles; cada opción incluye:
  *    • text: Texto de la opción.
  *    • next: id del siguiente nodo.
- *    • miniGame: (opcional) tipo de minijuego ("boicot", "influencia" o "campaña").
- *    • effect: Objeto con cambios en facciones (ej. { establishment: -10, medios: +5 }).
+ *    • miniGame: (opcional) tipo de minijuego ("identificacion", "negociacion" o "soborno").
+ *    • effect: Objeto con cambios en facciones.
  */
 export const narrativeTree = {
   start: {
-    text: "La nación está al borde del colapso. Milei, inmerso en un escándalo cripto, debe actuar para evitar una investigación que podría derrumbar al establecimiento. ¿Qué camino tomarás?",
+    text: "La crisis política ha alcanzado niveles sin precedentes. Los diputados y senadores están en venta y tu misión es comprar sus votos. Debes actuar con astucia: identifica a los corruptos y ofréceles cargos, dinero o favores. ¿Qué estrategia emprenderás?",
     choices: [
-      { text: "Lanzar un boicot radical", next: "boicot1", miniGame: "boicot", effect: { establishment: -10 } },
-      { text: "Manipular a los medios", next: "influencia1", miniGame: "influencia", effect: { medios: +10 } },
-      { text: "Organizar una campaña ciudadana", next: "campana1", miniGame: "campaña", effect: { poblacion: +10 } }
+      { text: "Identificar a los corruptos", next: "identificar", miniGame: "identificacion" },
+      { text: "Ofrecer cargos y favores", next: "ofrecer_cargos", miniGame: "negociacion" },
+      { text: "Ofrecer dinero", next: "ofrecer_dinero", miniGame: "soborno" }
     ]
   },
-  boicot1: {
-    text: "Decides atacar de manera directa el sistema. El ambiente se llena de tensión y protestas. ¿Te arriesgas a intensificar el ataque o reconsideras tu estrategia?",
+  identificar: {
+    text: "Has analizado los perfiles y descubierto a varios políticos corruptos. Ahora debes decidir a quién abordar: ¿los peronistas, los radicales o los del PRO?",
     choices: [
-      { text: "Intensificar el ataque", next: "boicot2", miniGame: "boicot", effect: { establishment: -15 } },
-      { text: "Replantear la estrategia", next: "regreso", effect: { establishment: +5 } }
+      { text: "Peronistas", next: "ofrecer_cargos", miniGame: "negociacion", effect: { poblacion: +5, establishment: -5 } },
+      { text: "Radicales", next: "ofrecer_cargos", miniGame: "negociacion", effect: { medios: +5 } },
+      { text: "Del PRO", next: "ofrecer_dinero", miniGame: "soborno", effect: { libertarios: +5 } }
     ]
   },
-  influencia1: {
-    text: "Con tus contactos en los medios, comienzas a difundir información que pone en duda la veracidad de la investigación. La opinión pública empieza a cambiar. ¿Deseas amplificar el mensaje o diversificar tus tácticas?",
+  ofrecer_cargos: {
+    text: "Decides ofrecer cargos y favores a cambio de lealtad. Debes negociar con precisión para que acepten tu propuesta sin levantar sospechas.",
     choices: [
-      { text: "Amplificar el mensaje", next: "influencia2", miniGame: "influencia", effect: { medios: +15 } },
-      { text: "Diversificar con una campaña", next: "campana1", miniGame: "campaña", effect: { poblacion: +5 } }
+      { text: "Negociar con éxito", next: "final_exito", effect: { medios: +10 } },
+      { text: "Negociar de forma mediocre", next: "final_mitad", effect: { medios: 0 } }
     ]
   },
-  campana1: {
-    text: "Lanzas una campaña ciudadana que busca unir a la población contra el sistema. Las redes se llenan de mensajes de esperanza y protesta. ¿Aprovechas el momento o ajustas la estrategia?",
+  ofrecer_dinero: {
+    text: "Optas por ofrecer dinero y sobornos. La precisión es crucial para no levantar sospechas y lograr comprar su lealtad.",
     choices: [
-      { text: "Aprovechar el momento", next: "final_exito", miniGame: "campaña", effect: { poblacion: +15 } },
-      { text: "Ajustar la estrategia", next: "final_mitad", effect: { poblacion: -5 } }
+      { text: "Sobornar con precisión", next: "final_exito", effect: { establishment: -10, poblacion: +10 } },
+      { text: "Sobornar mal", next: "final_fracaso", effect: { establishment: +5, poblacion: -10 } }
     ]
-  },
-  boicot2: {
-    text: "El ataque se intensifica, y logras debilitar notablemente al establecimiento. Sin embargo, la presión aumenta y el riesgo se multiplica.",
-    choices: [
-      { text: "Arriesgarlo todo", next: "final_exito", effect: { libertarios: +10, establishment: -20 } },
-      { text: "Retroceder para reagruparse", next: "final_mitad", effect: { establishment: -5 } }
-    ]
-  },
-  influencia2: {
-    text: "La manipulación de los medios se afianza y la narrativa comienza a girar a tu favor. ¿Consolidar este control o buscar alianzas en otros sectores?",
-    choices: [
-      { text: "Consolidar control", next: "final_exito", effect: { medios: +10, poblacion: +5 } },
-      { text: "Buscar nuevas alianzas", next: "campana1", miniGame: "campaña", effect: { poblacion: +5 } }
-    ]
-  },
-  regreso: {
-    text: "Decides replantear la estrategia y te retiras momentáneamente. Aunque la situación se estabiliza, se pierde parte de la oportunidad.",
-    choices: []
   },
   final_exito: {
-    text: "Tu estrategia ha sido un éxito rotundo. Has logrado boicotear la comisión y cambiar el rumbo del país. Una nueva era se abre ante ti.",
+    text: "Tus estrategias han sido un éxito. Has comprado la lealtad de los diputados y senadores, y ahora controlas el poder legislativo.",
     choices: []
   },
   final_mitad: {
-    text: "Aunque no alcanzaste todos tus objetivos, lograste debilitar al establecimiento. El futuro es incierto, pero se han abierto nuevas posibilidades.",
+    text: "Aunque lograste avances, tu estrategia no fue del todo exitosa. El control es parcial y la incertidumbre persiste.",
     choices: []
   },
   final_fracaso: {
-    text: "La campaña fracasa y la presión se vuelve insoportable. El escándalo se intensifica y la nación cae en el caos.",
+    text: "El intento de soborno fue un desastre y el escándalo estalló. Has fracasado en tu misión y el país se sumerge en el caos.",
     choices: []
   }
 };
   
 /**
  * Sistema de Facciones.
- * Permite llevar un seguimiento de cómo afectan tus decisiones a distintos poderes.
  */
 export class FactionSystem {
   constructor() {
@@ -103,7 +85,6 @@ export class FactionSystem {
 
 /**
  * Sistema de Logros.
- * Desbloquea y almacena logros durante la partida.
  */
 export class AchievementSystem {
   constructor() {
