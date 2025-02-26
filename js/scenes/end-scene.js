@@ -13,7 +13,12 @@ export default class EndScene extends Phaser.Scene {
   create() {
     const camWidth = this.cameras.main.width;
     const camHeight = this.cameras.main.height;
-    const bg = this.add.image(camWidth / 2, camHeight / 2, 'success_bg');
+    // Seleccionar fondo de acuerdo al resultado: success_bg para éxito, failure_bg para fracaso.
+    let bgKey = "success_bg";
+    if (this.finalText.indexOf("fracaso") !== -1) {
+      bgKey = "failure_bg";
+    }
+    const bg = this.add.image(camWidth / 2, camHeight / 2, bgKey);
     bg.setDisplaySize(camWidth, camHeight);
     bg.setAlpha(0);
     this.tweens.add({
