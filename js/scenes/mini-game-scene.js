@@ -32,7 +32,7 @@ export default class MiniGameScene extends Phaser.Scene {
     this.playerSprite = this.physics.add.sprite(0, 0, 'milei');
     this.playerSprite.setCollideWorldBounds(true);
     this.playerSprite.setBounce(0.2);
-    this.playerSprite.setScale(0.2); // Tamaño intermedio
+    this.playerSprite.setScale(0.01); // Tamaño intermedio
     this.playerContainer.add(this.playerSprite);
     
     // Controles de teclado
