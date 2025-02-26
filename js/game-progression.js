@@ -14,4 +14,3 @@ export class GameProgression {
     return this.highScores;
   }
 }
-
