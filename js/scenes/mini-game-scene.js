@@ -32,7 +32,7 @@ export default class MiniGameScene extends Phaser.Scene {
     this.playerSprite = this.physics.add.sprite(0, 0, 'milei');
     this.playerSprite.setCollideWorldBounds(true);
     this.playerSprite.setBounce(0.2);
-    this.playerSprite.setScale(0.5); // Tamaño intermedio
+    this.playerSprite.setScale(0.3); // Tamaño intermedio
     this.playerContainer.add(this.playerSprite);
     
     // Controles de teclado
@@ -55,14 +55,20 @@ export default class MiniGameScene extends Phaser.Scene {
     this.enemySprite.setCollideWorldBounds(true);
     this.enemySprite.setBounce(1);
     // Enemigo más grande y mucho más lento
-    this.enemySprite.setVelocityX(-50);
-    this.enemySprite.setScale(0.3);
+    this.enemySprite.setVelocityX(-70);
+    this.enemySprite.setScale(0.4);
     this.enemyContainer.add(this.enemySprite);
     
-    // Crear grupo de monedas
-    this.coins = this.physics.add.group();
+    // Configurar la cantidad de monedas según el tipo de juego
     this.coinsCollected = 0;
-    this.coinTarget = 10; // Se necesitan 3 monedas para que el enemigo se vuelva vulnerable
+    if (this.gameType === "radical") {
+      this.coinTarget = 3;
+    } else if (this.gameType === "peronist") {
+      this.coinTarget = 6;
+    } else if (this.gameType === "judge") {
+      this.coinTarget = 10;
+    }
+    
     // Indicador de monedas restantes
     this.coinIndicator = this.add.text(camWidth - 150, 20, "Faltan: " + this.coinTarget, {
       fontSize: '28px',
