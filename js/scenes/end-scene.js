@@ -28,7 +28,7 @@ export default class EndScene extends Phaser.Scene {
     
     this.add.rectangle(camWidth / 2, camHeight / 2, camWidth, camHeight, 0x000000, 0.3);
     
-    const titleText = "Fin de la Partida";
+    const titleText = "";
     this.add.text(camWidth / 2, 80, titleText, {
       fontSize: '48px',
       fill: '#0f0',
