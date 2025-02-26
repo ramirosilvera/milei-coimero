@@ -18,7 +18,7 @@ export default class MenuScene extends Phaser.Scene {
     }).setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
     
     const instructions = this.add.text(camWidth / 2, 200, 
-      'Compra diputados y senadores o asigna jueces para evitar la investigación por el escándalo cripto.',
+      'Compra la lealtad de diputados y senadores o asigna jueces para evitar la investigación del escándalo cripto.',
       { fontSize: '28px', fill: '#fff', align: 'center', wordWrap: { width: camWidth - 100 } }
     ).setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
     
