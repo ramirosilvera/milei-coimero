@@ -12,13 +12,13 @@ body {
   overflow: hidden;
 }
 
-/* Contenedor del juego centrado y responsivo */
+/* Contenedor del juego centrado y de tamaño fijo */
 #game-container {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 800px;
+  height: 600px;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
 }
 
 /* Botones interactivos */
@@ -35,18 +35,22 @@ body {
   transform: scale(1.05);
 }
 
-/* Texto con sombra para mejorar legibilidad */
+/* Texto con sombra */
 .text-shadow {
   text-shadow: 2px 2px 4px #000;
 }
 
-/* Responsividad para móviles */
+/* Responsividad para móviles: el contenedor ocupará el 95% de la pantalla */
 @media (max-width: 768px) {
   #game-container {
-    height: 100%;
+    width: 95%;
+    height: auto;
+    top: 2.5%;
+    left: 2.5%;
+    right: 2.5%;
+    bottom: 2.5%;
   }
   .small-text {
     font-size: 18px !important;
   }
 }
-
