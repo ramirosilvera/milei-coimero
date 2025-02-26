@@ -13,6 +13,7 @@ export default class NarrativeScene extends Phaser.Scene {
   create() {
     const camWidth = this.cameras.main.width;
     const camHeight = this.cameras.main.height;
+    
     const bg = this.add.image(camWidth / 2, camHeight / 2, 'congress_bg');
     bg.setDisplaySize(camWidth, camHeight);
     bg.setAlpha(0.8);
