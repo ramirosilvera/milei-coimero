@@ -27,12 +27,15 @@ export default class MiniGameScene extends Phaser.Scene {
     // Configurar límites del mundo
     this.physics.world.setBounds(0, 0, camWidth, camHeight);
     
+    // **Crear el grupo de monedas inmediatamente** para que esté disponible en los callbacks
+    this.coins = this.physics.add.group();
+    
     // Crear container para Milei (jugador)
     this.playerContainer = this.add.container(100, camHeight - 100);
     this.playerSprite = this.physics.add.sprite(0, 0, 'milei');
     this.playerSprite.setCollideWorldBounds(true);
     this.playerSprite.setBounce(0.2);
-    this.playerSprite.setScale(0.4); // Tamaño intermedio
+    this.playerSprite.setScale(0.5); // Tamaño intermedio
     this.playerContainer.add(this.playerSprite);
     
     // Controles de teclado
@@ -58,9 +61,6 @@ export default class MiniGameScene extends Phaser.Scene {
     this.enemySprite.setVelocityX(-50);
     this.enemySprite.setScale(0.3);
     this.enemyContainer.add(this.enemySprite);
-    
-    // **Corrección:** Crear el grupo de monedas antes de usarlo
-    this.coins = this.physics.add.group();
     
     // Configurar la cantidad de monedas según el tipo de juego
     this.coinsCollected = 0;
@@ -116,6 +116,7 @@ export default class MiniGameScene extends Phaser.Scene {
     const camHeight = this.cameras.main.height;
     const x = Phaser.Math.Between(50, camWidth - 50);
     const y = Phaser.Math.Between(50, camHeight - 150);
+    // Aquí se usa this.coins que ya se creó en create
     const coin = this.coins.create(x, y, 'coin');
     coin.setScale(0.3); // Monedas más pequeñas
     coin.body.setAllowGravity(false);
