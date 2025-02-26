@@ -30,7 +30,7 @@ export default class BootScene extends Phaser.Scene {
       loadingText.destroy();
     });
     
-    // Cargar imágenes
+    // Imágenes base
     this.load.image('menu_bg', 'assets/images/menu_bg.jpg');
     this.load.image('congress_bg', 'assets/images/congress_bg.jpg');
     this.load.image('milei', 'assets/images/milei.png');
@@ -39,8 +39,14 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('debate_icon', 'assets/images/debate_icon.png');
     this.load.image('success_bg', 'assets/images/success_bg.jpg');
     this.load.image('failure_bg', 'assets/images/failure_bg.jpg');
-
-    // Cargar audios
+    
+    // Imágenes para los minijuegos
+    this.load.image('coin', 'assets/images/coin.png');
+    this.load.image('radical_enemy', 'assets/images/radical_enemy.png');
+    this.load.image('peronist_enemy', 'assets/images/peronist_enemy.png');
+    this.load.image('judge_enemy', 'assets/images/judge_enemy.png');
+    
+    // Audios
     this.load.audio('background', 'assets/sounds/background.mp3');
     this.load.audio('click', 'assets/sounds/click.wav');
     this.load.audio('success', 'assets/sounds/success.wav');
@@ -56,4 +62,3 @@ export default class BootScene extends Phaser.Scene {
     this.scene.start('TutorialScene');
   }
 }
-
