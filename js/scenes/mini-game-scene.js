@@ -202,3 +202,5 @@ const jumpBtn = this.add.text(camWidth - 20, camHeight - 80, 'SALTAR', {
 jumpBtn.on('pointerdown', () => { this.jumpPressed = true; jumpBtn.setStyle({ fill: '#ff0' }); });
 jumpBtn.on('pointerup', () => { this.jumpPressed = false; jumpBtn.setStyle({ fill: '#fff' }); });
 jumpBtn.on('pointerout', () => { this.jumpPressed = false; jumpBtn.setStyle({ fill: '#fff' }); });
+  }
+}
