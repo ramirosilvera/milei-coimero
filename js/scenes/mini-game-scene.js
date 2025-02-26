@@ -62,7 +62,7 @@ export default class MiniGameScene extends Phaser.Scene {
     // Crear grupo de monedas
     this.coins = this.physics.add.group();
     this.coinsCollected = 0;
-    this.coinTarget = 3; // Se necesitan 3 monedas para que el enemigo se vuelva vulnerable
+    this.coinTarget = 10; // Se necesitan 3 monedas para que el enemigo se vuelva vulnerable
     // Indicador de monedas restantes
     this.coinIndicator = this.add.text(camWidth - 150, 20, "Faltan: " + this.coinTarget, {
       fontSize: '28px',
