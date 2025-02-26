@@ -18,7 +18,7 @@ export default class TutorialScene extends Phaser.Scene {
       "Tu misión es evitar que se investigue a Milei por el escándalo cripto, comprando la lealtad de diputados, senadores o manipulando el poder judicial.",
       "Elige tu estrategia: Comprar Radicales, Comprar Peronistas o Asignar Jueces por Decreto.",
       "Cada elección disparará un minijuego arcade en el que controlarás a Milei para recolectar monedas y derrotar al enemigo.",
-      "¡Recolecta 3 monedas para debilitar al enemigo y ganar el minijuego!",
+      "¡Recolecta monedas para debilitar al enemigo y ganar el minijuego!",
       "¡Tu éxito definirá el futuro del país!"
     ];
     
