@@ -30,7 +30,7 @@ export default class BootScene extends Phaser.Scene {
       loadingText.destroy();
     });
     
-    // Imágenes base
+    // Cargar imágenes
     this.load.image('menu_bg', 'assets/images/menu_bg.jpg');
     this.load.image('congress_bg', 'assets/images/congress_bg.jpg');
     this.load.image('milei', 'assets/images/milei.png');
@@ -40,13 +40,14 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('success_bg', 'assets/images/success_bg.jpg');
     this.load.image('failure_bg', 'assets/images/failure_bg.jpg');
     
-    // Imágenes para los minijuegos
+    // Imágenes para minijuegos arcade
     this.load.image('coin', 'assets/images/coin.png');
     this.load.image('radical_enemy', 'assets/images/radical_enemy.png');
     this.load.image('peronist_enemy', 'assets/images/peronist_enemy.png');
     this.load.image('judge_enemy', 'assets/images/judge_enemy.png');
+    this.load.image('fondo_arcade', 'assets/images/fondo_arcade.jpg');
     
-    // Audios
+    // Cargar audios
     this.load.audio('background', 'assets/sounds/background.mp3');
     this.load.audio('click', 'assets/sounds/click.wav');
     this.load.audio('success', 'assets/sounds/success.wav');
