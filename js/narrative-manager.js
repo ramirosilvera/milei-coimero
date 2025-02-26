@@ -1,72 +1,56 @@
 /**
- * Árbol Narrativo para Cripto Revolución – La Jugada de Milei.
+ * Árbol Narrativo para Milei el gran soborno.
  * Cada nodo contiene:
- * - text: Narrativa del nodo.
+ * - text: Narrativa.
  * - choices: Opciones disponibles; cada opción incluye:
  *    • text: Texto de la opción.
  *    • next: id del siguiente nodo.
- *    • miniGame: (opcional) tipo de minijuego ("identificacion", "negociacion", "soborno").
+ *    • miniGame: (opcional) tipo de minijuego ("radical", "peronist", "judge").
  *    • effect: Objeto con cambios en facciones.
  */
 export const narrativeTree = {
   start: {
-    text: "El escándalo cripto de Milei está a punto de desencadenar una investigación que podría destruir su carrera. La comisión investigadora se votará en breve, y tú tienes la misión de comprar la lealtad de diputados y senadores para evitar que se apruebe. ¿Cómo comenzarás?",
+    text: "Milei está en peligro de ser investigado por el escándalo cripto. Para evitarlo, debes comprar la lealtad de diputados y senadores o manipular el poder judicial. ¿Qué estrategia eliges?",
     choices: [
-      { text: "Identificar a los corruptos", next: "identificar", miniGame: "identificacion" },
-      { text: "Ofrecer cargos y favores", next: "ofrecer_cargos", miniGame: "negociacion" },
-      { text: "Ofrecer dinero", next: "ofrecer_dinero", miniGame: "soborno" }
+      { text: "Comprar Diputados y Senadores Radicales", next: "radical", miniGame: "radical" },
+      { text: "Comprar Diputados y Senadores Peronistas", next: "peronist", miniGame: "peronist" },
+      { text: "Asignar jueces por decreto", next: "judge", miniGame: "judge" }
     ]
   },
-  identificar: {
-    text: "Después de un exhaustivo análisis, descubres a varios políticos corruptos. Debes decidir con quién negociar: ¿los peronistas, los radicales o los del PRO? La decisión influirá en la estrategia a seguir.",
+  radical: {
+    text: "Has decidido comprar a los legisladores radicales para bloquear la investigación. Ahora, juega para recolectar monedas y vencer a sus representantes.",
     choices: [
-      { text: "Peronistas", next: "estrategia_peronista", miniGame: "negociacion", effect: { poblacion: +5, establishment: -5 } },
-      { text: "Radicales", next: "estrategia_radical", miniGame: "negociacion", effect: { medios: +5 } },
-      { text: "Del PRO", next: "ofrecer_dinero", miniGame: "soborno", effect: { libertarios: +5 } }
+      { text: "Ejecución magistral", next: "final_exito", effect: { medios: +20, establishment: -10 } },
+      { text: "Ejecución aceptable", next: "final_mitad", effect: { medios: +5 } },
+      { text: "Fracaso", next: "final_fracaso", effect: { medios: -10 } }
     ]
   },
-  estrategia_peronista: {
-    text: "Decides enfocarte en los peronistas. Ahora debes negociar con ellos para ofrecer cargos y favores que aseguren su apoyo sin levantar sospechas. ¿Cómo te comportarás?",
+  peronist: {
+    text: "Optas por comprar a los legisladores peronistas. Enfrenta el desafío arcade y recoge monedas para conquistar su lealtad.",
     choices: [
-      { text: "Negociación agresiva (alto riesgo, alta recompensa)", next: "final_exito", effect: { medios: +15, poblacion: +5 } },
-      { text: "Negociación equilibrada (riesgo moderado)", next: "final_mitad", effect: { medios: +5, poblacion: +5 } },
-      { text: "Negociación deficiente (fracaso parcial)", next: "final_fracaso", effect: { medios: -5, poblacion: -5 } }
+      { text: "Negociación brillante", next: "final_exito", effect: { poblacion: +20 } },
+      { text: "Negociación media", next: "final_mitad", effect: { poblacion: +5 } },
+      { text: "Negociación fallida", next: "final_fracaso", effect: { poblacion: -10 } }
     ]
   },
-  estrategia_radical: {
-    text: "Te diriges a los radicales. Su base es fuerte, pero son impredecibles. Debes ofrecerles cargos y favores de manera precisa para ganar su lealtad.",
+  judge: {
+    text: "Decides asignar jueces por decreto para evitar la investigación. El poder judicial es difícil de manipular, así que demuestra tu habilidad en el minijuego arcade.",
     choices: [
-      { text: "Ofrecer una propuesta contundente", next: "final_exito", effect: { medios: +15 } },
-      { text: "Ofrecer una propuesta moderada", next: "final_mitad", effect: { medios: +5 } },
-      { text: "Fracasar en la propuesta", next: "final_fracaso", effect: { medios: -5 } }
-    ]
-  },
-  ofrecer_cargos: {
-    text: "Decides ofrecer cargos y favores a cambio de lealtad. Debes negociar con precisión para que acepten tu propuesta sin levantar sospechas y evitar la votación de la comisión investigadora.",
-    choices: [
-      { text: "Negociación arriesgada con altos beneficios", next: "final_exito", effect: { medios: +15, establishment: -10 } },
-      { text: "Negociación prudente", next: "final_mitad", effect: { medios: +5 } },
-      { text: "Negociación deficiente", next: "final_fracaso", effect: { medios: -5 } }
-    ]
-  },
-  ofrecer_dinero: {
-    text: "Optas por ofrecer sobornos en efectivo. La precisión es crucial para entregar el dinero sin levantar sospechas. ¿Cómo ejecutarás el plan?",
-    choices: [
-      { text: "Soborno perfecto", next: "final_exito", effect: { establishment: -10, poblacion: +10 } },
-      { text: "Soborno intermedio", next: "final_mitad", effect: { establishment: -5 } },
-      { text: "Soborno desastroso", next: "final_fracaso", effect: { establishment: +5, poblacion: -10 } }
+      { text: "Designación impecable", next: "final_exito", effect: { establishment: -20 } },
+      { text: "Designación moderada", next: "final_mitad", effect: { establishment: -5 } },
+      { text: "Designación desastrosa", next: "final_fracaso", effect: { establishment: +10 } }
     ]
   },
   final_exito: {
-    text: "¡Éxito total! Has comprado la lealtad de suficientes diputados y senadores para evitar que se vote la comisión investigadora. El escándalo cripto queda en el olvido y el poder político se inclina a tu favor.",
+    text: "¡Triunfo total! Has logrado evitar la investigación, y Milei se salva gracias a tu estrategia. El poder queda en tus manos.",
     choices: []
   },
   final_mitad: {
-    text: "Tu estrategia ha tenido resultados mixtos. Aunque algunos políticos se han comprado, la votación se pospone por poco. El futuro es incierto, pero aún hay margen de maniobra.",
+    text: "El éxito fue parcial. Aunque algunas de tus acciones funcionaron, la amenaza persiste y el futuro es incierto.",
     choices: []
   },
   final_fracaso: {
-    text: "El plan ha fracasado. La comisión investigadora es aprobada y el escándalo cripto de Milei se desata, dejando el país al borde del colapso.",
+    text: "El plan ha fracasado. La comisión investigadora es votada y el escándalo cripto se desata, dejando consecuencias devastadoras.",
     choices: []
   }
 };
@@ -118,7 +102,4 @@ export class AchievementSystem {
     return this.achievements;
   }
 }
-
-
-
 
