@@ -32,7 +32,7 @@ export default class MiniGameScene extends Phaser.Scene {
     this.playerSprite = this.physics.add.sprite(0, 0, 'milei');
     this.playerSprite.setCollideWorldBounds(true);
     this.playerSprite.setBounce(0.2);
-    this.playerSprite.setScale(0.1); // Tamaño intermedio
+    this.playerSprite.setScale(0.5); // Tamaño intermedio
     this.playerContainer.add(this.playerSprite);
     
     // Controles de teclado
@@ -56,7 +56,7 @@ export default class MiniGameScene extends Phaser.Scene {
     this.enemySprite.setBounce(1);
     // Enemigo más grande y mucho más lento
     this.enemySprite.setVelocityX(-50);
-    this.enemySprite.setScale(0.2);
+    this.enemySprite.setScale(0.3);
     this.enemyContainer.add(this.enemySprite);
     
     // Crear grupo de monedas
