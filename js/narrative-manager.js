@@ -18,7 +18,7 @@ export const narrativeTree = {
     ]
   },
   radical: {
-    text: "Has decidido comprar a los legisladores radicales para bloquear la investigación. Ahora, juega al minijuego arcade y controla a Milei para recolectar monedas que te permitan derrotar a los enemigos radicales.",
+    text: "Has decidido comprar a los legisladores radicales. Ahora debes demostrar tu habilidad en un minijuego arcade: controla a Milei, recoge monedas y derrota a los enemigos radicales.",
     choices: [
       { text: "Estrategia audaz", next: "final_exito", effect: { medios: +20, establishment: -10 } },
       { text: "Estrategia prudente", next: "final_mitad", effect: { medios: +5 } },
@@ -26,15 +26,15 @@ export const narrativeTree = {
     ]
   },
   peronist: {
-    text: "Optas por comprar a los legisladores peronistas. Enfrenta el minijuego arcade, recoge monedas y derrota a los enemigos peronistas para consolidar tu control.",
+    text: "Optas por comprar a los legisladores peronistas. Enfrenta el desafío arcade, recoge monedas y derrota a los enemigos peronistas para consolidar tu control.",
     choices: [
       { text: "Negociación brillante", next: "final_exito", effect: { poblacion: +20 } },
       { text: "Negociación moderada", next: "final_mitad", effect: { poblacion: +5 } },
-      { text: "Negociación desastrosa", next: "final_fracaso", effect: { poblacion: -10 } }
+      { text: "Negociación fallida", next: "final_fracaso", effect: { poblacion: -10 } }
     ]
   },
   judge: {
-    text: "Decides asignar jueces por decreto para evitar la investigación. En el minijuego arcade, controla a Milei, recoge monedas y derrota a los jueces para imponer tu decreto.",
+    text: "Decides asignar jueces por decreto. En el minijuego arcade, controla a Milei, recoge monedas y derrota a los jueces para imponer tu decreto.",
     choices: [
       { text: "Designación impecable", next: "final_exito", effect: { establishment: -20 } },
       { text: "Designación moderada", next: "final_mitad", effect: { establishment: -5 } },
@@ -42,15 +42,15 @@ export const narrativeTree = {
     ]
   },
   final_exito: {
-    text: "¡Triunfo total! Has evitado la investigación y asegurado el control. Milei se salva gracias a tu astucia y el poder está en tus manos.",
+    text: "¡Triunfo total! Has evitado la investigación y asegurado el control político. Milei se salva gracias a tu estrategia y el poder está en tus manos.",
     choices: []
   },
   final_mitad: {
-    text: "El éxito fue parcial. Algunas acciones funcionaron, pero la amenaza persiste. El futuro es incierto, pero aún tienes oportunidades.",
+    text: "El éxito fue parcial. Aunque lograste comprar parte del poder, la amenaza persiste y el futuro es incierto.",
     choices: []
   },
   final_fracaso: {
-    text: "El plan ha fracasado. La investigación se inicia y el escándalo cripto se desata, llevando a consecuencias devastadoras.",
+    text: "El plan ha fracasado. La investigación se inicia y el escándalo cripto se desata, dejando consecuencias devastadoras.",
     choices: []
   }
 };
