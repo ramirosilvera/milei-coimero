@@ -12,43 +12,32 @@ export default class MiniGameScene extends Phaser.Scene {
     const camWidth = this.cameras.main.width;
     const camHeight = this.cameras.main.height;
     
-    // Fondo arcade: usar la imagen "fondo_arcade.jpg"
+    // Reproducir música de fondo arcade
+    this.arcadeMusic = this.sound.add('arcade_bg', { volume: 0.5, loop: true });
+    this.arcadeMusic.play();
+    
+    // Fondo arcade usando la imagen fondo_arcade
     const bg = this.add.image(camWidth / 2, camHeight / 2, 'fondo_arcade');
     bg.setDisplaySize(camWidth, camHeight);
     
-    // Agregar un overlay de leve oscuridad para mejorar la visibilidad de los elementos
+    // Overlay de leve oscuridad
     this.add.rectangle(camWidth / 2, camHeight / 2, camWidth, camHeight, 0x000000, 0.3);
     
-    // Configurar física del mundo y límites
+    // Configurar límites del mundo
     this.physics.world.setBounds(0, 0, camWidth, camHeight);
     
-    // Crear el jugador: Milei
-    this.player = this.physics.add.sprite(100, camHeight - 100, 'milei');
-    this.player.setCollideWorldBounds(true);
-    this.player.setBounce(0.2);
-    this.player.setScale(0.5);
+    // Crear container para Milei (jugador)
+    this.playerContainer = this.add.container(100, camHeight - 100);
+    this.playerSprite = this.physics.add.sprite(0, 0, 'milei');
+    this.playerSprite.setCollideWorldBounds(true);
+    this.playerSprite.setBounce(0.2);
+    this.playerSprite.setScale(0.5); // Tamaño intermedio
+    this.playerContainer.add(this.playerSprite);
     
-    // Controles
+    // Controles del jugador
     this.cursors = this.input.keyboard.createCursorKeys();
     
-    // Crear grupo de monedas
-    this.coins = this.physics.add.group();
-    this.coinsCollected = 0;
-    this.coinTarget = 10;
-    
-    // Mostrar contador de monedas
-    this.coinText = this.add.text(camWidth - 150, 20, "Monedas: 0", { fontSize: '28px', fill: '#fff' })
-      .setShadow(2, 2, "#000", 2, true, true);
-    
-    // Generar monedas de forma periódica
-    this.coinTimer = this.time.addEvent({
-      delay: 1000,
-      callback: this.spawnCoin,
-      callbackScope: this,
-      loop: true
-    });
-    
-    // Crear enemigo según el gameType
+    // Crear container para el enemigo
     let enemyKey = "";
     if (this.gameType === "radical") {
       enemyKey = "radical_enemy";
@@ -57,73 +46,75 @@ export default class MiniGameScene extends Phaser.Scene {
     } else if (this.gameType === "judge") {
       enemyKey = "judge_enemy";
     }
-    this.enemy = this.physics.add.sprite(camWidth - 100, camHeight - 100, enemyKey);
-    this.enemy.setCollideWorldBounds(true);
-    this.enemy.setBounce(1);
-    this.enemy.setVelocityX(-100);
-    this.enemy.setScale(0.5);
-    this.enemy.vulnerable = false;
+    this.enemyContainer = this.add.container(camWidth - 100, camHeight - 100);
+    this.enemySprite = this.physics.add.sprite(0, 0, enemyKey);
+    this.enemySprite.setCollideWorldBounds(true);
+    this.enemySprite.setBounce(1);
+    // Velocidad lenta (por ejemplo, 80 en comparación con 160 del jugador)
+    this.enemySprite.setVelocityX(-80);
+    this.enemySprite.setScale(0.8); // Más grande que Milei
+    this.enemyContainer.add(this.enemySprite);
     
-    // Hacer que al recolectar suficientes monedas, el enemigo se vuelva vulnerable
-    this.events.on('coinsUpdated', () => {
-      if (this.coinsCollected >= this.coinTarget) {
-        this.enemy.vulnerable = true;
-        // Opción: hacer que el enemigo parpadee para indicar vulnerabilidad
-        this.tweens.add({
-          targets: this.enemy,
-          alpha: { from: 1, to: 0.5 },
-          duration: 300,
-          yoyo: true,
-          repeat: -1
-        });
-      }
+    // Crear container para monedas (grupo)
+    this.coinContainer = this.add.container(0, 0);
+    this.coinsCollected = 0;
+    this.coinTarget = 10;
+    this.coinText = this.add.text(camWidth - 150, 20, "Monedas: 0", { fontSize: '28px', fill: '#fff' })
+      .setShadow(2,2,"#000",2,true,true);
+    
+    // Configurar colisiones: se usarán las físicas de los sprites dentro de los containers.
+    this.physics.add.overlap(this.playerSprite, this.coinContainer.list, this.collectCoin, null, this);
+    this.physics.add.overlap(this.playerSprite, this.enemySprite, this.hitEnemy, null, this);
+    
+    // Timer para generar monedas periódicamente
+    this.coinTimer = this.time.addEvent({
+      delay: 1000,
+      callback: this.spawnCoin,
+      callbackScope: this,
+      loop: true
     });
     
-    // Colisiones y overlaps
-    this.physics.add.overlap(this.player, this.coins, this.collectCoin, null, this);
-    this.physics.add.overlap(this.player, this.enemy, this.hitEnemy, null, this);
-    
-    // Timeout del minijuego
+    // Tiempo máximo para el minijuego (30 segundos)
     this.time.delayedCall(30000, () => { if (!this.challengeSuccess) this.finishGame(); });
   }
   
   update() {
-    // Controles básicos de movimiento (izquierda, derecha y salto)
+    // Controles básicos para mover a Milei
     if (this.cursors.left.isDown) {
-      this.player.setVelocityX(-160);
-      // Opcional: animación de caminar a la izquierda
-      this.player.flipX = true;
+      this.playerSprite.setVelocityX(-160);
+      this.playerSprite.flipX = true;
     } else if (this.cursors.right.isDown) {
-      this.player.setVelocityX(160);
-      this.player.flipX = false;
+      this.playerSprite.setVelocityX(160);
+      this.playerSprite.flipX = false;
     } else {
-      this.player.setVelocityX(0);
+      this.playerSprite.setVelocityX(0);
     }
-    if (this.cursors.up.isDown && this.player.body.touching.down) {
-      this.player.setVelocityY(-330);
+    if (this.cursors.up.isDown && this.playerSprite.body.touching.down) {
+      this.playerSprite.setVelocityY(-330);
     }
   }
   
   spawnCoin() {
     const camWidth = this.cameras.main.width;
     const camHeight = this.cameras.main.height;
-    // Posición aleatoria dentro de la zona jugable
+    // Posición aleatoria dentro del área jugable
     const x = Phaser.Math.Between(50, camWidth - 50);
     const y = Phaser.Math.Between(50, camHeight - 150);
-    const coin = this.coins.create(x, y, 'coin');
-    coin.setScale(0.5);
-    coin.setCollideWorldBounds(true);
-    coin.body.setAllowGravity(false);
-    // Animación de rotación
+    // Crear sprite de moneda
+    const coinSprite = this.physics.add.sprite(x, y, 'coin');
+    coinSprite.setScale(0.3); // Monedas más pequeñas
+    coinSprite.body.setAllowGravity(false);
+    // Agregar la moneda al container de monedas (esto es solo organizativo)
+    this.coinContainer.add(coinSprite);
+    // Animación: rotación continua
     this.tweens.add({
-      targets: coin,
+      targets: coinSprite,
       angle: 360,
       duration: 1000,
       repeat: -1
     });
-    
-    // La moneda se autodestruye después de 5 segundos si no se recoge
-    this.time.delayedCall(5000, () => { if (coin.active) coin.destroy(); });
+    // La moneda se destruye después de 5 segundos si no es recogida
+    this.time.delayedCall(5000, () => { if (coinSprite.active) coinSprite.destroy(); });
   }
   
   collectCoin(player, coin) {
@@ -131,18 +122,20 @@ export default class MiniGameScene extends Phaser.Scene {
     coin.destroy();
     this.coinsCollected++;
     this.coinText.setText("Monedas: " + this.coinsCollected);
-    this.events.emit('coinsUpdated');
+    // Si se recolectan suficientes monedas, el enemigo se vuelve vulnerable
+    if (this.coinsCollected >= this.coinTarget) {
+      this.enemySprite.setTint(0xff0000);
+      this.enemySprite.vulnerable = true;
+    }
   }
   
   hitEnemy(player, enemy) {
     if (enemy.vulnerable) {
-      // Si el enemigo está vulnerable, derrotarlo
       this.sound.play('success');
       enemy.destroy();
       this.challengeSuccess = true;
       this.finishGame();
     } else {
-      // Si no, el jugador pierde (puedes implementar efectos o reinicio)
       this.sound.play('failure');
       this.challengeSuccess = false;
       this.finishGame();
@@ -150,14 +143,19 @@ export default class MiniGameScene extends Phaser.Scene {
   }
   
   finishGame() {
+    // Limpiar timers y detener controles
     this.coinTimer.remove();
     this.input.keyboard.shutdown();
     this.physics.pause();
+    if (this.arcadeMusic) {
+      this.arcadeMusic.stop();
+    }
     this.cameras.main.fade(500, 0, 0, 0);
     this.cameras.main.once('camerafadeoutcomplete', () => {
-      const nextNode = this.registry.get('nextNode') || "start";
-      const factionSystem = this.registry.get('currentFaction');
-      this.scene.start('NarrativeScene', { currentNode: nextNode, factionSystem });
+      // Según el resultado del minijuego, se pasa a la narrativa final
+      let nextNode = this.challengeSuccess ? "final_exito" : "final_fracaso";
+      const factionSystem = this.registry.get('currentFaction') || {};
+      this.scene.start('NarrativeScene', { currentNode: nextNode, factionSystem: factionSystem });
     });
   }
 }
