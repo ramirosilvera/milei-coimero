@@ -1,4 +1,4 @@
-fexport default class MiniGameScene extends Phaser.Scene {
+export default class MiniGameScene extends Phaser.Scene {
   constructor() {
     super({ key: 'MiniGameScene' });
   }
