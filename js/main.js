@@ -21,7 +21,6 @@ const config = {
   }
 };
 
-// Evitamos redeclarar "game"
 if (!window.game) {
   window.game = new Phaser.Game(config);
 } else {
