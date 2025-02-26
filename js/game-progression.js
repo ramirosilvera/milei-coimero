@@ -1,6 +1,6 @@
 export class GameProgression {
   constructor() {
-    this.highScores = JSON.parse(localStorage.getItem('highScores')) || { identificacion: 0, negociacion: 0, soborno: 0 };
+    this.highScores = JSON.parse(localStorage.getItem('highScores')) || { radical: 0, peronist: 0, judge: 0 };
   }
   
   updateHighScore(strategy, score) {
