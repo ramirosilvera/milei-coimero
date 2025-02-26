@@ -21,7 +21,7 @@ export default class MiniGameScene extends Phaser.Scene {
     bg.setDisplaySize(camWidth, camHeight);
     bg.setAlpha(0.9);
     
-    // Overlay de leve oscuridad para resaltar los elementos
+    // Overlay de leve oscuridad
     this.add.rectangle(camWidth / 2, camHeight / 2, camWidth, camHeight, 0x000000, 0.3);
     
     // Configurar límites del mundo
@@ -54,7 +54,7 @@ export default class MiniGameScene extends Phaser.Scene {
     this.enemySprite = this.physics.add.sprite(0, 0, enemyKey);
     this.enemySprite.setCollideWorldBounds(true);
     this.enemySprite.setBounce(1);
-    // Enemigo más lento que Milei y más grande
+    // Enemigo más grande y mucho más lento
     this.enemySprite.setVelocityX(-50);
     this.enemySprite.setScale(0.7);
     this.enemyContainer.add(this.enemySprite);
@@ -62,10 +62,11 @@ export default class MiniGameScene extends Phaser.Scene {
     // Crear grupo de monedas
     this.coins = this.physics.add.group();
     this.coinsCollected = 0;
-    this.coinTarget = 3; // Se necesitan 3 monedas para ganar
+    this.coinTarget = 3; // Se necesitan 3 monedas para que el enemigo se vuelva vulnerable
     // Indicador de monedas restantes
     this.coinIndicator = this.add.text(camWidth - 150, 20, "Faltan: " + this.coinTarget, {
-      fontSize: '28px', fill: '#fff'
+      fontSize: '28px',
+      fill: '#fff'
     }).setOrigin(0.5).setShadow(2,2,"#000",2,true,true);
     
     // Colisiones: jugador vs monedas y jugador vs enemigo
@@ -85,7 +86,7 @@ export default class MiniGameScene extends Phaser.Scene {
   }
   
   update() {
-    // Controles de teclado
+    // Controles de teclado y on-screen
     if (this.cursors.left.isDown || this.leftPressed) {
       this.playerSprite.setVelocityX(-160);
       this.playerSprite.flipX = true;
@@ -96,7 +97,8 @@ export default class MiniGameScene extends Phaser.Scene {
       this.playerSprite.setVelocityX(0);
     }
     if ((this.cursors.up.isDown || this.jumpPressed) && this.playerSprite.body.touching.down) {
-      this.playerSprite.setVelocityY(-500);
+      // Permitir un salto alto
+      this.playerSprite.setVelocityY(-600);
     }
   }
   
@@ -115,7 +117,7 @@ export default class MiniGameScene extends Phaser.Scene {
       duration: 1000,
       repeat: -1
     });
-    // La moneda se destruye después de 5 segundos si no es recogida
+    // La moneda se destruye después de 5 segundos si no se recoge
     this.time.delayedCall(5000, () => { if (coin.active) coin.destroy(); });
   }
   
@@ -123,7 +125,7 @@ export default class MiniGameScene extends Phaser.Scene {
     this.sound.play('click');
     coin.destroy();
     this.coinsCollected++;
-    let faltan = Math.max(0, this.coinTarget - this.coinsCollected);
+    const faltan = Math.max(0, this.coinTarget - this.coinsCollected);
     this.coinIndicator.setText("Faltan: " + faltan);
     if (this.coinsCollected >= this.coinTarget) {
       // Hacer que el enemigo se vuelva vulnerable
@@ -154,7 +156,6 @@ export default class MiniGameScene extends Phaser.Scene {
     }
     this.cameras.main.fade(500, 0, 0, 0);
     this.cameras.main.once('camerafadeoutcomplete', () => {
-      // Si el minijuego se gana, se pasa a la narrativa con "final_exito", si no, "final_fracaso".
       const nextNode = this.challengeSuccess ? "final_exito" : "final_fracaso";
       const factionSystem = this.registry.get('currentFaction') || {};
       this.scene.start('NarrativeScene', { currentNode: nextNode, factionSystem: factionSystem });
@@ -169,34 +170,36 @@ export default class MiniGameScene extends Phaser.Scene {
     this.jumpPressed = false;
     
     // Botón izquierda
-    const leftBtn = this.add.text(30, camHeight - 50, '<', { fontSize: '32px', fill: '#fff' })
+    const leftBtn = this.add.text(20, camHeight - 80, '<', {
+      fontSize: '48px', fill: '#fff', backgroundColor: '#333', padding: { x: 20, y: 10 }
+    })
       .setInteractive({ useHandCursor: true })
       .setScrollFactor(0)
       .setDepth(10);
-    leftBtn.on('pointerdown', () => { this.leftPressed = true; });
-    leftBtn.on('pointerup', () => { this.leftPressed = false; });
-    leftBtn.on('pointerout', () => { this.leftPressed = false; });
+    leftBtn.on('pointerdown', () => { this.leftPressed = true; leftBtn.setStyle({ fill: '#ff0' }); });
+    leftBtn.on('pointerup', () => { this.leftPressed = false; leftBtn.setStyle({ fill: '#fff' }); });
+    leftBtn.on('pointerout', () => { this.leftPressed = false; leftBtn.setStyle({ fill: '#fff' }); });
     
     // Botón derecha
-    const rightBtn = this.add.text(80, camHeight - 50, '>', { fontSize: '32px', fill: '#fff' })
+    const rightBtn = this.add.text(100, camHeight - 80, '>', {
+      fontSize: '48px', fill: '#fff', backgroundColor: '#333', padding: { x: 20, y: 10 }
+    })
       .setInteractive({ useHandCursor: true })
       .setScrollFactor(0)
       .setDepth(10);
-    rightBtn.on('pointerdown', () => { this.rightPressed = true; });
-    rightBtn.on('pointerup', () => { this.rightPressed = false; });
-    rightBtn.on('pointerout', () => { this.rightPressed = false; });
+    rightBtn.on('pointerdown', () => { this.rightPressed = true; rightBtn.setStyle({ fill: '#ff0' }); });
+    rightBtn.on('pointerup', () => { this.rightPressed = false; rightBtn.setStyle({ fill: '#fff' }); });
+    rightBtn.on('pointerout', () => { this.rightPressed = false; rightBtn.setStyle({ fill: '#fff' }); });
     
-    // Botón salto
-    const jumpBtn = this.add.text(camWidth - 80, camHeight - 50, '↑', { fontSize: '32px', fill: '#fff' })
+    // Botón salto (más visible, etiqueta SALTAR)
+    const jumpBtn = this.add.text(camWidth - 140, camHeight - 80, 'SALTAR', {
+      fontSize: '48px', fill: '#fff', backgroundColor: '#333', padding: { x: 20, y: 10 }
+    })
       .setInteractive({ useHandCursor: true })
       .setScrollFactor(0)
       .setDepth(10);
-    jumpBtn.on('pointerdown', () => { this.jumpPressed = true; });
-    jumpBtn.on('pointerup', () => { this.jumpPressed = false; });
-    jumpBtn.on('pointerout', () => { this.jumpPressed = false; });
-    
-    [leftBtn, rightBtn, jumpBtn].forEach(btn => {
-      btn.setBackgroundColor('#222').setPadding(10);
-    });
+    jumpBtn.on('pointerdown', () => { this.jumpPressed = true; jumpBtn.setStyle({ fill: '#ff0' }); });
+    jumpBtn.on('pointerup', () => { this.jumpPressed = false; jumpBtn.setStyle({ fill: '#fff' }); });
+    jumpBtn.on('pointerout', () => { this.jumpPressed = false; jumpBtn.setStyle({ fill: '#fff' }); });
   }
 }
