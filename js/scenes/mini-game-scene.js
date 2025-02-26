@@ -11,43 +11,36 @@ export default class MiniGameScene extends Phaser.Scene {
   create() {
     const camWidth = this.cameras.main.width;
     const camHeight = this.cameras.main.height;
-    const bg = this.add.image(camWidth / 2, camHeight / 2, 'congress_bg');
+    
+    // Fondo arcade: usar la imagen "fondo_arcade.jpg"
+    const bg = this.add.image(camWidth / 2, camHeight / 2, 'fondo_arcade');
     bg.setDisplaySize(camWidth, camHeight);
-    bg.setAlpha(0.9);
     
-    this.challengeSuccess = false;
-    this.coinCount = 0;
-    this.coinTarget = 10; // Número de monedas necesarias para ganar
+    // Agregar un overlay de leve oscuridad para mejorar la visibilidad de los elementos
+    this.add.rectangle(camWidth / 2, camHeight / 2, camWidth, camHeight, 0x000000, 0.3);
     
-    // Instrucciones según el minijuego
-    let instructions = "";
-    let enemyKey = "";
-    if (this.gameType === "radical") {
-      instructions = "Radicales: Recoge monedas para debilitar a los legisladores radicales.";
-      enemyKey = "radical_enemy";
-    } else if (this.gameType === "peronist") {
-      instructions = "Peronistas: Recoge monedas para comprar a los legisladores peronistas.";
-      enemyKey = "peronist_enemy";
-    } else if (this.gameType === "judge") {
-      instructions = "Jueces: Recoge monedas para asignar jueces por decreto.";
-      enemyKey = "judge_enemy";
-    }
+    // Configurar física del mundo y límites
+    this.physics.world.setBounds(0, 0, camWidth, camHeight);
     
-    // Overlay de instrucciones
-    this.add.rectangle(camWidth / 2, 80, camWidth, 60, 0x000000, 0.7);
-    this.add.text(camWidth / 2, 80, instructions, { fontSize: '28px', fill: '#fff', align: 'center' })
-      .setOrigin(0.5).setShadow(2,2,"#000",2,true,true);
+    // Crear el jugador: Milei
+    this.player = this.physics.add.sprite(100, camHeight - 100, 'milei');
+    this.player.setCollideWorldBounds(true);
+    this.player.setBounce(0.2);
+    this.player.setScale(0.5);
     
-    // Mostrar el enemigo en la parte superior
-    this.enemy = this.add.image(camWidth / 2, 150, enemyKey);
-    this.enemy.setScale(0.5);
+    // Controles
+    this.cursors = this.input.keyboard.createCursorKeys();
     
-    // Grupo para monedas
+    // Crear grupo de monedas
+    this.coins = this.physics.add.group();
     this.coinsCollected = 0;
-    this.coinText = this.add.text(camWidth - 200, 50, "Monedas: 0", { fontSize: '28px', fill: '#fff' })
-      .setOrigin(0.5).setShadow(2,2,"#000",2,true,true);
+    this.coinTarget = 10;
     
-    // Generar monedas periódicamente
+    // Mostrar contador de monedas
+    this.coinText = this.add.text(camWidth - 150, 20, "Monedas: 0", { fontSize: '28px', fill: '#fff' })
+      .setShadow(2, 2, "#000", 2, true, true);
+    
+    // Generar monedas de forma periódica
     this.coinTimer = this.time.addEvent({
       delay: 1000,
       callback: this.spawnCoin,
@@ -55,20 +48,73 @@ export default class MiniGameScene extends Phaser.Scene {
       loop: true
     });
     
+    // Crear enemigo según el gameType
+    let enemyKey = "";
+    if (this.gameType === "radical") {
+      enemyKey = "radical_enemy";
+    } else if (this.gameType === "peronist") {
+      enemyKey = "peronist_enemy";
+    } else if (this.gameType === "judge") {
+      enemyKey = "judge_enemy";
+    }
+    this.enemy = this.physics.add.sprite(camWidth - 100, camHeight - 100, enemyKey);
+    this.enemy.setCollideWorldBounds(true);
+    this.enemy.setBounce(1);
+    this.enemy.setVelocityX(-100);
+    this.enemy.setScale(0.5);
+    this.enemy.vulnerable = false;
+    
+    // Hacer que al recolectar suficientes monedas, el enemigo se vuelva vulnerable
+    this.events.on('coinsUpdated', () => {
+      if (this.coinsCollected >= this.coinTarget) {
+        this.enemy.vulnerable = true;
+        // Opción: hacer que el enemigo parpadee para indicar vulnerabilidad
+        this.tweens.add({
+          targets: this.enemy,
+          alpha: { from: 1, to: 0.5 },
+          duration: 300,
+          yoyo: true,
+          repeat: -1
+        });
+      }
+    });
+    
+    // Colisiones y overlaps
+    this.physics.add.overlap(this.player, this.coins, this.collectCoin, null, this);
+    this.physics.add.overlap(this.player, this.enemy, this.hitEnemy, null, this);
+    
     // Timeout del minijuego
     this.time.delayedCall(30000, () => { if (!this.challengeSuccess) this.finishGame(); });
+  }
+  
+  update() {
+    // Controles básicos de movimiento (izquierda, derecha y salto)
+    if (this.cursors.left.isDown) {
+      this.player.setVelocityX(-160);
+      // Opcional: animación de caminar a la izquierda
+      this.player.flipX = true;
+    } else if (this.cursors.right.isDown) {
+      this.player.setVelocityX(160);
+      this.player.flipX = false;
+    } else {
+      this.player.setVelocityX(0);
+    }
+    if (this.cursors.up.isDown && this.player.body.touching.down) {
+      this.player.setVelocityY(-330);
+    }
   }
   
   spawnCoin() {
     const camWidth = this.cameras.main.width;
     const camHeight = this.cameras.main.height;
-    // Crear una moneda en posición aleatoria
+    // Posición aleatoria dentro de la zona jugable
     const x = Phaser.Math.Between(50, camWidth - 50);
-    const y = Phaser.Math.Between(150, camHeight - 50);
-    const coin = this.add.image(x, y, 'coin').setInteractive({ useHandCursor: true });
+    const y = Phaser.Math.Between(50, camHeight - 150);
+    const coin = this.coins.create(x, y, 'coin');
     coin.setScale(0.5);
-    
-    // Animación simple (rotación)
+    coin.setCollideWorldBounds(true);
+    coin.body.setAllowGravity(false);
+    // Animación de rotación
     this.tweens.add({
       targets: coin,
       angle: 360,
@@ -76,25 +122,37 @@ export default class MiniGameScene extends Phaser.Scene {
       repeat: -1
     });
     
-    coin.on('pointerdown', () => {
-      this.sound.play('click');
-      coin.destroy();
-      this.coinsCollected++;
-      this.coinText.setText("Monedas: " + this.coinsCollected);
-      // Si alcanza el umbral, se gana el minijuego
-      if (this.coinsCollected >= this.coinTarget) {
-        this.challengeSuccess = true;
-        this.finishGame();
-      }
-    });
-    
-    // La moneda desaparece después de 5 segundos si no se toca
+    // La moneda se autodestruye después de 5 segundos si no se recoge
     this.time.delayedCall(5000, () => { if (coin.active) coin.destroy(); });
+  }
+  
+  collectCoin(player, coin) {
+    this.sound.play('click');
+    coin.destroy();
+    this.coinsCollected++;
+    this.coinText.setText("Monedas: " + this.coinsCollected);
+    this.events.emit('coinsUpdated');
+  }
+  
+  hitEnemy(player, enemy) {
+    if (enemy.vulnerable) {
+      // Si el enemigo está vulnerable, derrotarlo
+      this.sound.play('success');
+      enemy.destroy();
+      this.challengeSuccess = true;
+      this.finishGame();
+    } else {
+      // Si no, el jugador pierde (puedes implementar efectos o reinicio)
+      this.sound.play('failure');
+      this.challengeSuccess = false;
+      this.finishGame();
+    }
   }
   
   finishGame() {
     this.coinTimer.remove();
-    this.input.removeAllListeners();
+    this.input.keyboard.shutdown();
+    this.physics.pause();
     this.cameras.main.fade(500, 0, 0, 0);
     this.cameras.main.once('camerafadeoutcomplete', () => {
       const nextNode = this.registry.get('nextNode') || "start";
