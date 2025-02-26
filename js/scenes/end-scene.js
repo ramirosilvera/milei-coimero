@@ -13,38 +13,65 @@ export default class EndScene extends Phaser.Scene {
   create() {
     const camWidth = this.cameras.main.width;
     const camHeight = this.cameras.main.height;
-    // Seleccionar fondo según resultado: success_bg para éxito, failure_bg para fracaso.
+    
+    // Seleccionar fondo según el resultado
     let bgKey = "success_bg";
-    if (this.finalText.indexOf("fracaso") !== -1) {
+    if (this.finalText.toLowerCase().indexOf("fracaso") !== -1) {
       bgKey = "failure_bg";
     }
+    // Fondo de la escena
     const bg = this.add.image(camWidth / 2, camHeight / 2, bgKey);
     bg.setDisplaySize(camWidth, camHeight);
     bg.setAlpha(0);
     this.tweens.add({
-      targets: this.cameras.main,
+      targets: bg,
       alpha: { from: 0, to: 1 },
       duration: 500
     });
     
-    const titleText = "Fin de la Partida";
-    this.add.text(camWidth / 2, 100, titleText, { fontSize: '48px', fill: '#0f0' })
-      .setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
-    this.add.text(camWidth / 2, 200, this.finalText, { fontSize: '32px', fill: '#fff', align: 'center', wordWrap: { width: camWidth - 100 } })
-      .setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
+    // Overlay para mejorar la legibilidad
+    this.add.rectangle(camWidth / 2, camHeight / 2, camWidth, camHeight, 0x000000, 0.3);
     
+    // Título
+    const titleText = "Fin de la Partida";
+    this.add.text(camWidth / 2, 80, titleText, {
+      fontSize: '48px',
+      fill: '#0f0',
+      align: 'center',
+      wordWrap: { width: camWidth - 50 }
+    }).setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
+    
+    // Texto final (narrativa)
+    this.add.text(camWidth / 2, 160, this.finalText, {
+      fontSize: '32px',
+      fill: '#fff',
+      align: 'center',
+      wordWrap: { width: camWidth - 50 }
+    }).setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
+    
+    // Estado final de las facciones
     const status = this.factionSystem.getStatus();
     const statusText = `Establecimiento: ${status.establishment} | Medios: ${status.medios} | Apoyo Popular: ${status.poblacion} | Libertarios: ${status.libertarios}`;
-    this.add.text(camWidth / 2, 350, statusText, { fontSize: '28px', fill: '#ffdd00', align: 'center' })
-      .setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
+    this.add.text(camWidth / 2, 250, statusText, {
+      fontSize: '28px',
+      fill: '#ffdd00',
+      align: 'center',
+      wordWrap: { width: camWidth - 50 }
+    }).setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
     
+    // Mostrar logro si corresponde
     const achievements = new AchievementSystem();
     if (status.medios >= 80) {
       achievements.unlock('Maestro de los Medios');
       this.showAchievementPopup('Logro Desbloqueado: Maestro de los Medios');
     }
     
-    const menuButton = this.add.text(camWidth / 2, 700, 'Volver al Menú', { fontSize: '32px', fill: '#fff' })
+    // Botón para volver al menú principal
+    const menuButton = this.add.text(camWidth / 2, camHeight - 80, 'Volver al Menú', {
+      fontSize: '32px',
+      fill: '#fff',
+      align: 'center'
+    })
       .setInteractive({ useHandCursor: true })
       .setOrigin(0.5)
       .setStyle({ padding: '10px 20px', backgroundColor: '#222' });
@@ -56,11 +83,13 @@ export default class EndScene extends Phaser.Scene {
   
   showAchievementPopup(message) {
     const camWidth = this.cameras.main.width;
-    const popup = this.add.text(camWidth / 2, 500, message, {
+    const popup = this.add.text(camWidth / 2, this.cameras.main.centerY, message, {
       fontSize: '32px',
       fill: '#ff0',
       backgroundColor: '#000',
-      padding: { x: 10, y: 10 }
+      padding: { x: 10, y: 10 },
+      align: 'center',
+      wordWrap: { width: camWidth - 50 }
     }).setOrigin(0.5).setAlpha(0);
     
     this.tweens.add({
