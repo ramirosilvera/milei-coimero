@@ -67,7 +67,7 @@ export default class MiniGameScene extends Phaser.Scene {
     this.coinIndicator = this.add.text(camWidth - 150, 20, "Faltan: " + this.coinTarget, {
       fontSize: '28px',
       fill: '#fff'
-    }).setOrigin(0.5).setShadow(2,2,"#000",2,true,true);
+    }).setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
     
     // Colisiones: jugador vs monedas y jugador vs enemigo
     this.physics.add.overlap(this.playerSprite, this.coins, this.collectCoin, null, this);
@@ -85,22 +85,22 @@ export default class MiniGameScene extends Phaser.Scene {
     this.time.delayedCall(30000, () => { if (!this.challengeSuccess) this.finishGame(); });
   }
   
-update() {
-  // Controles de teclado y on-screen
-  if (this.cursors.left.isDown || this.leftPressed) {
-    this.playerSprite.setVelocityX(-160);
-    this.playerSprite.flipX = true;
-  } else if (this.cursors.right.isDown || this.rightPressed) {
-    this.playerSprite.setVelocityX(160);
-    this.playerSprite.flipX = false;
-  } else {
-    this.playerSprite.setVelocityX(0);
+  update() {
+    // Controles de teclado y on-screen
+    if (this.cursors.left.isDown || this.leftPressed) {
+      this.playerSprite.setVelocityX(-160);
+      this.playerSprite.flipX = true;
+    } else if (this.cursors.right.isDown || this.rightPressed) {
+      this.playerSprite.setVelocityX(160);
+      this.playerSprite.flipX = false;
+    } else {
+      this.playerSprite.setVelocityX(0);
+    }
+    // Usar body.blocked.down para detectar contacto con el suelo
+    if ((this.cursors.up.isDown || this.jumpPressed) && this.playerSprite.body.blocked.down) {
+      this.playerSprite.setVelocityY(-600);
+    }
   }
-  // Usar body.blocked.down para detectar contacto con el suelo
-  if ((this.cursors.up.isDown || this.jumpPressed) && this.playerSprite.body.blocked.down) {
-    this.playerSprite.setVelocityY(-600);
-  }
-}
   
   spawnCoin() {
     const camWidth = this.cameras.main.width;
@@ -191,16 +191,16 @@ update() {
     rightBtn.on('pointerup', () => { this.rightPressed = false; rightBtn.setStyle({ fill: '#fff' }); });
     rightBtn.on('pointerout', () => { this.rightPressed = false; rightBtn.setStyle({ fill: '#fff' }); });
     
-// Botón salto (más visible, etiqueta SALTAR)
-const jumpBtn = this.add.text(camWidth - 20, camHeight - 80, 'SALTAR', {
-  fontSize: '48px', fill: '#fff', backgroundColor: '#333', padding: { x: 20, y: 10 }
-})
-  .setOrigin(1, 0)
-  .setInteractive({ useHandCursor: true })
-  .setScrollFactor(0)
-  .setDepth(10);
-jumpBtn.on('pointerdown', () => { this.jumpPressed = true; jumpBtn.setStyle({ fill: '#ff0' }); });
-jumpBtn.on('pointerup', () => { this.jumpPressed = false; jumpBtn.setStyle({ fill: '#fff' }); });
-jumpBtn.on('pointerout', () => { this.jumpPressed = false; jumpBtn.setStyle({ fill: '#fff' }); });
+    // Botón salto (más visible, etiqueta SALTAR)
+    const jumpBtn = this.add.text(camWidth - 20, camHeight - 80, 'SALTAR', {
+      fontSize: '48px', fill: '#fff', backgroundColor: '#333', padding: { x: 20, y: 10 }
+    })
+      .setOrigin(1, 0)
+      .setInteractive({ useHandCursor: true })
+      .setScrollFactor(0)
+      .setDepth(10);
+    jumpBtn.on('pointerdown', () => { this.jumpPressed = true; jumpBtn.setStyle({ fill: '#ff0' }); });
+    jumpBtn.on('pointerup', () => { this.jumpPressed = false; jumpBtn.setStyle({ fill: '#fff' }); });
+    jumpBtn.on('pointerout', () => { this.jumpPressed = false; jumpBtn.setStyle({ fill: '#fff' }); });
   }
 }
