@@ -11,11 +11,12 @@ export default class NarrativeScene extends Phaser.Scene {
   }
   
   create() {
-    this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'congress_bg')
-      .setDisplaySize(this.cameras.main.width, this.cameras.main.height)
-      .setAlpha(0.8);
-    // Overlay para legibilidad
-    this.add.rectangle(this.cameras.main.centerX, this.cameras.main.centerY, this.cameras.main.width, this.cameras.main.height, 0x000000, 0.5);
+    const camWidth = this.cameras.main.width;
+    const camHeight = this.cameras.main.height;
+    const bg = this.add.image(camWidth / 2, camHeight / 2, 'congress_bg');
+    bg.setDisplaySize(camWidth, camHeight);
+    bg.setAlpha(0.8);
+    this.add.rectangle(camWidth / 2, camHeight / 2, camWidth, camHeight, 0x000000, 0.5);
     this.renderNode();
   }
   
@@ -27,11 +28,12 @@ export default class NarrativeScene extends Phaser.Scene {
       this.choiceButtons.forEach(btn => btn.destroy());
     }
     
-    this.narrativeText = this.add.text(this.cameras.main.centerX, 300, node.text, {
+    const camWidth = this.cameras.main.width;
+    this.narrativeText = this.add.text(camWidth / 2, 300, node.text, {
       fontSize: '28px',
       fill: '#fff',
       align: 'center',
-      wordWrap: { width: this.cameras.main.width - 100 }
+      wordWrap: { width: camWidth - 100 }
     }).setOrigin(0.5).setShadow(2, 2, "#000", 2, true, true);
     
     this.choiceButtons = [];
@@ -44,10 +46,7 @@ export default class NarrativeScene extends Phaser.Scene {
           .setInteractive({ useHandCursor: true })
           .setOrigin(0.5)
           .setStyle({ padding: '10px 20px', backgroundColor: '#222' });
-        btn.on('pointerover', () => {
-          btn.setStyle({ fill: '#ff0' });
-          console.log("Opción seleccionada: ", choice.text);
-        });
+        btn.on('pointerover', () => btn.setStyle({ fill: '#ff0' }));
         btn.on('pointerout', () => btn.setStyle({ fill: '#0f0' }));
         btn.on('pointerdown', () => {
           this.sound.play('click');
