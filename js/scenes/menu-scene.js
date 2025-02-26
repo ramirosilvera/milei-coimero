@@ -43,7 +43,7 @@ export default class MenuScene extends Phaser.Scene {
       .setStyle({ padding: '8px 16px', backgroundColor: '#222' });
     
     creditsButton.on('pointerdown', () => {
-      alert("Milei el gran soborno\nDesarrollado por [Tu Nombre]\nInspirado en la corrupción política actual.");
+      alert("Milei el gran soborno\nDesarrollado por Ramiro Silvera\nInspirado en la corrupción del presidente Javier Milei y la nefasta oposición.");
     });
   }
 }
