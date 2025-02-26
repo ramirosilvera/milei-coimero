@@ -16,12 +16,12 @@ export default class MiniGameScene extends Phaser.Scene {
     this.arcadeMusic = this.sound.add('arcade_bg', { volume: 0.5, loop: true });
     this.arcadeMusic.play();
     
-    // Fondo arcade
+    // Fondo arcade con la imagen "fondo_arcade"
     const bg = this.add.image(camWidth / 2, camHeight / 2, 'fondo_arcade');
     bg.setDisplaySize(camWidth, camHeight);
     bg.setAlpha(0.9);
     
-    // Overlay de leve oscuridad
+    // Overlay para mejorar visibilidad
     this.add.rectangle(camWidth / 2, camHeight / 2, camWidth, camHeight, 0x000000, 0.3);
     
     // Configurar límites del mundo
@@ -32,7 +32,7 @@ export default class MiniGameScene extends Phaser.Scene {
     this.playerSprite = this.physics.add.sprite(0, 0, 'milei');
     this.playerSprite.setCollideWorldBounds(true);
     this.playerSprite.setBounce(0.2);
-    this.playerSprite.setScale(0.5); // Tamaño intermedio
+    this.playerSprite.setScale(0.4); // Tamaño intermedio, un poco más pequeño
     this.playerContainer.add(this.playerSprite);
     
     // Controles de teclado
@@ -54,20 +54,18 @@ export default class MiniGameScene extends Phaser.Scene {
     this.enemySprite = this.physics.add.sprite(0, 0, enemyKey);
     this.enemySprite.setCollideWorldBounds(true);
     this.enemySprite.setBounce(1);
-    // Enemigo más grande y lento
-    this.enemySprite.setVelocityX(-80);
-    this.enemySprite.setScale(0.8);
+    // Enemigo más grande y más lento que Milei
+    this.enemySprite.setVelocityX(-50);
+    this.enemySprite.setScale(0.6);
     this.enemyContainer.add(this.enemySprite);
     
-    // Crear container para monedas
-    this.coinContainer = this.add.container(0, 0);
-    this.coinsCollected = 0;
-    this.coinTarget = 10;
-    this.coinText = this.add.text(camWidth - 150, 20, "Monedas: 0", { fontSize: '28px', fill: '#fff' })
-      .setOrigin(0.5).setShadow(2,2,"#000",2,true,true);
-    
-    // Grupo de monedas (físicas)
+    // Crear container para monedas (grupo físico)
     this.coins = this.physics.add.group();
+    this.coinsCollected = 0;
+    this.coinTarget = 3; // Solo se requieren 3 monedas para ganar
+    // Indicador de monedas faltantes
+    this.coinIndicator = this.add.text(camWidth - 150, 20, "Faltan: 3", { fontSize: '28px', fill: '#fff' })
+      .setOrigin(0.5).setShadow(2,2,"#000",2,true,true);
     
     // Colisiones y overlaps
     this.physics.add.overlap(this.playerSprite, this.coins, this.collectCoin, null, this);
@@ -97,7 +95,7 @@ export default class MiniGameScene extends Phaser.Scene {
       this.playerSprite.setVelocityX(0);
     }
     if ((this.cursors.up.isDown || this.jumpPressed) && this.playerSprite.body.touching.down) {
-      // Permitir un salto alto
+      // Permitir un salto alto para alcanzar monedas
       this.playerSprite.setVelocityY(-500);
     }
   }
@@ -108,7 +106,7 @@ export default class MiniGameScene extends Phaser.Scene {
     const x = Phaser.Math.Between(50, camWidth - 50);
     const y = Phaser.Math.Between(50, camHeight - 150);
     const coin = this.coins.create(x, y, 'coin');
-    coin.setScale(0.3); // Monedas más pequeñas
+    coin.setScale(0.2); // Monedas más pequeñas
     coin.body.setAllowGravity(false);
     // Animación de rotación
     this.tweens.add({
@@ -125,7 +123,8 @@ export default class MiniGameScene extends Phaser.Scene {
     this.sound.play('click');
     coin.destroy();
     this.coinsCollected++;
-    this.coinText.setText("Monedas: " + this.coinsCollected);
+    let faltan = Math.max(0, this.coinTarget - this.coinsCollected);
+    this.coinIndicator.setText("Faltan: " + faltan);
     if (this.coinsCollected >= this.coinTarget) {
       // Indicar que el enemigo está vulnerable
       this.enemySprite.setTint(0xff0000);
@@ -155,7 +154,6 @@ export default class MiniGameScene extends Phaser.Scene {
     }
     this.cameras.main.fade(500, 0, 0, 0);
     this.cameras.main.once('camerafadeoutcomplete', () => {
-      // No se utiliza árbol de decisiones después del minijuego: éxito o fracaso directo
       const nextNode = this.challengeSuccess ? "final_exito" : "final_fracaso";
       const factionSystem = this.registry.get('currentFaction') || {};
       this.scene.start('NarrativeScene', { currentNode: nextNode, factionSystem: factionSystem });
@@ -165,37 +163,31 @@ export default class MiniGameScene extends Phaser.Scene {
   createOnScreenControls() {
     const camWidth = this.cameras.main.width;
     const camHeight = this.cameras.main.height;
-    // Variables para controlar botones
     this.leftPressed = false;
     this.rightPressed = false;
     this.jumpPressed = false;
     
-    // Crear botones de flecha: usar texto simple con flechas
     // Botón izquierda
     const leftBtn = this.add.text(30, camHeight - 50, '<', { fontSize: '32px', fill: '#fff' })
-      .setInteractive({ useHandCursor: true })
-      .setScrollFactor(0);
+      .setInteractive({ useHandCursor: true });
     leftBtn.on('pointerdown', () => { this.leftPressed = true; });
     leftBtn.on('pointerup', () => { this.leftPressed = false; });
     leftBtn.on('pointerout', () => { this.leftPressed = false; });
     
     // Botón derecha
     const rightBtn = this.add.text(80, camHeight - 50, '>', { fontSize: '32px', fill: '#fff' })
-      .setInteractive({ useHandCursor: true })
-      .setScrollFactor(0);
+      .setInteractive({ useHandCursor: true });
     rightBtn.on('pointerdown', () => { this.rightPressed = true; });
     rightBtn.on('pointerup', () => { this.rightPressed = false; });
     rightBtn.on('pointerout', () => { this.rightPressed = false; });
     
     // Botón salto
     const jumpBtn = this.add.text(camWidth - 80, camHeight - 50, '↑', { fontSize: '32px', fill: '#fff' })
-      .setInteractive({ useHandCursor: true })
-      .setScrollFactor(0);
+      .setInteractive({ useHandCursor: true });
     jumpBtn.on('pointerdown', () => { this.jumpPressed = true; });
     jumpBtn.on('pointerup', () => { this.jumpPressed = false; });
     jumpBtn.on('pointerout', () => { this.jumpPressed = false; });
     
-    // Opcional: ajustar estilos de botones
     [leftBtn, rightBtn, jumpBtn].forEach(btn => {
       btn.setBackgroundColor('#222').setPadding(10);
     });
