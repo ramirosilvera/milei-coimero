@@ -8,15 +8,15 @@ import EndScene from './scenes/end-scene.js';
 const config = {
   type: Phaser.AUTO,
   parent: 'game-container',
-  width: window.innerWidth,
-  height: window.innerHeight,
+  width: 800,
+  height: 600,
   scene: [BootScene, TutorialScene, MenuScene, NarrativeScene, MiniGameScene, EndScene],
   physics: {
     default: 'arcade',
-    arcade: { gravity: { y: 0 }, debug: false }
+    arcade: { gravity: { y: 600 }, debug: false }
   },
   scale: {
-    mode: Phaser.Scale.RESIZE,
+    mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH
   }
 };
