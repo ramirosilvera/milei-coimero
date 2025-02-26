@@ -30,7 +30,7 @@ export default class BootScene extends Phaser.Scene {
       loadingText.destroy();
     });
     
-    // Cargar imágenes
+    // Imágenes base
     this.load.image('menu_bg', 'assets/images/menu_bg.jpg');
     this.load.image('congress_bg', 'assets/images/congress_bg.jpg');
     this.load.image('milei', 'assets/images/milei.png');
@@ -47,13 +47,14 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('judge_enemy', 'assets/images/judge_enemy.png');
     this.load.image('fondo_arcade', 'assets/images/fondo_arcade.jpg');
     
-    // Cargar audios
+    // Audios
     this.load.audio('background', 'assets/sounds/background.mp3');
     this.load.audio('click', 'assets/sounds/click.wav');
     this.load.audio('success', 'assets/sounds/success.wav');
     this.load.audio('failure', 'assets/sounds/failure.wav');
     this.load.audio('debate', 'assets/sounds/debate.mp3');
     this.load.audio('boicot', 'assets/sounds/boicot.wav');
+    this.load.audio('arcade_bg', 'assets/sounds/arcade_bg.mp3');
   }
   
   create() {
