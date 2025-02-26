@@ -18,7 +18,7 @@ export const narrativeTree = {
     ]
   },
   radical: {
-    text: "Has decidido comprar a los legisladores radicales. Ahora debes demostrar tu habilidad en un minijuego arcade: controla a Milei, recoge monedas y derrota a los enemigos radicales.",
+    text: "Has decidido comprar a los legisladores radicales. Ahora debes demostrar tu habilidad en un minijuego arcade: controla a Milei, recoge 3 monedas y derrota al enemigo radical.",
     choices: [
       { text: "Estrategia audaz", next: "final_exito", effect: { medios: +20, establishment: -10 } },
       { text: "Estrategia prudente", next: "final_mitad", effect: { medios: +5 } },
@@ -26,7 +26,7 @@ export const narrativeTree = {
     ]
   },
   peronist: {
-    text: "Optas por comprar a los legisladores peronistas. Enfrenta el desafío arcade, recoge monedas y derrota a los enemigos peronistas para consolidar tu control.",
+    text: "Optas por comprar a los legisladores peronistas. Enfrenta el desafío arcade, recoge 3 monedas y derrota al enemigo peronista para consolidar tu control.",
     choices: [
       { text: "Negociación brillante", next: "final_exito", effect: { poblacion: +20 } },
       { text: "Negociación moderada", next: "final_mitad", effect: { poblacion: +5 } },
@@ -34,7 +34,7 @@ export const narrativeTree = {
     ]
   },
   judge: {
-    text: "Decides asignar jueces por decreto. En el minijuego arcade, controla a Milei, recoge monedas y derrota a los jueces para imponer tu decreto.",
+    text: "Decides asignar jueces por decreto. En el minijuego arcade, controla a Milei, recoge 3 monedas y derrota al enemigo juez para imponer tu decreto.",
     choices: [
       { text: "Designación impecable", next: "final_exito", effect: { establishment: -20 } },
       { text: "Designación moderada", next: "final_mitad", effect: { establishment: -5 } },
