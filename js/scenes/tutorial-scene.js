@@ -7,7 +7,7 @@ export default class TutorialScene extends Phaser.Scene {
     const camWidth = this.cameras.main.width;
     const camHeight = this.cameras.main.height;
     
-    // Fondo y overlay adaptados
+    // Fondo adaptado y overlay para legibilidad
     const bg = this.add.image(camWidth / 2, camHeight / 2, 'menu_bg');
     bg.setDisplaySize(camWidth, camHeight);
     bg.setAlpha(0.5);
@@ -15,11 +15,10 @@ export default class TutorialScene extends Phaser.Scene {
     
     const tutorialText = [
       "Bienvenido a Milei el gran soborno.",
-      "Tu misión es evitar que se investigue a Milei por el escándalo cripto.",
-      "Para ello, debes comprar diputados y senadores o manipular el poder judicial.",
-      "Elige entre: Comprar Radicales, Comprar Peronistas o Asignar Jueces por Decreto.",
-      "Cada decisión disparará un minijuego arcade donde deberás recolectar monedas para vencer al enemigo.",
-      "¡Tu estrategia determinará el futuro!"
+      "Tu misión es evitar que se investigue a Milei por el escándalo cripto, comprando la lealtad de diputados, senadores o manipulando el poder judicial.",
+      "Elige tu estrategia: Comprar Radicales, Comprar Peronistas o Asignar Jueces por Decreto.",
+      "Cada elección disparará un minijuego arcade donde controlarás a Milei para recolectar monedas y derrotar a los enemigos.",
+      "¡Tu éxito definirá el futuro del país!"
     ];
     
     let currentLine = 0;
